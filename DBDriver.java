@@ -8,13 +8,22 @@ public class DBDriver {
     static String USER = "team024";
     static String PASSWORD = "5f5f3eba";
 
-    public static void main(String[] args) {
-        System.out.println("Connecting...");
-
+    public static Connection getConnection() {
         try {
             Connection conn = DriverManager.getConnection(URL+DBNAME, USER, PASSWORD);
             System.out.println("Connection");
-            conn.close();
+            //conn.close();
+            return conn;
+        }
+        catch(SQLException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void closeConnection(Connection con) {
+        try {
+            con.close();
         }
         catch(SQLException ex) {
             ex.printStackTrace();
@@ -23,3 +32,9 @@ public class DBDriver {
 
 }
 
+/* Now can just use the code below:
+
+    Connection con = DBDriver.getConnection();
+    DBDriver.closeConnection(con);
+
+*/
