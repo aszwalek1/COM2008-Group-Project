@@ -10,10 +10,9 @@ public class DBDriver {
 
     public static Connection getConnection() {
         try {
-            Connection conn = DriverManager.getConnection(URL+DBNAME, USER, PASSWORD);
+            Connection con = DriverManager.getConnection(URL+DBNAME, USER, PASSWORD);
             System.out.println("Connection");
-            //conn.close();
-            return conn;
+            return con;
         }
         catch(SQLException ex) {
             ex.printStackTrace();
