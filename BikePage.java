@@ -43,13 +43,14 @@ public class BikePage {
         // label in the middle panel
         centralPanel.add(Box.createRigidArea(new Dimension(50, 40)));
         JLabel centralLabel = new JLabel("Choose a ready bike to order");
+        centralLabel.setFont(new Font("Verdana",Font.BOLD, 18));
         centralPanel.add(centralLabel);
         //  dropdown options and order button
         centralPanel.add(Box.createRigidArea(new Dimension(50, 100)));
         String[] bikeStrings = { "Bike1", "Bike2", "Bike3", "Bike4", "Bike5" };
         JComboBox<String> bikeList = new JComboBox<>(bikeStrings);
         centralPanel.add(bikeList);
-        centralPanel.add(Box.createRigidArea(new Dimension(50, 200)));
+        centralPanel.add(Box.createRigidArea(new Dimension(50, 100)));
         centralPanel.add(centralOrderButton);
         centralPanel.add(Box.createRigidArea(new Dimension(50, 700)));
 
@@ -58,8 +59,8 @@ public class BikePage {
         //dropdown components options and order button
 
         eastPanel.add(Box.createRigidArea(new Dimension(50, 40)));
-        JLabel eastLabel = new JLabel("Customise your bike by choosing the components       " +
-                "                                                                                   ");
+        JLabel eastLabel = new JLabel("Customise your bike by choosing the components       ");
+        eastLabel.setFont(new Font("Verdana",Font.BOLD, 18));
         eastPanel.add(eastLabel);
         eastPanel.add(Box.createRigidArea(new Dimension(50, 100)));
         String[] frameString = { "frame set size1", "frame set size2", "frame set size3", "frame set size4"};
