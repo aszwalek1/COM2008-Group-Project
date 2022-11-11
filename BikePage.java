@@ -66,9 +66,18 @@ public class BikePage {
         String[] frameString = { "frame set size1", "frame set size2", "frame set size3", "frame set size4"};
         JComboBox<String> frameSetList = new JComboBox<>(frameString);
         eastPanel.add(frameSetList);
-        eastPanel.add(Box.createRigidArea(new Dimension(50, 100)));
+        eastPanel.add(Box.createRigidArea(new Dimension(50, 50)));
 
-        //add later (MAY OR MAY NOT OFFER SHOCKS)
+        //Radio Buttons for choosing shocks option
+        JRadioButton withShocks = new JRadioButton("With shocks");
+        JRadioButton withoutShocks = new JRadioButton("No shocks");
+        ButtonGroup group = new ButtonGroup();
+        withShocks.setSelected(true);
+        group.add(withShocks);
+        group.add(withoutShocks);
+        eastPanel.add(withShocks);
+        eastPanel.add(withoutShocks);
+        eastPanel.add(Box.createRigidArea(new Dimension(200, 50)));
 
         String[] handlebarStrings = { "Straight Handlebar", "High Handlebar", "Dropped Handlebar" };
         JComboBox<String> handlebarList = new JComboBox<>(handlebarStrings);
