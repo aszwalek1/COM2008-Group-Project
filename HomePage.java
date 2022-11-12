@@ -59,17 +59,17 @@ public class HomePage {
 
         clogin.addActionListener(ae -> {
           f.dispose();
-           new CustomerPage();
+           new CustomerLogin();
         });
 
        slogin.addActionListener(e -> {
             f.dispose();
-            new StaffPage();
+            new StaffLogin();
         });
 
         browse.addActionListener(ae -> {
             f.dispose();
-            new BikePage();
+            new BrowsePage();
         });
 
 

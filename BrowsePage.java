@@ -1,42 +1,43 @@
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Array;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 
-public class BikePage {
+public class BrowsePage {
 
-    public BikePage() {
+    //Frame
+    JFrame f = new JFrame("Build Your Bike");
 
-        //Frame
-        JFrame f = new JFrame("Build Your Bike");
+    //Buttons
+    JButton backButton = new JButton("Back");
+    JButton centralOrderButton = new JButton("Order");
+    JButton eastOrderButton = new JButton("Order");
+
+    //Panels
+    JPanel mainPanel = new JPanel(new GridLayout(1, 3));
+    JPanel westPanel = new JPanel();
+    JPanel centralPanel = new JPanel();
+    JPanel eastPanel = new JPanel();
+
+    public BrowsePage() {
+
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //Buttons
-        JButton backButton = new JButton("Back");
-        JButton centralOrderButton = new JButton("Order");
-        JButton eastOrderButton = new JButton("Order");
-
-
-        //Panels
-        JPanel mainPanel = new JPanel(new GridLayout(1, 3));
-        JPanel westPanel = new JPanel();
-        JPanel centralPanel = new JPanel();
-        JPanel eastPanel = new JPanel();
         mainPanel.add(westPanel);
         mainPanel.add(centralPanel);
         mainPanel.add(eastPanel);
-
 
         //Setting layout
         eastPanel.setLayout(new BoxLayout(eastPanel, BoxLayout.Y_AXIS));
         centralPanel.setLayout(new BoxLayout(centralPanel, BoxLayout.Y_AXIS));
 
+
         //  WEST PANEL
 
-        westPanel.add(backButton); //add backButton button
+        westPanel.add(backButton);
+        backButton.addActionListener(al -> {
+            f.dispose();
+            new HomePage();
+        });
+
 
         //  CENTRAL PANEL
 
@@ -45,19 +46,30 @@ public class BikePage {
         JLabel centralLabel = new JLabel("Choose a ready bike to order");
         centralLabel.setFont(new Font("Verdana",Font.BOLD, 18));
         centralPanel.add(centralLabel);
-        //  dropdown options and order button
+
+        //Dropdown options and order button
         centralPanel.add(Box.createRigidArea(new Dimension(50, 100)));
         String[] bikeStrings = { "Bike1", "Bike2", "Bike3", "Bike4", "Bike5" };
         JComboBox<String> bikeList = new JComboBox<>(bikeStrings);
         centralPanel.add(bikeList);
         centralPanel.add(Box.createRigidArea(new Dimension(50, 100)));
+
+        //Order button in the central panel
         centralPanel.add(centralOrderButton);
+        centralOrderButton.setFont(new Font("Verdana", Font.PLAIN, 20));
+
         centralPanel.add(Box.createRigidArea(new Dimension(50, 700)));
+
+        //Action Listener for the Order button
+        centralOrderButton.addActionListener(e -> {
+            f.dispose();
+            new PaymentPage();
+        });
+
 
         // EAST PANEL
 
-        //dropdown components options and order button
-
+        //Dropdown components options and order button
         eastPanel.add(Box.createRigidArea(new Dimension(50, 40)));
         JLabel eastLabel = new JLabel("Customise your bike by choosing the components       ");
         eastLabel.setFont(new Font("Verdana",Font.BOLD, 18));
@@ -93,10 +105,24 @@ public class BikePage {
         String[] wheelStyleStrings = { "Road Style", "Mountain Style", "Hybrid Style" };
         JComboBox<String> wheelStyleList = new JComboBox<>(wheelStyleStrings);
         eastPanel.add(wheelStyleList);
-        eastPanel.add(Box.createRigidArea(new Dimension(200, 100)));
+        eastPanel.add(Box.createRigidArea(new Dimension(200, 50)));
 
         eastPanel.add(eastOrderButton);
-        eastPanel.add(Box.createRigidArea(new Dimension(200, 100)));
+        eastOrderButton.setFont(new Font("Verdana", Font.PLAIN, 20));
+        eastPanel.add(Box.createRigidArea(new Dimension(200, 150)));
+
+        //Action Listener for the Order button
+
+        /*
+            This should go to the payment page if it is a logged in customer
+            or go to register page if no one is logged in
+
+         */
+        eastOrderButton.addActionListener(e -> {
+            f.dispose();
+            new PaymentPage();
+        });
+
 
 
         //add panels to the frame
@@ -114,7 +140,7 @@ public class BikePage {
 }
 
 
-        /*          USING DATABASE FOR DROP DOWNS ??
+        /*          USING DATABASE FOR DROP-DOWNS ??
         //Drop-Down menu for ready bikes
         //Get Bikes from a table from the Database
         ArrayList<String> readyBikes = new ArrayList<>();
