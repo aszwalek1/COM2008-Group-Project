@@ -7,8 +7,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class BikePage {
+
     //Frame
     JFrame f = new JFrame("Build Your Bike");
+
     //Buttons
     JButton backButton = new JButton("Back");
     JButton centralOrderButton = new JButton("Order");
@@ -50,7 +52,7 @@ public class BikePage {
         centralLabel.setFont(new Font("Verdana",Font.BOLD, 18));
         centralPanel.add(centralLabel);
 
-        //  dropdown options and order button
+        //Dropdown options and order button
         centralPanel.add(Box.createRigidArea(new Dimension(50, 100)));
         String[] bikeStrings = { "Bike1", "Bike2", "Bike3", "Bike4", "Bike5" };
         JComboBox<String> bikeList = new JComboBox<>(bikeStrings);
@@ -72,7 +74,7 @@ public class BikePage {
 
         // EAST PANEL
 
-        //dropdown components options and order button
+        //Dropdown components options and order button
         eastPanel.add(Box.createRigidArea(new Dimension(50, 40)));
         JLabel eastLabel = new JLabel("Customise your bike by choosing the components       ");
         eastLabel.setFont(new Font("Verdana",Font.BOLD, 18));
@@ -137,7 +139,7 @@ public class BikePage {
 }
 
 
-        /*          USING DATABASE FOR DROP DOWNS ??
+        /*          USING DATABASE FOR DROP-DOWNS ??
         //Drop-Down menu for ready bikes
         //Get Bikes from a table from the Database
         ArrayList<String> readyBikes = new ArrayList<>();
