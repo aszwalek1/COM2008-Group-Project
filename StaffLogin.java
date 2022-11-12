@@ -2,12 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class StaffPage {
+public class StaffLogin {
 
 
 
 
-    public StaffPage() {
+    public StaffLogin() {
         //frame
         JFrame f = new JFrame("STAFF LOGIN");
         f.setVisible(true);
@@ -73,6 +73,6 @@ public class StaffPage {
 
     public static void main(String[] args) {
 
-        new StaffPage();
+        new StaffLogin();
     }
 }

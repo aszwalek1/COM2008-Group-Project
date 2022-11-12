@@ -1,9 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class CustomerPage {
+public class CustomerLogin {
 
-    public CustomerPage() {
+    public CustomerLogin() {
 
         JFrame f = new JFrame("Customer");
         f.setVisible(true);
