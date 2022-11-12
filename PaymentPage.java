@@ -38,16 +38,26 @@ public class PaymentPage implements ActionListener {
             new BrowsePage();
         });
 
-        //Pay button action
-        payButton.addActionListener(this);
-        payButton.setFont(new Font("Verdana", Font.PLAIN, 20));
-
         //Layout
         rightPanel.setLayout(new GridLayout(2,1));
 
+        //Back button
         leftPanel.add(backButton, BorderLayout.WEST);
+        backButton.setMargin(new Insets(5,5,5,5));
+        backButton.setBackground(new Color(59, 89, 182));
+        backButton.setForeground(Color.WHITE);
+        backButton.setFont(new Font("Arial", Font.BOLD, 20));
+
+        //Pay label
         rightTopPanel.add(payLabel);
         payLabel.setFont(new Font("Verdana",Font.BOLD, 30));
+
+        //Pay button
+        payButton.addActionListener(this);
+        payButton.setMargin(new Insets(5,5,5,5));
+        payButton.setBackground(new Color(59, 89, 182));
+        payButton.setForeground(Color.WHITE);
+        payButton.setFont(new Font("Arial", Font.BOLD, 20));
         rightBottomPanel.add(payButton);
 
         f.add(leftPanel, BorderLayout.WEST);

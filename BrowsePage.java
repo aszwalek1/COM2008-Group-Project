@@ -33,6 +33,11 @@ public class BrowsePage {
         //  WEST PANEL
 
         westPanel.add(backButton);
+        backButton.setMargin(new Insets(5,5,5,5));
+        backButton.setBackground(new Color(59, 89, 182));
+        backButton.setForeground(Color.WHITE);
+        backButton.setFont(new Font("Arial", Font.BOLD, 12));
+
         backButton.addActionListener(al -> {
             f.dispose();
             new HomePage();
@@ -56,7 +61,11 @@ public class BrowsePage {
 
         //Order button in the central panel
         centralPanel.add(centralOrderButton);
-        centralOrderButton.setFont(new Font("Verdana", Font.PLAIN, 20));
+        centralOrderButton.setMargin(new Insets(5,5,5,5));
+        centralOrderButton.setBackground(new Color(59, 89, 182));
+        centralOrderButton.setForeground(Color.WHITE);
+        centralOrderButton.setFont(new Font("Arial", Font.BOLD, 20));
+
 
         centralPanel.add(Box.createRigidArea(new Dimension(50, 700)));
 
@@ -108,7 +117,11 @@ public class BrowsePage {
         eastPanel.add(Box.createRigidArea(new Dimension(200, 50)));
 
         eastPanel.add(eastOrderButton);
-        eastOrderButton.setFont(new Font("Verdana", Font.PLAIN, 20));
+        eastOrderButton.setMargin(new Insets(5,5,5,5));
+        eastOrderButton.setBackground(new Color(59, 89, 182));
+        eastOrderButton.setForeground(Color.WHITE);
+        eastOrderButton.setFont(new Font("Arial", Font.BOLD, 20));
+
         eastPanel.add(Box.createRigidArea(new Dimension(200, 150)));
 
         //Action Listener for the Order button
