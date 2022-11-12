@@ -35,7 +35,7 @@ public class PaymentPage implements ActionListener {
         //Back button action
         backButton.addActionListener(al -> {
             f.dispose();
-            new BikePage();
+            new BrowsePage();
         });
 
         //Pay button action

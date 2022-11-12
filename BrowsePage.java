@@ -1,12 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
-import java.sql.Array;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 
-public class BikePage {
+public class BrowsePage {
 
     //Frame
     JFrame f = new JFrame("Build Your Bike");
@@ -22,7 +17,7 @@ public class BikePage {
     JPanel centralPanel = new JPanel();
     JPanel eastPanel = new JPanel();
 
-    public BikePage() {
+    public BrowsePage() {
 
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -117,6 +112,12 @@ public class BikePage {
         eastPanel.add(Box.createRigidArea(new Dimension(200, 150)));
 
         //Action Listener for the Order button
+
+        /*
+            This should go to the payment page if it is a logged in customer
+            or go to register page if no one is logged in
+
+         */
         eastOrderButton.addActionListener(e -> {
             f.dispose();
             new PaymentPage();

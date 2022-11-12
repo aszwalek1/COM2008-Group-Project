@@ -69,7 +69,7 @@ public class HomePage {
 
         browse.addActionListener(ae -> {
             f.dispose();
-            new BikePage();
+            new BrowsePage();
         });
 
 
