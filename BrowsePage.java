@@ -10,6 +10,7 @@ public class BrowsePage {
     JButton backButton = new JButton("Back");
     JButton centralOrderButton = new JButton("Order");
     JButton eastOrderButton = new JButton("Order");
+    JButton temporaryRegistration = new JButton("Register here to buy a bike");
 
     //Panels
     JPanel mainPanel = new JPanel(new GridLayout(1, 3));
@@ -59,6 +60,16 @@ public class BrowsePage {
         centralPanel.add(bikeList);
         centralPanel.add(Box.createRigidArea(new Dimension(50, 100)));
 
+        //Label for the bike name
+        JLabel bikeNameLabel = new JLabel("Type the name for your bike in the field below");
+        bikeNameLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
+        centralPanel.add(bikeNameLabel);
+
+        //Text field for the bike name
+        JTextField bikeNameField = new JTextField("");
+        centralPanel.add(bikeNameField);
+        centralPanel.add(Box.createRigidArea(new Dimension(200, 20)));
+
         //Order button in the central panel
         centralPanel.add(centralOrderButton);
         centralOrderButton.setMargin(new Insets(5,5,5,5));
@@ -67,13 +78,43 @@ public class BrowsePage {
         centralOrderButton.setFont(new Font("Arial", Font.BOLD, 20));
 
 
-        centralPanel.add(Box.createRigidArea(new Dimension(50, 700)));
+
+        centralPanel.add(Box.createRigidArea(new Dimension(50, 300)));
 
         //Action Listener for the Order button
         centralOrderButton.addActionListener(e -> {
-            f.dispose();
-            new PaymentPage();
+            if(bikeNameField.getText().length() == 0) {
+                JOptionPane.showMessageDialog(f, "Please type the bike name to proceed");
+            }
+            else{
+                String bikeName = bikeNameField.getText();
+                f.dispose();
+                new PaymentPage();
+            }
+
         });
+
+
+
+        // TEMPORARY BUTTON TO ACCESS THE REGISTRATION PAGE
+        // SHOPPERS ARE SUPPOSED TO CLICK THE ORDER BUTTON TO GO TO THE REGISTRATION PAGE
+        // AND LOGGED IN CUSTOMERS DO NOT GO TO THE REGISTRATION PAGE AT ANY POINT
+
+
+        temporaryRegistration.setMargin(new Insets(5,5,5,5));
+        temporaryRegistration.setBackground(new Color(59, 89, 182));
+        temporaryRegistration.setForeground(Color.WHITE);
+        temporaryRegistration.setFont(new Font("Arial", Font.BOLD, 20));
+        centralPanel.add(temporaryRegistration);
+
+        temporaryRegistration.addActionListener(e -> {
+            f.dispose();
+            new RegisterPage();
+        });
+
+
+
+
 
 
         // EAST PANEL
@@ -127,7 +168,9 @@ public class BrowsePage {
         nameLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(nameLabel);
 
-        JTextField nameField = new JTextField(" ");
+
+
+        JTextField nameField = new JTextField("");
         eastPanel.add(nameField);
         eastPanel.add(Box.createRigidArea(new Dimension(200, 20)));
 
@@ -149,10 +192,15 @@ public class BrowsePage {
 
          */
         eastOrderButton.addActionListener(e -> {
-            String bikeName = nameField.getText();
-            System.out.println(bikeName);
-            f.dispose();
-            new PaymentPage();
+            if(nameField.getText().length() == 0) {
+                JOptionPane.showMessageDialog(f, "Please type the bike name to proceed");
+            }
+            else {
+                String bikeName = nameField.getText();
+                System.out.println(bikeName);
+                f.dispose();
+                new PaymentPage();
+            }
         });
 
 
