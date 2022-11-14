@@ -1,6 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DBDriver {
     static String URL = "jdbc:mysql://stusql.dcs.shef.ac.uk/";
@@ -10,11 +8,11 @@ public class DBDriver {
 
     public static Connection getConnection() {
         try {
-            Connection con = DriverManager.getConnection(URL+DBNAME, USER, PASSWORD);
-            System.out.println("Connection");
+            Connection con = DriverManager.getConnection(URL + DBNAME, USER, PASSWORD);
+            System.out.println("Connection to Database successful");
             return con;
-        }
-        catch(SQLException ex) {
+        } catch (SQLException ex) {
+            System.out.println("Connection to Database unsuccessful");
             ex.printStackTrace();
             return null;
         }
@@ -23,17 +21,94 @@ public class DBDriver {
     public static void closeConnection(Connection con) {
         try {
             con.close();
-        }
-        catch(SQLException ex) {
+            System.out.println("Connection to Database closed successfully");
+        } catch (SQLException ex) {
+            System.out.println("Connection to Database could not be closed successfully");
             ex.printStackTrace();
         }
     }
 
+    public static void customerSelectAll() throws SQLException {
+        Connection con = DBDriver.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Customer");
+        while (rs.next()) {
+            System.out.print("Customer ID: " + rs.getInt("customerId"));
+            System.out.print(", Forename: " + rs.getString("forename"));
+            System.out.print(", Surname: " + rs.getString("surname"));
+            System.out.print(", HouseNo: " + rs.getInt("houseNo"));
+            System.out.println(", Postcode: " + rs.getString("postcode"));
+        }
+        closeConnection(con);
+    }
+
+    public static void staffSelectAll() throws SQLException {
+        Connection con = DBDriver.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Staff");
+        while (rs.next()) {
+            System.out.print("Staff Username: " + rs.getString("staffUsername"));
+            System.out.println(", Staff Password: " + rs.getString("sPassword"));
+        }
+        closeConnection(con);
+    }
+
+    public static void addressSelectAll() throws SQLException {
+        Connection con = DBDriver.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Address");
+        while (rs.next()) {
+            System.out.print("HouseNo: " + rs.getString("houseNo"));
+            System.out.print(", Street Name: " + rs.getString("streetName"));
+            System.out.print(", City Name: " + rs.getString("cityName"));
+            System.out.println(", Postcode: " + rs.getString("postcode"));
+        }
+        closeConnection(con);
+    }
+
+    public static void customerInsertRecord(String forename, String surname, int houseNo, String postcode) throws SQLException {
+        Connection con = DBDriver.getConnection();
+        Statement stmt = con.createStatement();
+        System.out.println("Inserting record into the Customer table...");
+        String intoTable = "INSERT INTO Customer (forename, surname, houseNo, postcode) VALUES (";
+        String sql = intoTable + forename + "," + surname + "," + houseNo + ",\"" + postcode + "\")";
+        try {
+            stmt.executeUpdate(sql);
+            System.out.println("Record insertion successful");
+        } catch (SQLException ex) {
+            System.out.println("Record insertion unsuccessful");
+            ex.printStackTrace();
+        }
+        closeConnection(con);
+    }
+
+    public static void addressInsertRecord(int houseNo, String streetName, String cityName, String postcode) throws SQLException {
+        Connection con = DBDriver.getConnection();
+        Statement stmt = con.createStatement();
+        System.out.println("Inserting record into the Address table...");
+        String intoTable = "INSERT INTO Address (houseNo, streetName, cityName, postcode) VALUES (";
+        String sql = intoTable + houseNo + ",\"" + streetName + "\",\"" + cityName + "\",\"" + postcode + "\")";
+        try {
+            stmt.executeUpdate(sql);
+            System.out.println("Record insertion successful");
+        } catch (SQLException ex) {
+            System.out.println("Record insertion unsuccessful");
+            ex.printStackTrace();
+        }
+        closeConnection(con);
+    }
+
+    public static void main(String[] args) throws SQLException {
+
+        //customerSelectAll();
+
+        //staffSelectAll();
+
+        //customerInsertRecord("Waigen", "Waigen", 18, "S10 5DF");
+
+        addressInsertRecord(14, "Manchester Road", "Sheffield", "S10 5DF");
+
+        addressSelectAll();
+
+    }
 }
-
-/* Now can just use the code below:
-
-    Connection con = DBDriver.getConnection();
-    DBDriver.closeConnection(con);
-
-*/
