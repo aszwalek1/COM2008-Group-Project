@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="53d91712-24fb-4c7f-8f79-27258b1a37cc" name="Changes" comment="Changed the buttons style" />
+    <list default="true" id="53d91712-24fb-4c7f-8f79-27258b1a37cc" name="Changes" comment="Made the bike name fields required" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -87,7 +87,7 @@
       <workItem from="1667769107096" duration="14758000" />
       <workItem from="1667903910095" duration="19320000" />
       <workItem from="1667996472863" duration="594000" />
-      <workItem from="1668166735348" duration="28683000" />
+      <workItem from="1668166735348" duration="37512000" />
     </task>
     <task id="LOCAL-00001" summary="Added the DBDriver file">
       <created>1667770661209</created>
@@ -180,7 +180,21 @@
       <option name="project" value="LOCAL" />
       <updated>1668265735790</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="I read the brief again and fixed the BrowsePage">
+      <created>1668294556045</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1668294556045</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Made the bike name fields required">
+      <created>1668346759483</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1668346759483</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -208,6 +222,8 @@
     <MESSAGE value="Fixed the comments on BikePage" />
     <MESSAGE value="Changed file name to BrowsePage" />
     <MESSAGE value="Changed the buttons style" />
-    <option name="LAST_COMMIT_MESSAGE" value="Changed the buttons style" />
+    <MESSAGE value="I read the brief again and fixed the BrowsePage" />
+    <MESSAGE value="Made the bike name fields required" />
+    <option name="LAST_COMMIT_MESSAGE" value="Made the bike name fields required" />
   </component>
 </project>
