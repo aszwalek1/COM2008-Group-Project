@@ -87,4 +87,8 @@ public class CustomerLogin {
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
         f.setVisible(true);
     }
+
+    public static void main(String[] args) {
+        CustomerLogin customer = new CustomerLogin();
+    }
 }
