@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 
 
 public class StaffLogin {
@@ -54,6 +56,18 @@ public class StaffLogin {
         login.setForeground(Color.WHITE);
         login.setFont(new Font("Arial", Font.BOLD, 12));
         panel.add(login);
+
+
+        login.addActionListener(ae -> {
+            try {
+                DBDriver.staffLogin("","");
+            } catch (SQLException | NoSuchAlgorithmException e) {
+                throw new RuntimeException(e);
+            }
+            JOptionPane.showMessageDialog(f, "Logged in");
+        });
+
+
 
         JButton back = new JButton("BACK");
         back.setBounds(650,400,80,25);

@@ -1,4 +1,8 @@
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+
 
 public class DBDriver {
     static String URL = "jdbc:mysql://stusql.dcs.shef.ac.uk/";
@@ -98,7 +102,34 @@ public class DBDriver {
         closeConnection(con);
     }
 
-    public static void main(String[] args) throws SQLException {
+    //////////////// staff stuff
+    public static void staffLogin(String userIn, String passIn) throws SQLException, NoSuchAlgorithmException {
+        String userDB; String passDB = "";
+        Connection con = DBDriver.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Staff WHERE staffUsername = '" + userIn + "'");
+        while (rs.next()) {
+            userDB = rs.getString("staffUsername");
+            System.out.println("Username: " + userDB);
+            passDB = rs.getString("sPassword");
+            System.out.println("Password: " + passDB);
+        }
+        staffCheckPass(passIn, passDB);
+        closeConnection(con);
+    }
+
+    public static Boolean staffCheckPass(String passIn, String passDB) throws SQLException, NoSuchAlgorithmException {
+        String passInEncrypted;
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        passInEncrypted = new String(digest.digest(passIn.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
+        if (passInEncrypted.equals(passDB)) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
+    }
+
+    public static void main(String[] args) throws SQLException, NoSuchAlgorithmException {
 
         //customerSelectAll();
 
@@ -106,9 +137,11 @@ public class DBDriver {
 
         //customerInsertRecord("Waigen", "Waigen", 18, "S10 5DF");
 
-        addressInsertRecord(14, "Manchester Road", "Sheffield", "S10 5DF");
+        //addressInsertRecord(14, "Manchester Road", "Sheffield", "S10 5DF");
 
-        addressSelectAll();
+        //addressSelectAll();
+
+        staffLogin("Staff1","hddsa");
 
     }
 }
