@@ -1,10 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class RegisterPage {
+public class RegisterPage extends JFrame {
 
     //Frame
-    JFrame f = new JFrame("Build Your Bike");
+    JFrame f = new JFrame("Registration - Build-a-Bike Ltd.");
 
     //Panels
     JPanel mainPanel = new JPanel();

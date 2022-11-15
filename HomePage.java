@@ -5,7 +5,7 @@ public class HomePage {
 
     public HomePage() {
 
-        JFrame f = new JFrame("BUILD A BIKE");
+        JFrame f = new JFrame("Home Page - Build-a-Bike Ltd.");
         JPanel panel= new JPanel();
         f.getContentPane();
         panel.setLayout(null);
