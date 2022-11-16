@@ -82,6 +82,12 @@ public class CustomerLogin {
             new HomePage();
         });
 
+        login.addActionListener(ae -> {
+            f.dispose();
+            new CustomerPage();
+        });
+
+
 
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
