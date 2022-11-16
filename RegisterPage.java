@@ -142,13 +142,14 @@ public class RegisterPage extends JFrame {
                            Integer.parseInt(houseNoField.getText()),roadField.getText().toLowerCase(),cityField.getText().toLowerCase(),
                             postcodeField.getText().toUpperCase());
                     JOptionPane.showMessageDialog(f, "Success!");
+                    f.dispose();
+                    new PaymentPage();
                 } catch (SQLException e) {
-                    JOptionPane.showMessageDialog(f, "Error when adding Customer!");
+                    JOptionPane.showMessageDialog(f, "Error when adding a customer! Please consult a member of staff. (Likely a database connection error)");
                     throw new RuntimeException(e);
                 }
 
-                f.dispose();
-                new PaymentPage();
+
             }
 
         });
