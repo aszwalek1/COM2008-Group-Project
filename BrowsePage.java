@@ -4,7 +4,7 @@ import java.awt.*;
 public class BrowsePage {
 
     //Frame
-    JFrame f = new JFrame("Build Your Bike");
+    JFrame f = new JFrame(" Browse - Build-a-Bike Ltd.");
 
     //Buttons
     JButton backButton = new JButton("Back");

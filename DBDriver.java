@@ -70,17 +70,38 @@ public class DBDriver {
         closeConnection(con);
     }
 
-    public static void customerInsertRecord(String forename, String surname, int houseNo, String postcode) throws SQLException {
+    public static boolean addressExists(int houseNo, String postcode)  throws SQLException
+    {
         Connection con = DBDriver.getConnection();
         Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM Address WHERE houseNo = '" + houseNo + "' AND postcode = '"+ postcode +"'");
+        boolean exists = rs.next();
+        con.close();
+        return exists;
+
+    }
+
+    public static void insertCustomerRecord(String forename, String surname, int houseNo, String streetName, String cityName, String postcode) throws SQLException
+    {
+        Connection con = getConnection();
+        Statement stmt = con.createStatement();
+        //Check if the Address exists
+        if(!addressExists(houseNo, postcode))
+        {
+            //Add Address
+            addressInsertRecord(houseNo, streetName, cityName, postcode);
+        }
+        //Add Customer
+        String sql = "INSERT INTO Customer (forename,surname,houseNo,postcode) VALUES ('" + forename + "','" + surname + "'," + houseNo + ",'" + postcode + "')";
         System.out.println("Inserting record into the Customer table...");
-        String intoTable = "INSERT INTO Customer (forename, surname, houseNo, postcode) VALUES (";
-        String sql = intoTable + forename + "," + surname + "," + houseNo + ",\"" + postcode + "\")";
-        try {
+        try
+        {
             stmt.executeUpdate(sql);
-            System.out.println("Record insertion successful");
-        } catch (SQLException ex) {
-            System.out.println("Record insertion unsuccessful");
+            System.out.println("Customer insertion successful");
+        }
+        catch (SQLException ex)
+        {
+            System.out.println("Customer insertion unsuccessful");
             ex.printStackTrace();
         }
         closeConnection(con);
@@ -118,7 +139,7 @@ public class DBDriver {
         closeConnection(con);
     }
 
-    public static Boolean staffCheckPass(String passIn, String passDB) throws SQLException, NoSuchAlgorithmException {
+    public static Boolean staffCheckPass(String passIn, String passDB) throws NoSuchAlgorithmException {
         String passInEncrypted;
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         passInEncrypted = new String(digest.digest(passIn.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);

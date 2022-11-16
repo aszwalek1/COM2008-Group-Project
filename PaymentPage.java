@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 public class PaymentPage implements ActionListener {
     //Frame
-    JFrame f = new JFrame("Build Your Bike");
+    JFrame f = new JFrame("Payment - Build-a-Bike Ltd.");
 
     //Panel
     JPanel mainPanel = new JPanel(new GridLayout(1, 2));

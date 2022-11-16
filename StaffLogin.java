@@ -11,7 +11,7 @@ public class StaffLogin {
 
     public StaffLogin() {
         //frame
-        JFrame f = new JFrame("STAFF LOGIN");
+        JFrame f = new JFrame("Staff Login - Build-a-Bike Ltd.");
         f.setVisible(true);
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);

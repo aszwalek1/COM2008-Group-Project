@@ -5,7 +5,7 @@ public class CustomerLogin {
 
     public CustomerLogin() {
 
-        JFrame f = new JFrame("Customer");
+        JFrame f = new JFrame("Customer Login - Build-a-Bike Ltd.");
         f.setVisible(true);
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);

@@ -1,10 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class RegisterPage {
+public class RegisterPage extends JFrame {
 
     //Frame
-    JFrame f = new JFrame("Build Your Bike");
+    JFrame f = new JFrame("Registration - Build-a-Bike Ltd.");
 
     //Panels
     JPanel mainPanel = new JPanel();
@@ -119,9 +122,34 @@ public class RegisterPage {
 
                 JOptionPane.showMessageDialog(f, "Please provide all the information to continue");
             }
+            else if (!isAlpha(forenameField.getText()) ||
+                        !isAlpha(surnameField.getText()) ||
+                        !isNo(houseNoField.getText()) ||
+                        !isAlphaOrSpace(roadField.getText()) ||
+                        !isAlphaOrSpace(cityField.getText()) ||
+                        !isPostcode(postcodeField.getText())){
+                JOptionPane.showMessageDialog(f, "Please provide valid details to continue");
+            }
+            else if(forenameField.getText().length()>30 || surnameField.getText().length()>30 ||
+                    houseNoField.getText().length()>11 || roadField.getText().length()>30 ||
+                    cityField.getText().length()>30){
+                JOptionPane.showMessageDialog(f, "Details provided are too long. Please shorten to continue");
+            }
             else {
-                f.dispose();
-                new PaymentPage();
+                //Add Customer To DB
+                try {
+                    DBDriver.insertCustomerRecord(forenameField.getText().toLowerCase(),surnameField.getText().toLowerCase(),
+                           Integer.parseInt(houseNoField.getText()),roadField.getText().toLowerCase(),cityField.getText().toLowerCase(),
+                            postcodeField.getText().toUpperCase());
+                    JOptionPane.showMessageDialog(f, "Success!");
+                    f.dispose();
+                    new PaymentPage();
+                } catch (SQLException e) {
+                    JOptionPane.showMessageDialog(f, "Error when adding a customer! Please consult a member of staff. (Likely a database connection error)");
+                    throw new RuntimeException(e);
+                }
+
+
             }
 
         });
@@ -132,6 +160,50 @@ public class RegisterPage {
         f.pack();
         f.setVisible(true);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+
+    public boolean isAlpha(String name) {
+        char[] chars = name.toCharArray();
+
+        for (char c : chars) {
+            if(!Character.isLetter(c)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean isAlphaOrSpace(String name) {
+        char[] chars = name.toCharArray();
+
+        for (char c : chars) {
+            if(!Character.isLetter(c) && c != ' ') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean isNo(String no)
+    {
+        try {
+            Integer.parseInt(no);
+            return true;
+        }
+        catch (NumberFormatException ex) {
+            return false;
+        }
+    }
+
+    public boolean isPostcode(String postcode)
+    {
+        String regex = "^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(postcode);
+
+        return matcher.matches();
     }
 
 }
