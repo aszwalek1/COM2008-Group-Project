@@ -125,8 +125,8 @@ public class RegisterPage extends JFrame {
             else if (!isAlpha(forenameField.getText()) ||
                         !isAlpha(surnameField.getText()) ||
                         !isNo(houseNoField.getText()) ||
-                        !isAlpha(roadField.getText()) ||
-                        !isAlpha(cityField.getText()) ||
+                        !isAlphaOrSpace(roadField.getText()) ||
+                        !isAlphaOrSpace(cityField.getText()) ||
                         !isPostcode(postcodeField.getText())){
                 JOptionPane.showMessageDialog(f, "Please provide valid details to continue");
             }
@@ -166,6 +166,18 @@ public class RegisterPage extends JFrame {
 
         for (char c : chars) {
             if(!Character.isLetter(c)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean isAlphaOrSpace(String name) {
+        char[] chars = name.toCharArray();
+
+        for (char c : chars) {
+            if(!Character.isLetter(c) && c != ' ') {
                 return false;
             }
         }
