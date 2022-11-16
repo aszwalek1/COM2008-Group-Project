@@ -55,7 +55,7 @@ public class CustomerLogin {
 
         //message
         JLabel info_id = new JLabel("Don't remember your Order ID? Enter your Address to login");
-        info_id.setBounds(550,500,400,25);
+        info_id.setBounds(550,400,400,25);
         panel.add(info_id);
 
         // name
