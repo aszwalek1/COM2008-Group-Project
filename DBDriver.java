@@ -2,6 +2,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class DBDriver {
@@ -70,6 +72,9 @@ public class DBDriver {
         closeConnection(con);
     }
 
+    //---------------------------------------------------
+    //REGISTER PAGE FUNCTIONS
+    //---------------------------------------------------
     public static boolean addressExists(int houseNo, String postcode)  throws SQLException
     {
         Connection con = DBDriver.getConnection();
@@ -122,6 +127,9 @@ public class DBDriver {
         }
         closeConnection(con);
     }
+    //-----------------------------------------------------
+    //END OF REGISTER PAGE FUNCTIONS
+    //-----------------------------------------------------
 
     //////////////// staff stuff
     public static void staffLogin(String userIn, String passIn) throws SQLException, NoSuchAlgorithmException {
@@ -149,6 +157,132 @@ public class DBDriver {
             return Boolean.FALSE;
         }
     }
+
+    //---------------------------------------------------------------------
+    //BROWSE PAGE FUNCTIONS
+    //---------------------------------------------------------------------
+
+    public static ArrayList<String> allFramesInStock(){
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = con.createStatement();
+            ArrayList<String> frameList = new ArrayList<String>();
+            ResultSet rs = stmt.executeQuery("SELECT frameId, brandName, productName, gears, shocks, size, unitCost FROM FrameSet INNER JOIN Product ON frameId = productId WHERE stock > 0;");
+            while (rs.next()) {
+                frameList.add(rs.getInt("frameId")+". "+rs.getString("brandName")+" '"+rs.getString("productName")+
+                        "' - Gears: "+rs.getInt("gears")+", Shocks: "+boolIntToString(rs.getInt("shocks"))+", Size: "+
+                        rs.getDouble("size")+", Cost: £"+rs.getDouble("unitCost"));
+            }
+            closeConnection(con);
+            return frameList;
+        }
+        catch(SQLException ex)
+        {
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+            ArrayList<String> emptyList = new ArrayList<String>();
+            return emptyList;
+        }
+
+
+    }
+
+    public static ArrayList<String> allWheelsInStock(){
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = con.createStatement();
+            ArrayList<String> wheelList = new ArrayList<String>();
+            ResultSet rs = stmt.executeQuery("SELECT wheelId, brandName, productName, style, brakes, diameter, unitCost FROM Wheel INNER JOIN Product ON wheelId = productId WHERE stock > 1;");
+            while (rs.next()) {
+                wheelList.add(rs.getInt("wheelId")+". "+rs.getString("brandName")+" '"+rs.getString("productName")+
+                        "' - Style: "+rs.getString("style")+", Brakes: "+rs.getString("brakes")+", Diameter: "+
+                        rs.getDouble("diameter")+", Cost: £"+rs.getDouble("unitCost"));
+            }
+            closeConnection(con);
+            return wheelList;
+        }
+        catch(SQLException ex){
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+            ArrayList<String> emptyList = new ArrayList<String>();
+            return emptyList;
+        }
+
+
+    }
+
+    public static ArrayList<String> allHandlebarsInStock(){
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = con.createStatement();
+            ArrayList<String> handlebarList = new ArrayList<String>();
+            ResultSet rs = stmt.executeQuery("SELECT handlebarId, brandName, productName, handlebarStyle, unitCost FROM Handlebar INNER JOIN Product ON handlebarId = productId WHERE stock > 0;");
+            while (rs.next()) {
+                handlebarList.add(rs.getInt("handlebarId")+". "+rs.getString("brandName")+" '"+rs.getString("productName")+
+                        "' - Style: "+rs.getString("handlebarStyle")+", Cost: £"+rs.getDouble("unitCost"));
+            }
+            closeConnection(con);
+            return handlebarList;
+        }
+        catch (SQLException ex){
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+            ArrayList<String> emptyList = new ArrayList<String>();
+            return emptyList;
+        }
+
+
+    }
+
+    public static ArrayList<String> allAssembledBikesInStock(){
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = con.createStatement();
+            ArrayList<String> bikeList = new ArrayList<String>();
+            ResultSet rs = stmt.executeQuery("SELECT assembledBikeId, aPro.brandName, aPro.productName, " +
+                    "gears AS frameGears, shocks AS frameShocks, size AS frameSize, handlebarStyle, " +
+                    "diameter AS wheelDiameter, brakes AS wheelBrakes, style AS wheelStyle, " +
+                    "(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost+wPro.unitCost) AS total FROM AssembledBike " +
+                    "INNER JOIN Product AS aPro ON assembledBikeId = aPro.productId " +
+                    "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
+                    "INNER JOIN Handlebar ON AssembledBike.handlebarId = Handlebar.handlebarId " +
+                    "INNER JOIN Wheel ON AssembledBike.wheelId = Wheel.wheelId " +
+                    "INNER JOIN Product AS fPro ON FrameSet.frameId = fPro.productId " +
+                    "INNER JOIN Product AS hPro ON Handlebar.handlebarId = hPro.productId " +
+                    "INNER JOIN Product AS wPro ON Wheel.wheelId = wPro.productId WHERE aPro.stock > 0;");
+            while (rs.next()) {
+                bikeList.add(rs.getInt("assembledBikeId")+". "+rs.getString("brandName")+" '"+rs.getString("productName")+
+                        "' - Frame Gears: "+rs.getInt("frameGears")+", Frame Shocks: "+boolIntToString(rs.getInt("frameShocks"))+
+                        ", Frame Size: "+rs.getDouble("frameSize")+", Handlebar Style: "+rs.getString("handlebarStyle")+
+                        ", Wheel Diameter: "+rs.getDouble("wheelDiameter")+", Wheel Brakes: "+rs.getString("wheelBrakes")+
+                        ", Wheel Style: "+rs.getString("wheelStyle")+", Total Cost: £"+rs.getDouble("total"));
+            }
+            closeConnection(con);
+            return bikeList;
+        }
+        catch (SQLException ex){
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+            ArrayList<String> emptyList = new ArrayList<String>();
+            return emptyList;
+        }
+
+
+    }
+
+    public static String boolIntToString(int tinyInt)
+    {
+        if(tinyInt == 1){
+            return "Yes";
+        }
+        else{
+            return "No";
+        }
+    }
+
+    //---------------------------------------------------------------------
+    //END OF BROWSE PAGE FUNCTIONS
+    //---------------------------------------------------------------------
 
     public static void main(String[] args) throws SQLException, NoSuchAlgorithmException {
 

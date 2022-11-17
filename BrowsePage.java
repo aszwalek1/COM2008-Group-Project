@@ -1,5 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class BrowsePage {
 
@@ -34,7 +37,7 @@ public class BrowsePage {
         //  WEST PANEL
 
         westPanel.add(backButton);
-        backButton.setMargin(new Insets(5,5,5,5));
+        backButton.setMargin(new Insets(5, 5, 5, 5));
         backButton.setBackground(new Color(59, 89, 182));
         backButton.setForeground(Color.WHITE);
         backButton.setFont(new Font("Arial", Font.BOLD, 12));
@@ -50,12 +53,14 @@ public class BrowsePage {
         // label in the middle panel
         centralPanel.add(Box.createRigidArea(new Dimension(50, 40)));
         JLabel centralLabel = new JLabel("Choose a ready bike to order");
-        centralLabel.setFont(new Font("Verdana",Font.BOLD, 18));
+        centralLabel.setFont(new Font("Verdana", Font.BOLD, 18));
         centralPanel.add(centralLabel);
 
         //Dropdown options and order button
         centralPanel.add(Box.createRigidArea(new Dimension(50, 140)));
-        String[] bikeStrings = { "Bike1", "Bike2", "Bike3", "Bike4", "Bike5" };
+
+        ArrayList<String> assembledBikesList = new ArrayList<>(DBDriver.allAssembledBikesInStock());
+        String[] bikeStrings = assembledBikesList.toArray(new String[assembledBikesList.size()]);
         JComboBox<String> bikeList = new JComboBox<>(bikeStrings);
         centralPanel.add(bikeList);
         centralPanel.add(Box.createRigidArea(new Dimension(50, 100)));
@@ -72,21 +77,19 @@ public class BrowsePage {
 
         //Order button in the central panel
         centralPanel.add(centralOrderButton);
-        centralOrderButton.setMargin(new Insets(5,5,5,5));
+        centralOrderButton.setMargin(new Insets(5, 5, 5, 5));
         centralOrderButton.setBackground(new Color(59, 89, 182));
         centralOrderButton.setForeground(Color.WHITE);
         centralOrderButton.setFont(new Font("Arial", Font.BOLD, 20));
-
 
 
         centralPanel.add(Box.createRigidArea(new Dimension(50, 300)));
 
         //Action Listener for the Order button
         centralOrderButton.addActionListener(e -> {
-            if(bikeNameField.getText().length() == 0) {
+            if (bikeNameField.getText().length() == 0) {
                 JOptionPane.showMessageDialog(f, "Please type the bike name to proceed");
-            }
-            else{
+            } else {
                 String bikeName = bikeNameField.getText();
                 f.dispose();
                 new CustomerPage();
@@ -100,7 +103,7 @@ public class BrowsePage {
         // AND LOGGED IN CUSTOMERS DO NOT GO TO THE REGISTRATION PAGE AT ANY POINT
 
 
-        temporaryRegistration.setMargin(new Insets(5,5,5,5));
+        temporaryRegistration.setMargin(new Insets(5, 5, 5, 5));
         temporaryRegistration.setBackground(new Color(59, 89, 182));
         temporaryRegistration.setForeground(Color.WHITE);
         temporaryRegistration.setFont(new Font("Arial", Font.BOLD, 20));
@@ -112,13 +115,12 @@ public class BrowsePage {
         });
 
 
-
         // EAST PANEL
 
         //Dropdown components options and order button
         eastPanel.add(Box.createRigidArea(new Dimension(50, 40)));
         JLabel eastLabel = new JLabel("Customise your bike by choosing the components (£10 Assembly Charge) ");
-        eastLabel.setFont(new Font("Verdana",Font.BOLD, 16));
+        eastLabel.setFont(new Font("Verdana", Font.BOLD, 16));
         eastPanel.add(eastLabel);
         eastPanel.add(Box.createRigidArea(new Dimension(50, 80)));
 
@@ -134,50 +136,60 @@ public class BrowsePage {
         frameLabel3.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(frameLabel3);
 
-        String[] frameString = { "frame set size1 with shocks", "frame set size2 no shocks",
-                "frame set size3 with shocks",
-                "frame set size4 no shocks"};
+        ArrayList<String> frameList = new ArrayList<>(DBDriver.allFramesInStock());
+        String[] frameString = frameList.toArray(new String[frameList.size()]);
         JComboBox<String> frameSetList = new JComboBox<>(frameString);
         eastPanel.add(frameSetList);
+
         eastPanel.add(Box.createRigidArea(new Dimension(50, 80)));
 
         JLabel handlebarLabel = new JLabel("Choose the style of the handlebar");
         handlebarLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(handlebarLabel);
-        String[] handlebarStrings = { "Straight Handlebar", "High Handlebar", "Dropped Handlebar" };
+
+        ArrayList<String> handlebarsList = new ArrayList<>(DBDriver.allHandlebarsInStock());
+        String[] handlebarStrings = handlebarsList.toArray(new String[handlebarsList.size()]);
         JComboBox<String> handlebarList = new JComboBox<>(handlebarStrings);
         eastPanel.add(handlebarList);
+
         eastPanel.add(Box.createRigidArea(new Dimension(200, 80)));
 
         JLabel wheelsLabel = new JLabel("Choose the wheels for your bike");
         wheelsLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(wheelsLabel);
-        String[] wheelStyleStrings = { "Road style, 40cm, with rim brake system",
-                "Mountain Style, 50cm, with disk brake system",
-                "Hybrid Style, 65cm, with rim brake system",
-                "Mountain Style, 60cm, with disk brake system" };
+
+        ArrayList<String> wheelList = new ArrayList<>(DBDriver.allWheelsInStock());
+        String[] wheelStyleStrings = wheelList.toArray(new String[wheelList.size()]);
         JComboBox<String> wheelStyleList = new JComboBox<>(wheelStyleStrings);
         eastPanel.add(wheelStyleList);
+
+        eastPanel.add(Box.createRigidArea(new Dimension(200, 80)));
+
+        double cost = 10+Double.parseDouble(String.valueOf(handlebarList.getSelectedItem()).split("£")[1])+
+                Double.parseDouble(String.valueOf(frameSetList.getSelectedItem()).split("£")[1])+
+                Double.parseDouble(String.valueOf(wheelStyleList.getSelectedItem()).split("£")[1]);
+        cost = Math.round(cost * 100.0) / 100.0;
+        JLabel costLabel = new JLabel("Total Cost(Including Assembly Charge): £"+cost);
+        costLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
+        eastPanel.add(costLabel);
+
         eastPanel.add(Box.createRigidArea(new Dimension(200, 80)));
 
         JLabel nameLabel = new JLabel("Type the name for your bike in the field below");
         nameLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(nameLabel);
 
-
-
         JTextField nameField = new JTextField("");
         eastPanel.add(nameField);
         eastPanel.add(Box.createRigidArea(new Dimension(200, 20)));
 
         eastPanel.add(eastOrderButton);
-        eastOrderButton.setMargin(new Insets(5,5,5,5));
+        eastOrderButton.setMargin(new Insets(5, 5, 5, 5));
         eastOrderButton.setBackground(new Color(59, 89, 182));
         eastOrderButton.setForeground(Color.WHITE);
         eastOrderButton.setFont(new Font("Arial", Font.BOLD, 20));
 
         eastPanel.add(Box.createRigidArea(new Dimension(200, 110)));
-
 
 
         //Action Listener for the Order button
@@ -188,10 +200,9 @@ public class BrowsePage {
 
          */
         eastOrderButton.addActionListener(e -> {
-            if(nameField.getText().length() == 0) {
+            if (nameField.getText().length() == 0) {
                 JOptionPane.showMessageDialog(f, "Please type the bike name to proceed");
-            }
-            else {
+            } else {
                 String bikeName = nameField.getText();
                 System.out.println(bikeName);
                 f.dispose();
@@ -199,7 +210,38 @@ public class BrowsePage {
             }
         });
 
+        wheelStyleList.addActionListener (e -> {
+            double totalcost = 10+
+                    Double.parseDouble(String.valueOf(handlebarList.getSelectedItem()).split("£")[1])+
+                    Double.parseDouble(String.valueOf(frameSetList.getSelectedItem()).split("£")[1])+
+                    Double.parseDouble(String.valueOf(wheelStyleList.getSelectedItem()).split("£")[1]);
 
+            totalcost = Math.round(totalcost * 100.0) / 100.0;
+
+            costLabel.setText("Total Cost(Including Assembly Charge): £"+totalcost);
+
+        });
+        frameSetList.addActionListener (e -> {
+            double totalcost = 10+
+                    Double.parseDouble(String.valueOf(handlebarList.getSelectedItem()).split("£")[1])+
+                    Double.parseDouble(String.valueOf(frameSetList.getSelectedItem()).split("£")[1])+
+                    Double.parseDouble(String.valueOf(wheelStyleList.getSelectedItem()).split("£")[1]);
+
+            totalcost = Math.round(totalcost * 100.0) / 100.0;
+
+            costLabel.setText("Total Cost(Including Assembly Charge): £"+totalcost);
+
+        });
+        handlebarList.addActionListener (e -> {
+            double totalcost = 10+
+                    Double.parseDouble(String.valueOf(handlebarList.getSelectedItem()).split("£")[1])+
+                    Double.parseDouble(String.valueOf(frameSetList.getSelectedItem()).split("£")[1])+
+                    Double.parseDouble(String.valueOf(wheelStyleList.getSelectedItem()).split("£")[1]);
+            totalcost = Math.round(totalcost * 100.0) / 100.0;
+
+            costLabel.setText("Total Cost(Including Assembly Charge): £"+totalcost);
+
+        });
 
         //add panels to the frame
         f.add(westPanel, BorderLayout.WEST);
@@ -213,6 +255,8 @@ public class BrowsePage {
 
 
     }
+
+
 }
 
 
