@@ -89,11 +89,10 @@ public class BrowsePage {
             else{
                 String bikeName = bikeNameField.getText();
                 f.dispose();
-                new PaymentPage();
+                new CustomerPage();
             }
 
         });
-
 
 
         // TEMPORARY BUTTON TO ACCESS THE REGISTRATION PAGE
@@ -111,9 +110,6 @@ public class BrowsePage {
             f.dispose();
             new RegisterPage();
         });
-
-
-
 
 
 
@@ -199,7 +195,7 @@ public class BrowsePage {
                 String bikeName = nameField.getText();
                 System.out.println(bikeName);
                 f.dispose();
-                new PaymentPage();
+                new CustomerPage();
             }
         });
 
