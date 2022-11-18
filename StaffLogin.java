@@ -71,7 +71,7 @@ public class StaffLogin {
         login.addActionListener(ae -> {
             try {
                 DBDriver.staffLogin("","");
-            } catch (SQLException | NoSuchAlgorithmException e) {
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
             JOptionPane.showMessageDialog(f, "Logged in");
