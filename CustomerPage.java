@@ -16,18 +16,20 @@ public class CustomerPage implements ActionListener {
     JPanel topPanel = new JPanel();
     JPanel toptopPanel = new JPanel();
     JPanel detailsPanel = new JPanel();
-    JScrollPane scrollPanel = new JScrollPane();
 
     //Buttons
     JButton exitButton = new JButton("Exit");
     JButton browseButton = new JButton("Create new order");
     JButton saveDetailsButton = new JButton("Save changes");
+    JButton deleteButton = new JButton("Cancel the order");
 
 
     //Main Labels
     JLabel pageLabel = new JLabel("CUSTOMER PAGE");
     JLabel detailsLabel = new JLabel("Your Personal Details: ");
     JLabel ordersLabel = new JLabel("Your Orders: ");
+    JLabel explainLabel = new JLabel(
+            "Choose the order and click the button below to cancel it");
 
     // Details Labels
 
@@ -47,8 +49,6 @@ public class CustomerPage implements ActionListener {
     JTextField postcode = new JTextField("             ");
 
 
-
-
     public CustomerPage() {
 
         //Setting layouts
@@ -62,7 +62,6 @@ public class CustomerPage implements ActionListener {
         mainPanel.add(middlePanel);
 
         middlePanel.add(topPanel);
-        middlePanel.add(scrollPanel);
         topPanel.add(toptopPanel);
         topPanel.add(detailsPanel);
 
@@ -109,8 +108,20 @@ public class CustomerPage implements ActionListener {
         saveDetailsButton.setForeground(Color.WHITE);
         saveDetailsButton.setFont(new Font("Arial", Font.BOLD, 20));
 
-        //Orders Label
+        //Orders Labels
         topPanel.add(ordersLabel);
+        topPanel.add(Box.createRigidArea(new Dimension(50, 10)));
+        topPanel.add(explainLabel);
+        topPanel.add(Box.createRigidArea(new Dimension(50, 10)));
+
+        //Delete order button
+        topPanel.add(deleteButton);
+        deleteButton.setBackground(new Color(59, 89, 182));
+        deleteButton.setForeground(Color.WHITE);
+        deleteButton.setFont(new Font("Arial", Font.BOLD, 20));
+
+
+        topPanel.add(Box.createRigidArea(new Dimension(50, 30)));
 
         //Formatting Labels
         pageLabel.setFont(new Font("Verdana", Font.BOLD, 20));
@@ -119,22 +130,34 @@ public class CustomerPage implements ActionListener {
 
 
         //Scroll Panel
+
         //scrollPanel.setViewportView(table);
 
+        // Column Names
+        String[] columnNames = {
+                "Order ID", "Date", "Frame-set", "Handlebar", "wheels", "total price" };
 
 
+        // Data to be displayed in the JTable
+        String[][] data = {
+                {"12345", "1.04.2023", "Kate Spade", "Gucci", "Prada", "9999"},
+                {"78978", "1.01.2020", "Poundland", "Poundland", "IKEA", "12"}
+        };
 
+        //Table
+        JTable ordersTable = new JTable(data, columnNames);
+        ordersTable.setBounds(30, 40, 200, 300);
+        ordersTable.setFont(new Font("Verdana", Font.PLAIN, 20));
+        ordersTable.setRowHeight(24);
+        ordersTable.getTableHeader().setFont(new Font("Verdana", Font.PLAIN, 22));
 
+        JScrollPane scrollPanel = new JScrollPane(ordersTable);
+        middlePanel.add(scrollPanel);
 
 
         //Buttons actions
-
         exitButton.addActionListener(this);
         browseButton.addActionListener(this);
-
-
-
-
 
         f.add(leftPanel, BorderLayout.WEST);
         f.add(rightPanel, BorderLayout.EAST);
