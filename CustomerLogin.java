@@ -59,7 +59,7 @@ public class CustomerLogin {
         panel.add(info_id);
 
         // name
-        JLabel name_id = new JLabel("NAME");
+        JLabel name_id = new JLabel("NAME*");
         name_id.setBounds(550,300,400,25);
         panel.add( name_id);
         name_id.setVisible(false);
@@ -71,7 +71,7 @@ public class CustomerLogin {
         name_text.setVisible(false);
 
         // surname
-        JLabel surname_id = new JLabel("SURNAME");
+        JLabel surname_id = new JLabel("SURNAME*");
         surname_id.setBounds(550,350,400,25);
         panel.add( surname_id);
         surname_id.setVisible(false);
@@ -84,7 +84,7 @@ public class CustomerLogin {
 
 
         // house number
-        JLabel house_id = new JLabel("HOUSE NO.");
+        JLabel house_id = new JLabel("HOUSE NO.*");
         house_id.setBounds(550,400,400,25);
         panel.add(house_id);
         house_id.setVisible(false);
@@ -96,7 +96,7 @@ public class CustomerLogin {
         house_text.setVisible(false);
 
         // POST CODE
-        JLabel post_id = new JLabel("POST CODE");
+        JLabel post_id = new JLabel("POST CODE*");
         post_id.setBounds(550,450,400,25);
         panel.add(post_id);
         post_id.setVisible(false);

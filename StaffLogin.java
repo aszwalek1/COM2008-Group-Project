@@ -69,6 +69,11 @@ public class StaffLogin {
 
 
         login.addActionListener(ae -> {
+
+
+            f.dispose();
+            new StaffPage();
+
             try {
                 DBDriver.staffLogin("","");
             } catch (SQLException | NoSuchAlgorithmException e) {
