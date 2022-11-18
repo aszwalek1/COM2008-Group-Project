@@ -51,7 +51,7 @@ public class BrowsePage {
         //  CENTRAL PANEL
 
         // label in the middle panel
-        centralPanel.add(Box.createRigidArea(new Dimension(50, 40)));
+        centralPanel.add(Box.createRigidArea(new Dimension(10, 40)));
         JLabel centralLabel = new JLabel("Choose a ready bike to order");
         centralLabel.setFont(new Font("Verdana", Font.BOLD, 18));
         centralPanel.add(centralLabel);
