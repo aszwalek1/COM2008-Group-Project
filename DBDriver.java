@@ -128,7 +128,7 @@ public class DBDriver {
     //-----------------------------------------------------
 
     //////////////// staff stuff
-    public static void staffLogin(String userIn, String passIn) throws SQLException {
+    public static boolean staffLogin(String userIn, String passIn) throws SQLException {
         String passDB = "";
         String passEncrypt = "";
         Connection con = DBDriver.getConnection();
@@ -141,12 +141,8 @@ public class DBDriver {
         while (rs.next()) {
             passEncrypt = rs.getString(1);
         }
-        if (passEncrypt.equals(passDB)) {
-            System.out.println("Logged in");
-        } else {
-            System.out.println("Incorrect password");
-        }
         closeConnection(con);
+        return passEncrypt.equals(passDB);
     }
 
     //---------------------------------------------------------------------
@@ -287,7 +283,7 @@ public class DBDriver {
 
         //addressSelectAll();
 
-        staffLogin("Staff1","password");
+        //staffLogin("Staff1","password");
 
     }
 }
