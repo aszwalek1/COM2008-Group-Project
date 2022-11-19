@@ -14,14 +14,17 @@ public class StaffPage implements ActionListener {
     JPanel rightPanel = new JPanel();
     JPanel middlePanel = new JPanel();
     JPanel topPanel = new JPanel();
-    JPanel toptopPanel = new JPanel();
+
+    JPanel inventoryPanel = new JPanel();
+
+
 
 
     // All Buttons
     JButton backButton = new JButton("Back");
-    JButton browseButton = new JButton("View Customer");
+    JButton customerButton = new JButton("View Customer");
 
-    JButton getBrowseButton = new JButton("BROWSE");
+    JButton getBrowseButton = new JButton("Browse");
 
 
 
@@ -31,15 +34,32 @@ public class StaffPage implements ActionListener {
         //Setting layouts
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
-        toptopPanel.setLayout(new BoxLayout(toptopPanel, BoxLayout.Y_AXIS));
+
+
 
         //Adding panels to the main panel
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
         mainPanel.add(middlePanel);
-
         middlePanel.add(topPanel);
-        topPanel.add(toptopPanel);
+        topPanel.add(inventoryPanel);
+
+
+        //Labels and text fields for  for inventory
+
+        JLabel title = new JLabel("INVENTORY");
+        title.setFont(new Font("Arial", Font.BOLD, 20));
+
+//        JLabel frameSet = new JLabel(("Frameset"));
+//        title.setFont(new Font("Arial", Font.BOLD, 20));
+//
+//        JLabel handlebars = new JLabel(("Handlebar"));
+//        title.setFont(new Font("Arial", Font.BOLD, 20));
+//
+//        JLabel wheels = new JLabel(("Wheels"));
+//        title.setFont(new Font("Arial", Font.BOLD, 20));
+
+
 
 
 
@@ -50,26 +70,28 @@ public class StaffPage implements ActionListener {
         backButton.setForeground(Color.WHITE);
         backButton.setFont(new Font("Arial", Font.BOLD, 20));
 
-        rightPanel.add(browseButton);
-        browseButton.setMargin(new Insets(5,5,5,5));
-        browseButton.setBackground(new Color(59, 89, 182));
-        browseButton.setForeground(Color.WHITE);
-        browseButton.setFont(new Font("Arial", Font.BOLD, 20));
+        rightPanel.add(customerButton);
+        customerButton.setMargin(new Insets(5,5,5,5));
+        customerButton.setBackground(new Color(59, 89, 182));
+        customerButton.setForeground(Color.WHITE);
+        customerButton.setFont(new Font("Arial", Font.BOLD, 20));
 
         leftPanel.add(getBrowseButton);
         getBrowseButton.setMargin(new Insets(5,5,5,5));
         getBrowseButton.setBackground(new Color(59, 89, 182));
         getBrowseButton.setForeground(Color.WHITE);
         getBrowseButton.setFont(new Font("Arial", Font.BOLD, 20));
-        toptopPanel.add(Box.createRigidArea(new Dimension(50, 30)));
-        toptopPanel.add(Box.createRigidArea(new Dimension(50, 50)));
-        topPanel.add(Box.createRigidArea(new Dimension(50, 30)));
+        topPanel.add(Box.createRigidArea(new Dimension(50, 100)));
+
+//        inventoryPanel.add(title);
+//        inventoryPanel.add(frameSet);
+//        inventoryPanel.add(handlebars);
+//        inventoryPanel.add(wheels);
+
 
 
 
         //Scroll Panel
-
-        //scrollPanel.setViewportView(table);
 
         // Column Names
         String[] columnNames = {
@@ -100,8 +122,11 @@ public class StaffPage implements ActionListener {
 
         //Buttons actions
         backButton.addActionListener(this);
-        browseButton.addActionListener(this);
+        customerButton.addActionListener(this);
+        getBrowseButton.addActionListener(this);
 
+
+        //Adding rest of the panels to
         f.add(leftPanel, BorderLayout.WEST);
         f.add(rightPanel, BorderLayout.EAST);
         f.add(middlePanel, BorderLayout.CENTER);
@@ -116,9 +141,15 @@ public class StaffPage implements ActionListener {
             f.dispose();
             new HomePage();
         }
-        else if(e.getSource() == browseButton) {
+        else if(e.getSource() == getBrowseButton) {
             f.dispose();
             new BrowsePage();
         }
+//        else if (e.getSource() == customerButton) {
+//            f.dispose();
+//            new CustomerPage();
+//        }
     }
+
+
 }
