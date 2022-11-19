@@ -1,9 +1,5 @@
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class DBDriver {
@@ -132,30 +128,21 @@ public class DBDriver {
     //-----------------------------------------------------
 
     //////////////// staff stuff
-    public static void staffLogin(String userIn, String passIn) throws SQLException, NoSuchAlgorithmException {
-        String userDB; String passDB = "";
+    public static boolean staffLogin(String userIn, String passIn) throws SQLException {
+        String passDB = "";
+        String passEncrypt = "";
         Connection con = DBDriver.getConnection();
         Statement stmt = con.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Staff WHERE staffUsername = '" + userIn + "'");
         while (rs.next()) {
-            userDB = rs.getString("staffUsername");
-            System.out.println("Username: " + userDB);
             passDB = rs.getString("sPassword");
-            System.out.println("Password: " + passDB);
         }
-        staffCheckPass(passIn, passDB);
+        rs = stmt.executeQuery("SELECT SHA2('" + passIn + "', 256)");
+        while (rs.next()) {
+            passEncrypt = rs.getString(1);
+        }
         closeConnection(con);
-    }
-
-    public static Boolean staffCheckPass(String passIn, String passDB) throws NoSuchAlgorithmException {
-        String passInEncrypted;
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        passInEncrypted = new String(digest.digest(passIn.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8);
-        if (passInEncrypted.equals(passDB)) {
-            return Boolean.TRUE;
-        } else {
-            return Boolean.FALSE;
-        }
+        return passEncrypt.equals(passDB);
     }
 
     //---------------------------------------------------------------------
@@ -284,7 +271,7 @@ public class DBDriver {
     //END OF BROWSE PAGE FUNCTIONS
     //---------------------------------------------------------------------
 
-    public static void main(String[] args) throws SQLException, NoSuchAlgorithmException {
+    public static void main(String[] args) throws SQLException{
 
         //customerSelectAll();
 
@@ -296,7 +283,7 @@ public class DBDriver {
 
         //addressSelectAll();
 
-        staffLogin("Staff1","hddsa");
+        //staffLogin("Staff1","password");
 
     }
 }

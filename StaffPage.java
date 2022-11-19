@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 public class StaffPage implements ActionListener {
 
     //Frame
-    JFrame f = new JFrame("Customer Page - Build-a-Bike Ltd.");
+    JFrame f = new JFrame("Staff - Build-a-Bike Ltd.");
 
     //Panels
     JPanel mainPanel = new JPanel(new GridLayout(1, 3));
@@ -15,20 +15,13 @@ public class StaffPage implements ActionListener {
     JPanel middlePanel = new JPanel();
     JPanel topPanel = new JPanel();
     JPanel toptopPanel = new JPanel();
-    JPanel detailsPanel = new JPanel();
-    JScrollPane scrollPanel = new JScrollPane();
-
-    //Buttons
-    JButton exitButton = new JButton("BACK");
-    JButton browseButton = new JButton("VIEW CUSTOMERS");
-    JButton saveDetailsButton = new JButton("VIEW ORDERS");
 
 
-    //Main Labels
-    JLabel pageLabel = new JLabel("STAFF PAGE");
-//    JLabel detailsLabel = new JLabel("Your Personal Details: ");
-    JLabel ordersLabel = new JLabel("Your Orders: ");
+    // All Buttons
+    JButton backButton = new JButton("Back");
+    JButton browseButton = new JButton("View Customer");
 
+    JButton getBrowseButton = new JButton("BROWSE");
 
 
 
@@ -46,17 +39,16 @@ public class StaffPage implements ActionListener {
         mainPanel.add(middlePanel);
 
         middlePanel.add(topPanel);
-        middlePanel.add(scrollPanel);
         topPanel.add(toptopPanel);
-        topPanel.add(detailsPanel);
+
 
 
         //Adding Main Buttons
-        leftPanel.add(exitButton);
-        exitButton.setMargin(new Insets(5,5,5,5));
-        exitButton.setBackground(new Color(59, 89, 182));
-        exitButton.setForeground(Color.WHITE);
-        exitButton.setFont(new Font("Arial", Font.BOLD, 20));
+        leftPanel.add(backButton);
+        backButton.setMargin(new Insets(5,5,5,5));
+        backButton.setBackground(new Color(59, 89, 182));
+        backButton.setForeground(Color.WHITE);
+        backButton.setFont(new Font("Arial", Font.BOLD, 20));
 
         rightPanel.add(browseButton);
         browseButton.setMargin(new Insets(5,5,5,5));
@@ -64,42 +56,51 @@ public class StaffPage implements ActionListener {
         browseButton.setForeground(Color.WHITE);
         browseButton.setFont(new Font("Arial", Font.BOLD, 20));
 
-        //Adding Main Labels
-        pageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-//        detailsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        toptopPanel.add(pageLabel);
+        leftPanel.add(getBrowseButton);
+        getBrowseButton.setMargin(new Insets(5,5,5,5));
+        getBrowseButton.setBackground(new Color(59, 89, 182));
+        getBrowseButton.setForeground(Color.WHITE);
+        getBrowseButton.setFont(new Font("Arial", Font.BOLD, 20));
         toptopPanel.add(Box.createRigidArea(new Dimension(50, 30)));
-//        toptopPanel.add(detailsLabel);
         toptopPanel.add(Box.createRigidArea(new Dimension(50, 50)));
+        topPanel.add(Box.createRigidArea(new Dimension(50, 30)));
 
-
-
-        //Orders Label
-        topPanel.add(ordersLabel);
-
-        //Formatting Labels
-        pageLabel.setFont(new Font("Verdana", Font.BOLD, 20));
-//        detailsLabel.setFont(new Font("Verdana", Font.BOLD, 17));
-        ordersLabel.setFont(new Font("Verdana", Font.BOLD, 17));
 
 
         //Scroll Panel
+
         //scrollPanel.setViewportView(table);
 
+        // Column Names
+        String[] columnNames = {
+                "Order ID", "Status" };
+
+
+        // Data to be displayed in the JTable
+        String[][] data = {
+                {"12345", "Pending"},
+                {"78978", "In processs"},
+                {"1455", "Pending"},
+                {"7855", "In processs"}
+        };
 
 
 
 
+        //Table
+        JTable ordersTable = new JTable(data, columnNames);
+        ordersTable.setBounds(30, 40, 200, 300);
+        ordersTable.setFont(new Font("Verdana", Font.PLAIN, 20));
+        ordersTable.setRowHeight(24);
+        ordersTable.getTableHeader().setFont(new Font("Verdana", Font.PLAIN, 22));
+
+        JScrollPane scrollPanel = new JScrollPane(ordersTable);
+        middlePanel.add(scrollPanel);
 
 
         //Buttons actions
-
-        exitButton.addActionListener(this);
+        backButton.addActionListener(this);
         browseButton.addActionListener(this);
-
-
-
-
 
         f.add(leftPanel, BorderLayout.WEST);
         f.add(rightPanel, BorderLayout.EAST);
@@ -111,7 +112,7 @@ public class StaffPage implements ActionListener {
 
     }
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == exitButton) {
+        if(e.getSource() == backButton) {
             f.dispose();
             new HomePage();
         }

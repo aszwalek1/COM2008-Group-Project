@@ -48,15 +48,15 @@ public class StaffLogin {
         panel.add(password);
 
 
-        //Text field
-        JTextField text = new JTextField(20);
-        text.setBounds(750,300,165,25);
-        panel.add(text);
+        //Username field
+        JTextField user = new JTextField(20);
+        user.setBounds(750,300,165,25);
+        panel.add(user);
 
         //Password field
-        JPasswordField p = new JPasswordField();
-        p.setBounds(750,350,165,25);
-        panel.add(p);
+        JPasswordField pass = new JPasswordField();
+        pass.setBounds(750,350,165,25);
+        panel.add(pass);
 
         //Button
 
@@ -75,11 +75,14 @@ public class StaffLogin {
             new StaffPage();
 
             try {
-                DBDriver.staffLogin("","");
-            } catch (SQLException | NoSuchAlgorithmException e) {
+                if (DBDriver.staffLogin(user.getText(), String.valueOf(pass.getPassword()))){
+                    JOptionPane.showMessageDialog(f, "Login Success");
+                } else {
+                    JOptionPane.showMessageDialog(f, "Login Failed");
+                }
+            } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            JOptionPane.showMessageDialog(f, "Logged in");
         });
 
 
