@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class BrowsePage {
@@ -9,17 +7,19 @@ public class BrowsePage {
     //Frame
     JFrame f = new JFrame(" Browse - Build-a-Bike Ltd.");
 
+    //Panels
+    JPanel mainPanel = new JPanel(new GridLayout(1, 3));
+    JPanel westPanel = new JPanel();
+    JPanel centralPanel = new JPanel();
+    JPanel eastPanel = new JPanel();
+
     //Buttons
     JButton backButton = new JButton("Back");
     JButton centralOrderButton = new JButton("Order");
     JButton eastOrderButton = new JButton("Order");
     JButton temporaryRegistration = new JButton("Register here to buy a bike");
 
-    //Panels
-    JPanel mainPanel = new JPanel(new GridLayout(1, 3));
-    JPanel westPanel = new JPanel();
-    JPanel centralPanel = new JPanel();
-    JPanel eastPanel = new JPanel();
+
 
     public BrowsePage() {
 
@@ -40,7 +40,7 @@ public class BrowsePage {
         backButton.setMargin(new Insets(5, 5, 5, 5));
         backButton.setBackground(new Color(59, 89, 182));
         backButton.setForeground(Color.WHITE);
-        backButton.setFont(new Font("Arial", Font.BOLD, 12));
+        backButton.setFont(new Font("Arial", Font.BOLD, 20));
 
         backButton.addActionListener(al -> {
             f.dispose();
@@ -51,14 +51,14 @@ public class BrowsePage {
         //  CENTRAL PANEL
 
         // label in the middle panel
-        centralPanel.add(Box.createRigidArea(new Dimension(10, 40)));
+        centralPanel.add(Box.createRigidArea(new Dimension(400, 40)));
         JLabel centralLabel = new JLabel("Choose a ready bike to order");
-        centralLabel.setFont(new Font("Verdana", Font.BOLD, 18));
+        centralLabel.setFont(new Font("Verdana", Font.BOLD, 16));
         centralPanel.add(centralLabel);
 
-        //Dropdown options and order button
-        centralPanel.add(Box.createRigidArea(new Dimension(50, 140)));
+        centralPanel.add(Box.createRigidArea(new Dimension(50, 162)));
 
+        // Combo Box with ready bikes from the database
         ArrayList<String> assembledBikesList = new ArrayList<>(DBDriver.allAssembledBikesInStock());
         String[] bikeStrings = assembledBikesList.toArray(new String[assembledBikesList.size()]);
         JComboBox<String> bikeList = new JComboBox<>(bikeStrings);
@@ -66,7 +66,7 @@ public class BrowsePage {
         centralPanel.add(Box.createRigidArea(new Dimension(50, 100)));
 
         //Label for the bike name
-        JLabel bikeNameLabel = new JLabel("Type the name for your bike in the field below");
+        JLabel bikeNameLabel = new JLabel("Your Bike's Name:");
         bikeNameLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         centralPanel.add(bikeNameLabel);
 
@@ -98,11 +98,6 @@ public class BrowsePage {
         });
 
 
-        // TEMPORARY BUTTON TO ACCESS THE REGISTRATION PAGE
-        // SHOPPERS ARE SUPPOSED TO CLICK THE ORDER BUTTON TO GO TO THE REGISTRATION PAGE
-        // AND LOGGED IN CUSTOMERS DO NOT GO TO THE REGISTRATION PAGE AT ANY POINT
-
-
         temporaryRegistration.setMargin(new Insets(5, 5, 5, 5));
         temporaryRegistration.setBackground(new Color(59, 89, 182));
         temporaryRegistration.setForeground(Color.WHITE);
@@ -119,7 +114,7 @@ public class BrowsePage {
 
         //Dropdown components options and order button
         eastPanel.add(Box.createRigidArea(new Dimension(50, 40)));
-        JLabel eastLabel = new JLabel("Customise your bike by choosing the components (£10 Assembly Charge) ");
+        JLabel eastLabel = new JLabel("Customise your bike by choosing the components ");
         eastLabel.setFont(new Font("Verdana", Font.BOLD, 16));
         eastPanel.add(eastLabel);
         eastPanel.add(Box.createRigidArea(new Dimension(50, 80)));
@@ -135,7 +130,9 @@ public class BrowsePage {
         JLabel frameLabel3 = new JLabel("(it comes with pre-specified gears to suit the frame) ");
         frameLabel3.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(frameLabel3);
+        eastPanel.add(Box.createRigidArea(new Dimension(200, 20)));
 
+        // Combo Box with frame options from the database
         ArrayList<String> frameList = new ArrayList<>(DBDriver.allFramesInStock());
         String[] frameString = frameList.toArray(new String[frameList.size()]);
         JComboBox<String> frameSetList = new JComboBox<>(frameString);
@@ -147,6 +144,7 @@ public class BrowsePage {
         handlebarLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(handlebarLabel);
 
+        // Combo Box with handlebar options from the database
         ArrayList<String> handlebarsList = new ArrayList<>(DBDriver.allHandlebarsInStock());
         String[] handlebarStrings = handlebarsList.toArray(new String[handlebarsList.size()]);
         JComboBox<String> handlebarList = new JComboBox<>(handlebarStrings);
@@ -158,12 +156,13 @@ public class BrowsePage {
         wheelsLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(wheelsLabel);
 
+        // Combo Box with wheels options from the database
         ArrayList<String> wheelList = new ArrayList<>(DBDriver.allWheelsInStock());
         String[] wheelStyleStrings = wheelList.toArray(new String[wheelList.size()]);
         JComboBox<String> wheelStyleList = new JComboBox<>(wheelStyleStrings);
         eastPanel.add(wheelStyleList);
 
-        eastPanel.add(Box.createRigidArea(new Dimension(200, 80)));
+        eastPanel.add(Box.createRigidArea(new Dimension(200, 50)));
 
         double cost = 10+Double.parseDouble(String.valueOf(handlebarList.getSelectedItem()).split("£")[1])+
                 Double.parseDouble(String.valueOf(frameSetList.getSelectedItem()).split("£")[1])+
@@ -173,32 +172,30 @@ public class BrowsePage {
         costLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(costLabel);
 
-        eastPanel.add(Box.createRigidArea(new Dimension(200, 80)));
+        eastPanel.add(Box.createRigidArea(new Dimension(200, 40)));
 
-        JLabel nameLabel = new JLabel("Type the name for your bike in the field below");
+        // Bike name label
+        JLabel nameLabel = new JLabel("Your Bike's Name:");
         nameLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(nameLabel);
 
+        // Bike name text field
         JTextField nameField = new JTextField("");
         eastPanel.add(nameField);
         eastPanel.add(Box.createRigidArea(new Dimension(200, 20)));
 
+        // Order Button on the right
         eastPanel.add(eastOrderButton);
         eastOrderButton.setMargin(new Insets(5, 5, 5, 5));
         eastOrderButton.setBackground(new Color(59, 89, 182));
         eastOrderButton.setForeground(Color.WHITE);
         eastOrderButton.setFont(new Font("Arial", Font.BOLD, 20));
 
-        eastPanel.add(Box.createRigidArea(new Dimension(200, 110)));
+        eastPanel.add(Box.createRigidArea(new Dimension(200, 80)));
 
 
-        //Action Listener for the Order button
+        //Action Listeners
 
-        /*
-            This should go to the payment page if it is a logged in customer
-            or go to register page if no one is logged in
-
-         */
         eastOrderButton.addActionListener(e -> {
             if (nameField.getText().length() == 0) {
                 JOptionPane.showMessageDialog(f, "Please type the bike name to proceed");
@@ -248,37 +245,10 @@ public class BrowsePage {
         f.add(centralPanel, BorderLayout.CENTER);
         f.add(eastPanel, BorderLayout.EAST);
 
-
         f.pack();
         f.setVisible(true);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-
     }
 
-
 }
-
-
-        /*          USING DATABASE FOR DROP-DOWNS ??
-        //Drop-Down menu for ready bikes
-        //Get Bikes from a table from the Database
-        ArrayList<String> readyBikes = new ArrayList<>();
-        try {
-            Connection con = DBDriver.getConnection();
-            String query = "select bikes from DBTable";
-            PreparedStatement pst = con.prepareStatement(query);
-            ResultSet rs = pst.executeQuery();
-            while(rs.next()){
-                //shows Name data in combobox
-                //Add data to the array list
-                readyBikes.add(rs.getString("BikeID")); //?????????????????
-            }
-            pst.close();
-            DBDriver.closeConnection(con);
-        }
-        catch(Exception exception){
-            exception.printStackTrace();
-        }
-        return readyBikes;
-        */
