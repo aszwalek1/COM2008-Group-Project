@@ -69,6 +69,11 @@ public class StaffLogin {
 
 
         login.addActionListener(ae -> {
+
+
+            f.dispose();
+            new StaffPage();
+
             try {
                 if (DBDriver.staffLogin(user.getText(), String.valueOf(pass.getPassword()))){
                     JOptionPane.showMessageDialog(f, "Login Success");

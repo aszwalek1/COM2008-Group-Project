@@ -18,16 +18,6 @@ public class HomePage {
         name.setBounds(575, 200, 1000,100);
         panel.add(name);
 
-
-//        ImageIcon image = new ImageIcon("bike.jpg");
-//        JLabel imageLabel = new JLabel(image);
-//        panel.add(imageLabel);
-//        imageLabel.setBounds(500,500,80,20);
-//        imageLabel.setVisible(true);
-
-
-
-
         JButton clogin = new JButton(" CUSTOMER");
         Dimension size = clogin.getPreferredSize();
         clogin.setBounds(550,400 ,size.width, size.height);

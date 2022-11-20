@@ -1,12 +1,155 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class StaffPage {
+public class StaffPage implements ActionListener {
+
+    //Frame
+    JFrame f = new JFrame("Staff - Build-a-Bike Ltd.");
+
+    //Panels
+    JPanel mainPanel = new JPanel(new GridLayout(1, 3));
+    JPanel leftPanel = new JPanel();
+    JPanel rightPanel = new JPanel();
+    JPanel middlePanel = new JPanel();
+    JPanel topPanel = new JPanel();
+
+    JPanel inventoryPanel = new JPanel();
+
+
+
+
+    // All Buttons
+    JButton backButton = new JButton("Back");
+    JButton customerButton = new JButton("View Customer");
+
+    JButton getBrowseButton = new JButton("Browse");
+
+
+
 
     public StaffPage() {
-        //frame
-        JFrame f = new JFrame("Staff Login - Build-a-Bike Ltd.");
+
+        //Setting layouts
+        middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
+        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+
+
+
+        //Adding panels to the main panel
+        mainPanel.add(leftPanel);
+        mainPanel.add(rightPanel);
+        mainPanel.add(middlePanel);
+        middlePanel.add(topPanel);
+        topPanel.add(inventoryPanel);
+
+
+        //Labels and text fields for  for inventory
+
+        JLabel title = new JLabel("INVENTORY");
+        title.setFont(new Font("Arial", Font.BOLD, 20));
+
+//        JLabel frameSet = new JLabel(("Frameset"));
+//        title.setFont(new Font("Arial", Font.BOLD, 20));
+//
+//        JLabel handlebars = new JLabel(("Handlebar"));
+//        title.setFont(new Font("Arial", Font.BOLD, 20));
+//
+//        JLabel wheels = new JLabel(("Wheels"));
+//        title.setFont(new Font("Arial", Font.BOLD, 20));
+
+
+
+
+
+        //Adding Main Buttons
+        leftPanel.add(backButton);
+        backButton.setMargin(new Insets(5,5,5,5));
+        backButton.setBackground(new Color(59, 89, 182));
+        backButton.setForeground(Color.WHITE);
+        backButton.setFont(new Font("Arial", Font.BOLD, 20));
+
+        rightPanel.add(customerButton);
+        customerButton.setMargin(new Insets(5,5,5,5));
+        customerButton.setBackground(new Color(59, 89, 182));
+        customerButton.setForeground(Color.WHITE);
+        customerButton.setFont(new Font("Arial", Font.BOLD, 20));
+
+        leftPanel.add(getBrowseButton);
+        getBrowseButton.setMargin(new Insets(5,5,5,5));
+        getBrowseButton.setBackground(new Color(59, 89, 182));
+        getBrowseButton.setForeground(Color.WHITE);
+        getBrowseButton.setFont(new Font("Arial", Font.BOLD, 20));
+        topPanel.add(Box.createRigidArea(new Dimension(50, 100)));
+
+//        inventoryPanel.add(title);
+//        inventoryPanel.add(frameSet);
+//        inventoryPanel.add(handlebars);
+//        inventoryPanel.add(wheels);
+
+
+
+
+        //Scroll Panel
+
+        // Column Names
+        String[] columnNames = {
+                "Order ID", "Status" };
+
+
+        // Data to be displayed in the JTable
+        String[][] data = {
+                {"12345", "Pending"},
+                {"78978", "In processs"},
+                {"1455", "Pending"},
+                {"7855", "In processs"}
+        };
+
+
+
+
+        //Table
+        JTable ordersTable = new JTable(data, columnNames);
+        ordersTable.setBounds(30, 40, 200, 300);
+        ordersTable.setFont(new Font("Verdana", Font.PLAIN, 20));
+        ordersTable.setRowHeight(24);
+        ordersTable.getTableHeader().setFont(new Font("Verdana", Font.PLAIN, 22));
+
+        JScrollPane scrollPanel = new JScrollPane(ordersTable);
+        middlePanel.add(scrollPanel);
+
+
+        //Buttons actions
+        backButton.addActionListener(this);
+        customerButton.addActionListener(this);
+        getBrowseButton.addActionListener(this);
+
+
+        //Adding rest of the panels to
+        f.add(leftPanel, BorderLayout.WEST);
+        f.add(rightPanel, BorderLayout.EAST);
+        f.add(middlePanel, BorderLayout.CENTER);
+
         f.setVisible(true);
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+
     }
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == backButton) {
+            f.dispose();
+            new HomePage();
+        }
+        else if(e.getSource() == getBrowseButton) {
+            f.dispose();
+            new BrowsePage();
+        }
+//        else if (e.getSource() == customerButton) {
+//            f.dispose();
+//            new CustomerPage();
+//        }
+    }
+
+
 }
