@@ -1,5 +1,11 @@
+import com.mysql.cj.jdbc.result.ResultSetImpl;
+
+import javax.swing.*;
+import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class DBDriver {
@@ -71,18 +77,39 @@ public class DBDriver {
     //---------------------------------------------------
     //REGISTER PAGE FUNCTIONS
     //---------------------------------------------------
-    public static boolean addressExists(int houseNo, String postcode)  throws SQLException
+    public static boolean addressExists(String houseNo, String postcode)
     {
-        Connection con = DBDriver.getConnection();
-        Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM Address WHERE houseNo = '" + houseNo + "' AND postcode = '"+ postcode +"'");
-        boolean exists = rs.next();
-        con.close();
-        return exists;
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Address WHERE houseNo = '" + houseNo + "' AND postcode = '"+ postcode +"'");
+            boolean exists = rs.next();
+            con.close();
+            return exists;
+        }
+        catch (SQLException ex){
+            return false;
+        }
+
 
     }
 
-    public static void insertCustomerRecord(String forename, String surname, int houseNo, String streetName, String cityName, String postcode) throws SQLException
+    public static boolean customerExists(int customerId)
+    {
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Customer WHERE customerId = " + customerId);
+            boolean exists = rs.next();
+            con.close();
+            return exists;
+        }
+        catch (SQLException ex){
+            return false;
+        }
+    }
+
+    public static void insertCustomerRecord(String forename, String surname, String houseNo, String streetName, String cityName, String postcode) throws SQLException
     {
         Connection con = getConnection();
         Statement stmt = con.createStatement();
@@ -108,7 +135,7 @@ public class DBDriver {
         closeConnection(con);
     }
 
-    public static void addressInsertRecord(int houseNo, String streetName, String cityName, String postcode) throws SQLException {
+    public static void addressInsertRecord(String houseNo, String streetName, String cityName, String postcode) throws SQLException {
         Connection con = DBDriver.getConnection();
         Statement stmt = con.createStatement();
         System.out.println("Inserting record into the Address table...");
@@ -257,6 +284,81 @@ public class DBDriver {
 
     }
 
+    public static ArrayList<String> allOrdersFromCustomer(int customerId){
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = con.createStatement();
+            ArrayList<String> orderList = new ArrayList<String>();
+            ResultSet rs = stmt.executeQuery("SELECT orderNo, CONCAT(fPro.brandName,' - ', fPro.productName) AS frameName, CONCAT(hPro.brandName,' - ', hPro.productName) AS handlebarName,CONCAT(wPro.brandName,' - ', wPro.productName) AS wheelName, orderDate, orderCost, orderStatus FROM Orders " +
+                    "INNER JOIN AssembledBike ON AssembledBike.assembledBikeId = Orders.assembledBikeId " +
+                    "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
+                    "INNER JOIN Handlebar ON AssembledBike.handlebarId = Handlebar.handlebarId " +
+                    "INNER JOIN Wheel ON AssembledBike.wheelId = Wheel.wheelId " +
+                    "INNER JOIN Product AS fPro ON FrameSet.frameId = fPro.productId " +
+                    "INNER JOIN Product AS hPro ON Handlebar.handlebarId = hPro.productId " +
+                    "INNER JOIN Product AS wPro ON Wheel.wheelId = wPro.productId WHERE customerId = "+customerId);
+            while (rs.next()) {
+                orderList.add(rs.getInt("orderNo")+ ","+rs.getString("orderDate")+","+rs.getString("frameName")+","+rs.getString("handlebarName")+
+                        ","+rs.getString("wheelName")+",£"+rs.getDouble("orderCost")+","+rs.getString("orderStatus"));
+            }
+            closeConnection(con);
+            return orderList;
+        }
+        catch (SQLException ex){
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+            ArrayList<String> emptyList = new ArrayList<String>();
+            return emptyList;
+        }
+
+
+    }
+
+    public static void DeleteOrder(int orderNo)
+    {
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = con.createStatement();
+            int count = stmt.executeUpdate("DELETE FROM Orders WHERE orderNo = "+orderNo);
+            con.close();
+        }
+        catch (SQLException ex)
+        {
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+        }
+
+
+    }
+
+    public static void UpdateCustomer(int customerId,String forename, String surname, String houseNo, String streetName, String cityName, String postcode)
+    {
+
+        try
+        {
+            Connection con = getConnection();
+            Statement stmt = con.createStatement();
+            //Check if the Address exists
+            if(!addressExists(houseNo, postcode))
+            {
+                //Add Address
+                addressInsertRecord(houseNo, streetName, cityName, postcode);
+            }
+            //Add Customer
+            System.out.println("Updating customer record...");
+            int count = stmt.executeUpdate("UPDATE Customer SET forename = '"+forename+"', surname = '"+surname+"', houseNo = '"+houseNo+"', postcode = '"+postcode+"' WHERE customerId = "+customerId);
+            System.out.println("Customer update successful");
+            closeConnection(con);
+        }
+        catch (SQLException ex)
+        {
+            System.out.println("Customer update unsuccessful");
+            ex.printStackTrace();
+        }
+
+    }
+
+
     public static String boolIntToString(int tinyInt)
     {
         if(tinyInt == 1){
@@ -270,6 +372,138 @@ public class DBDriver {
     //---------------------------------------------------------------------
     //END OF BROWSE PAGE FUNCTIONS
     //---------------------------------------------------------------------
+
+    public static boolean orderExists(int orderNo)
+    {
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Orders WHERE orderNo = " + orderNo);
+            boolean exists = rs.next();
+            con.close();
+            return exists;
+        }
+        catch(SQLException ex)
+        {
+            System.out.println("Error with Database connection");
+            ex.printStackTrace();
+            return false;
+        }
+
+
+    }
+
+    public static int customerFromOrder(int orderNo)
+    {
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT customerId FROM Orders WHERE orderNo = " + orderNo);
+            rs.next();
+            int customerId = rs.getInt("customerId");
+            con.close();
+            return customerId;
+        }
+        catch (SQLException ex){
+            return 0;
+        }
+
+    }
+
+    public static ArrayList<String> customerDetails(int customerId)
+    {
+        ArrayList<String> selectedCustomer = new ArrayList<>();
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Customer INNER JOIN Address ON Customer.houseNo = Address.houseNo AND Customer.postcode = Address.postcode WHERE customerId = "+customerId);
+            rs.next();
+            selectedCustomer.add(rs.getString("forename"));
+            selectedCustomer.add(rs.getString("surname"));
+            selectedCustomer.add(rs.getString("houseNo"));
+            selectedCustomer.add(rs.getString("streetName"));
+            selectedCustomer.add(rs.getString("cityName"));
+            selectedCustomer.add(rs.getString("postcode"));
+
+            con.close();
+            return selectedCustomer;
+        }
+        catch (SQLException ex){
+            return selectedCustomer;
+        }
+    }
+
+    //---------------------------------------------------------------------
+    //VALIDATION FUNCTIONS
+    //---------------------------------------------------------------------
+    public static boolean isAlpha(String name) {
+        char[] chars = name.toCharArray();
+
+        for (char c : chars) {
+            if(!Character.isLetter(c)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean isAlphaOrSpace(String name) {
+        char[] chars = name.toCharArray();
+
+        for (char c : chars) {
+            if(!Character.isLetter(c) && c != ' ') {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static boolean isNo(String no)
+    {
+        try {
+            Integer.parseInt(no);
+            return true;
+        }
+        catch (NumberFormatException ex) {
+            return false;
+        }
+    }
+
+    public static boolean isNoOrAlpha(String no)
+    {
+        char[] chars = no.toCharArray();
+        for (char c : chars)
+        {
+            try{
+                Integer.parseInt(""+c);
+            }
+            catch (NumberFormatException ex){
+                if(!Character.isLetter(c)) {
+                    return false;
+                }
+            }
+
+        }
+
+        return true;
+    }
+
+    public static boolean isPostcode(String postcode)
+    {
+        String regex = "^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(postcode);
+
+        return matcher.matches();
+    }
+
+    public static int confirm(String message) {
+        int result = JOptionPane.showConfirmDialog((Component) null, message,
+                "alert", JOptionPane.OK_CANCEL_OPTION);
+        return result;
+    }
 
     public static void main(String[] args) throws SQLException{
 

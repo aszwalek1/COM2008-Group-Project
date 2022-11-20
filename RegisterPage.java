@@ -120,15 +120,23 @@ public class RegisterPage extends JFrame {
                     cityField.getText().length() == 0 ||
                     postcodeField.getText().length() == 0) {
 
-                JOptionPane.showMessageDialog(f, "Please provide all the information to continue");
+                JOptionPane.showMessageDialog(f, "Please provide information in all fields to continue");
             }
-            else if (!isAlpha(forenameField.getText()) ||
-                        !isAlpha(surnameField.getText()) ||
-                        !isNo(houseNoField.getText()) ||
-                        !isAlphaOrSpace(roadField.getText()) ||
-                        !isAlphaOrSpace(cityField.getText()) ||
-                        !isPostcode(postcodeField.getText())){
-                JOptionPane.showMessageDialog(f, "Please provide valid details to continue");
+            else if (!DBDriver.isAlpha(forenameField.getText()) || !DBDriver.isAlpha(surnameField.getText()))
+            {
+                JOptionPane.showMessageDialog(f, "Invalid Forename/Surname. They can contain only letters e.g. Smith");
+            }
+            else if(!DBDriver.isNoOrAlpha(houseNoField.getText()))
+            {
+                JOptionPane.showMessageDialog(f, "Invalid House Number. It can contain only letters and numbers e.g. 18 ,18B, B");
+            }
+            else if(!DBDriver.isAlphaOrSpace(roadField.getText()) || !DBDriver.isAlphaOrSpace(cityField.getText()))
+            {
+                JOptionPane.showMessageDialog(f, "Invalid Road Name/City Name. They can contain only letters and Spaces e.g. Newton le Willows, Manchester");
+            }
+            else if(!DBDriver.isPostcode(postcodeField.getText()))
+            {
+                JOptionPane.showMessageDialog(f, "Invalid Postcode. It must be a valid UK postcode which contains only letters, numbers and a single space. Valid Formats '## ###', '### ###','#### ###', e.g. BT23 6QS");
             }
             else if(forenameField.getText().length()>30 || surnameField.getText().length()>30 ||
                     houseNoField.getText().length()>11 || roadField.getText().length()>30 ||
@@ -139,14 +147,13 @@ public class RegisterPage extends JFrame {
                 //Add Customer To DB
                 try {
                     DBDriver.insertCustomerRecord(forenameField.getText().toLowerCase(),surnameField.getText().toLowerCase(),
-                           Integer.parseInt(houseNoField.getText()),roadField.getText().toLowerCase(),cityField.getText().toLowerCase(),
+                           houseNoField.getText().toUpperCase(),roadField.getText().toLowerCase(),cityField.getText().toLowerCase(),
                             postcodeField.getText().toUpperCase());
                     JOptionPane.showMessageDialog(f, "Success!");
                     f.dispose();
-                    new PaymentPage();
+                    //new BrowsePage();
                 } catch (SQLException e) {
                     JOptionPane.showMessageDialog(f, "Error when adding a customer! Please consult a member of staff. (Likely a database connection error)");
-                    throw new RuntimeException(e);
                 }
 
 
@@ -162,48 +169,6 @@ public class RegisterPage extends JFrame {
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
-    public boolean isAlpha(String name) {
-        char[] chars = name.toCharArray();
 
-        for (char c : chars) {
-            if(!Character.isLetter(c)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public boolean isAlphaOrSpace(String name) {
-        char[] chars = name.toCharArray();
-
-        for (char c : chars) {
-            if(!Character.isLetter(c) && c != ' ') {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public boolean isNo(String no)
-    {
-        try {
-            Integer.parseInt(no);
-            return true;
-        }
-        catch (NumberFormatException ex) {
-            return false;
-        }
-    }
-
-    public boolean isPostcode(String postcode)
-    {
-        String regex = "^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(postcode);
-
-        return matcher.matches();
-    }
 
 }

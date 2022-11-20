@@ -49,7 +49,7 @@ public class HomePage {
 
         clogin.addActionListener(ae -> {
           f.dispose();
-           new CustomerLogin();
+           new CustomerLogin("CustomerPage");
         });
 
        slogin.addActionListener(e -> {
