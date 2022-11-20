@@ -92,7 +92,7 @@ public class BrowsePage {
             } else {
                 String bikeName = bikeNameField.getText();
                 f.dispose();
-                new CustomerPage();
+                //new CustomerPage();
             }
 
         });
@@ -206,7 +206,7 @@ public class BrowsePage {
                 String bikeName = nameField.getText();
                 System.out.println(bikeName);
                 f.dispose();
-                new CustomerPage();
+                //new CustomerPage();
             }
         });
 

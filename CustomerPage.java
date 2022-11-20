@@ -1,7 +1,10 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class CustomerPage implements ActionListener {
 
@@ -40,6 +43,10 @@ public class CustomerPage implements ActionListener {
     JLabel cityLabel = new JLabel("City: ");
     JLabel postcodeLabel = new JLabel("Postcode: ");
 
+    JLabel customerIdLabel = new JLabel();
+
+
+
     //Text Fields
     JTextField firstname = new JTextField("                 ");
     JTextField surname = new JTextField("                 ");
@@ -48,8 +55,29 @@ public class CustomerPage implements ActionListener {
     JTextField cityName = new JTextField("                 ");
     JTextField postcode = new JTextField("             ");
 
+    String[] columnNames = {
+            "Order ID", "Date", "Frame-set", "Handlebar", "wheels", "total price", "status" };
+    String[][] data = {};
+    JTable ordersTable = new JTable(new DefaultTableModel(new Object[]{"Order ID", "Date", "Frame-set", "Handlebar", "wheels", "total price", "status" },0))
+    {
+        //MAKE TABLE UNEDITABLE BY USER
+        private static final long serialVersionUID = 1L;
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+    DefaultTableModel orderModel = (DefaultTableModel) ordersTable.getModel();
 
-    public CustomerPage() {
+
+    public CustomerPage(int customerId) {
+
+        ArrayList<String> customerDetails = DBDriver.customerDetails(customerId);
+        firstname.setText(customerDetails.get(0));
+        surname.setText(customerDetails.get(1));
+        houseNo.setText(customerDetails.get(2));
+        roadName.setText(customerDetails.get(3));
+        cityName.setText(customerDetails.get(4));
+        postcode.setText(customerDetails.get(5));
 
         //Setting layouts
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
@@ -88,6 +116,9 @@ public class CustomerPage implements ActionListener {
         toptopPanel.add(Box.createRigidArea(new Dimension(50, 50)));
 
         //Customer Details
+        customerIdLabel.setText(""+customerId);
+        customerIdLabel.setVisible(false);
+        detailsPanel.add(customerIdLabel);
         detailsPanel.add(nameLabel);
         detailsPanel.add(firstname);
         detailsPanel.add(surnameLabel);
@@ -133,23 +164,22 @@ public class CustomerPage implements ActionListener {
 
         //scrollPanel.setViewportView(table);
 
-        // Column Names
-        String[] columnNames = {
-                "Order ID", "Date", "Frame-set", "Handlebar", "wheels", "total price" };
-
-
         // Data to be displayed in the JTable
-        String[][] data = {
-                {"12345", "1.04.2023", "Kate Spade", "Gucci", "Prada", "9999"},
-                {"78978", "1.01.2020", "Poundland", "Poundland", "IKEA", "12"}
-        };
+
+        ArrayList<String> orderList = DBDriver.allOrdersFromCustomer(customerId);
+        String[][] data = new String[orderList.size()][7];
+        for(int i=0;i<orderList.size();i++)
+        {
+             orderModel.addRow(orderList.get(i).split(","));
+        }
 
         //Table
-        JTable ordersTable = new JTable(data, columnNames);
-        ordersTable.setBounds(30, 40, 200, 300);
+        ordersTable.setBounds(30, 40, 250, 300);
         ordersTable.setFont(new Font("Verdana", Font.PLAIN, 20));
         ordersTable.setRowHeight(24);
         ordersTable.getTableHeader().setFont(new Font("Verdana", Font.PLAIN, 22));
+
+        //ordersTable.setCell
 
         JScrollPane scrollPanel = new JScrollPane(ordersTable);
         middlePanel.add(scrollPanel);
@@ -158,6 +188,8 @@ public class CustomerPage implements ActionListener {
         //Buttons actions
         exitButton.addActionListener(this);
         browseButton.addActionListener(this);
+        deleteButton.addActionListener(this);
+        saveDetailsButton.addActionListener(this);
 
         f.add(leftPanel, BorderLayout.WEST);
         f.add(rightPanel, BorderLayout.EAST);
@@ -177,5 +209,71 @@ public class CustomerPage implements ActionListener {
             f.dispose();
             new BrowsePage();
         }
+        else if(e.getSource() == saveDetailsButton)
+        {
+            //Validate Details
+            //Prompt if they want to update their details
+            //Update details
+            if(firstname.getText().length() == 0 ||
+                    surname.getText().length() == 0 ||
+                    houseNo.getText().length() == 0 ||
+                    roadName.getText().length() == 0 ||
+                    cityName.getText().length() == 0 ||
+                    postcode.getText().length() == 0) {
+
+                JOptionPane.showMessageDialog(f, "Please provide information in all fields to continue");
+            }
+            else if (!DBDriver.isAlpha(firstname.getText()) || !DBDriver.isAlpha(surname.getText()))
+            {
+                JOptionPane.showMessageDialog(f, "Invalid Forename/Surname. They can contain only letters e.g. Smith");
+            }
+            else if(!DBDriver.isNoOrAlpha(houseNo.getText()))
+            {
+                JOptionPane.showMessageDialog(f, "Invalid House Number. It can contain only letters and numbers e.g. 18 ,18B, B");
+            }
+            else if(!DBDriver.isAlphaOrSpace(roadName.getText()) || !DBDriver.isAlphaOrSpace(cityName.getText()))
+            {
+                JOptionPane.showMessageDialog(f, "Invalid Road Name/City Name. They can contain only letters and Spaces e.g. Newton le Willows, Manchester");
+            }
+            else if(!DBDriver.isPostcode(postcode.getText()))
+            {
+                JOptionPane.showMessageDialog(f, "Invalid Postcode. It must be a valid UK postcode which contains only letters, numbers and a single space. Valid Formats '## ###', '### ###','#### ###', e.g. BT23 6QS");
+            }
+            else if(firstname.getText().length()>30 || surname.getText().length()>30 ||
+                    houseNo.getText().length()>11 || roadName.getText().length()>30 ||
+                    cityName.getText().length()>30){
+                JOptionPane.showMessageDialog(f, "Details provided are too long. Please shorten to continue");
+            }
+            else {
+                //Add Customer To DB
+                if(DBDriver.confirm("Are you sure you'd like to update your details?") == 0)
+                {
+                    DBDriver.UpdateCustomer(Integer.valueOf(customerIdLabel.getText()), firstname.getText().toLowerCase(),surname.getText().toLowerCase(),
+                            houseNo.getText().toUpperCase(),roadName.getText().toLowerCase(),cityName.getText().toLowerCase(),postcode.getText().toUpperCase());
+                    JOptionPane.showMessageDialog(f, "Success!");
+                }
+            }
+        }
+        else if(e.getSource() == deleteButton)
+        {
+            if(ordersTable.getSelectedRow() != -1)
+            {
+                if(ordersTable.getValueAt(ordersTable.getSelectedRow(),6).equals("Pending"))
+                {
+                    if(DBDriver.confirm("Are you sure you'd like to delete this order?") == 0)
+                    {
+                        DBDriver.DeleteOrder(Integer.valueOf(ordersTable.getValueAt(ordersTable.getSelectedRow(),0).toString()));
+                        orderModel.removeRow(ordersTable.getSelectedRow());
+                    }
+
+                }
+                else
+                {
+                    JOptionPane.showMessageDialog(f, "Sorry, you can only cancel orders which are pending, as they have yet to be paid for.");
+                }
+
+            }
+        }
     }
+
 }
