@@ -15,7 +15,9 @@ public class StaffPage implements ActionListener {
     JPanel middlePanel = new JPanel();
     JPanel topPanel = new JPanel();
 
-    JPanel inventoryPanel = new JPanel();
+    JPanel topmostPanel = new JPanel();
+
+    JPanel detailsPanel = new JPanel();
 
 
 
@@ -34,6 +36,8 @@ public class StaffPage implements ActionListener {
         //Setting layouts
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
+        detailsPanel.add(Box.createRigidArea(new Dimension(70,10)));
+
 
 
 
@@ -42,7 +46,9 @@ public class StaffPage implements ActionListener {
         mainPanel.add(rightPanel);
         mainPanel.add(middlePanel);
         middlePanel.add(topPanel);
-        topPanel.add(inventoryPanel);
+        topPanel.add(topmostPanel);
+        topPanel.add(detailsPanel);
+
 
 
         //Labels and text fields for  for inventory
@@ -50,14 +56,25 @@ public class StaffPage implements ActionListener {
         JLabel title = new JLabel("INVENTORY");
         title.setFont(new Font("Arial", Font.BOLD, 20));
 
-//        JLabel frameSet = new JLabel(("Frameset"));
-//        title.setFont(new Font("Arial", Font.BOLD, 20));
-//
-//        JLabel handlebars = new JLabel(("Handlebar"));
-//        title.setFont(new Font("Arial", Font.BOLD, 20));
-//
-//        JLabel wheels = new JLabel(("Wheels"));
-//        title.setFont(new Font("Arial", Font.BOLD, 20));
+
+
+        JLabel wheels = new JLabel("WHEELS");
+
+
+        JLabel frames = new JLabel("FRAME-SETS");
+
+
+        JLabel handle = new JLabel("HANDLE");
+
+
+
+        //All text field
+        JTextField wheels_in = new JTextField("                 ");
+
+        JTextField frames_in = new JTextField("                 ");
+
+        JTextField handle_in = new JTextField("        ");
+
 
 
 
@@ -83,14 +100,21 @@ public class StaffPage implements ActionListener {
         getBrowseButton.setFont(new Font("Arial", Font.BOLD, 20));
         topPanel.add(Box.createRigidArea(new Dimension(50, 100)));
 
-//        inventoryPanel.add(title);
-//        inventoryPanel.add(frameSet);
-//        inventoryPanel.add(handlebars);
-//        inventoryPanel.add(wheels);
+
+        topmostPanel.add(title);
+        detailsPanel.add(wheels);
+        detailsPanel.add(wheels_in);
+
+        detailsPanel.add(frames);
+        detailsPanel.add(frames_in);
+
+        detailsPanel.add(handle);
+        detailsPanel.add(handle_in);
 
 
 
 
+/// MAKE A DROP DOWN BOX FOR THE OPTION
         //Scroll Panel
 
         // Column Names
@@ -115,6 +139,7 @@ public class StaffPage implements ActionListener {
         ordersTable.setFont(new Font("Verdana", Font.PLAIN, 20));
         ordersTable.setRowHeight(24);
         ordersTable.getTableHeader().setFont(new Font("Verdana", Font.PLAIN, 22));
+
 
         JScrollPane scrollPanel = new JScrollPane(ordersTable);
         middlePanel.add(scrollPanel);
