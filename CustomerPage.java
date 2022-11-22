@@ -3,7 +3,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CustomerPage implements ActionListener {
@@ -55,9 +54,6 @@ public class CustomerPage implements ActionListener {
     JTextField cityName = new JTextField("                 ");
     JTextField postcode = new JTextField("             ");
 
-    String[] columnNames = {
-            "Order ID", "Date", "Frame-set", "Handlebar", "wheels", "total price", "status" };
-    String[][] data = {};
     JTable ordersTable = new JTable(new DefaultTableModel(new Object[]{"Order ID", "Date", "Frame-set", "Handlebar", "wheels", "total price", "status" },0))
     {
         //MAKE TABLE UNEDITABLE BY USER
@@ -167,10 +163,8 @@ public class CustomerPage implements ActionListener {
         // Data to be displayed in the JTable
 
         ArrayList<String> orderList = DBDriver.allOrdersFromCustomer(customerId);
-        String[][] data = new String[orderList.size()][7];
-        for(int i=0;i<orderList.size();i++)
-        {
-             orderModel.addRow(orderList.get(i).split(","));
+        for (String s : orderList) {
+            orderModel.addRow(s.split(","));
         }
 
         //Table
@@ -178,6 +172,7 @@ public class CustomerPage implements ActionListener {
         ordersTable.setFont(new Font("Verdana", Font.PLAIN, 20));
         ordersTable.setRowHeight(24);
         ordersTable.getTableHeader().setFont(new Font("Verdana", Font.PLAIN, 22));
+        ordersTable.getTableHeader().setReorderingAllowed(false);
 
         //ordersTable.setCell
 
@@ -248,7 +243,7 @@ public class CustomerPage implements ActionListener {
                 //Add Customer To DB
                 if(DBDriver.confirm("Are you sure you'd like to update your details?") == 0)
                 {
-                    DBDriver.UpdateCustomer(Integer.valueOf(customerIdLabel.getText()), firstname.getText().toLowerCase(),surname.getText().toLowerCase(),
+                    DBDriver.UpdateCustomer(Integer.parseInt(customerIdLabel.getText()), firstname.getText().toLowerCase(),surname.getText().toLowerCase(),
                             houseNo.getText().toUpperCase(),roadName.getText().toLowerCase(),cityName.getText().toLowerCase(),postcode.getText().toUpperCase());
                     JOptionPane.showMessageDialog(f, "Success!");
                 }
@@ -262,7 +257,7 @@ public class CustomerPage implements ActionListener {
                 {
                     if(DBDriver.confirm("Are you sure you'd like to delete this order?") == 0)
                     {
-                        DBDriver.DeleteOrder(Integer.valueOf(ordersTable.getValueAt(ordersTable.getSelectedRow(),0).toString()));
+                        DBDriver.DeleteOrder(Integer.parseInt(ordersTable.getValueAt(ordersTable.getSelectedRow(),0).toString()));
                         orderModel.removeRow(ordersTable.getSelectedRow());
                     }
 

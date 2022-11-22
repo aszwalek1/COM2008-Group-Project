@@ -27,8 +27,10 @@ public class StaffPage implements ActionListener {
     // All Buttons
     JButton backButton = new JButton("Back");
     JButton customerButton = new JButton("View Customer");
-
     JButton getBrowseButton = new JButton("Browse");
+    JButton setOrderStatusPendingButton = new JButton("Pending");
+    JButton setOrderStatusFulfilledButton = new JButton("Fulfilled");
+    JButton setOrderStatusConfirmedButton = new JButton("Confirmed");
 
     // Column Names
     String[] columnNames = {
@@ -115,6 +117,28 @@ public class StaffPage implements ActionListener {
         topPanel.add(Box.createRigidArea(new Dimension(50, 100)));
 
 
+        leftPanel.add(setOrderStatusPendingButton);
+        setOrderStatusPendingButton.setMargin(new Insets(5,5,5,5));
+        setOrderStatusPendingButton.setBackground(new Color(59, 89, 182));
+        setOrderStatusPendingButton.setForeground(Color.WHITE);
+        setOrderStatusPendingButton.setFont(new Font("Arial", Font.BOLD, 20));
+        topPanel.add(Box.createRigidArea(new Dimension(50, 100)));
+
+        leftPanel.add(setOrderStatusFulfilledButton);
+        setOrderStatusFulfilledButton.setMargin(new Insets(5,5,5,5));
+        setOrderStatusFulfilledButton.setBackground(new Color(59, 89, 182));
+        setOrderStatusFulfilledButton.setForeground(Color.WHITE);
+        setOrderStatusFulfilledButton.setFont(new Font("Arial", Font.BOLD, 20));
+        topPanel.add(Box.createRigidArea(new Dimension(50, 100)));
+
+        leftPanel.add(setOrderStatusConfirmedButton);
+        setOrderStatusConfirmedButton.setMargin(new Insets(5,5,5,5));
+        setOrderStatusConfirmedButton.setBackground(new Color(59, 89, 182));
+        setOrderStatusConfirmedButton.setForeground(Color.WHITE);
+        setOrderStatusConfirmedButton.setFont(new Font("Arial", Font.BOLD, 20));
+        topPanel.add(Box.createRigidArea(new Dimension(50, 100)));
+
+
         topmostPanel.add(title);
         detailsPanel.add(wheels);
         detailsPanel.add(wheels_in);
@@ -128,7 +152,7 @@ public class StaffPage implements ActionListener {
 
 
 
-/// MAKE A DROP DOWN BOX FOR THE OPTION
+        /// MAKE A DROP DOWN BOX FOR THE OPTION
         //Scroll Panel
 
 
@@ -142,19 +166,22 @@ public class StaffPage implements ActionListener {
         ArrayList<String> orderList = DBDriver.allOrders();
         for (String s : orderList) {
             orderModel.addRow(s.split(","));
-            System.out.println(s);
         }
-
 
         JScrollPane scrollPanel = new JScrollPane(ordersTable);
         middlePanel.add(scrollPanel);
+
+
+
 
 
         //Buttons actions
         backButton.addActionListener(this);
         customerButton.addActionListener(this);
         getBrowseButton.addActionListener(this);
-
+        setOrderStatusPendingButton.addActionListener(this);
+        setOrderStatusFulfilledButton.addActionListener(this);
+        setOrderStatusConfirmedButton.addActionListener(this);
 
         //Adding rest of the panels to
         f.add(leftPanel, BorderLayout.WEST);
@@ -170,10 +197,45 @@ public class StaffPage implements ActionListener {
         if(e.getSource() == backButton) {
             f.dispose();
             new HomePage();
-        }
-        else if(e.getSource() == getBrowseButton) {
+        } else if(e.getSource() == getBrowseButton) {
             f.dispose();
             new BrowsePage();
+        } else if(e.getSource() == setOrderStatusPendingButton) {
+            if(ordersTable.getSelectedRow() != -1) {
+                if(!ordersTable.getValueAt(ordersTable.getSelectedRow(),8).equals("Pending")) {
+                    if(DBDriver.confirm("Are you sure you'd like to change this order's status to: Pending ?") == 0) {
+                        DBDriver.UpdateOrderStatus(Integer.parseInt(ordersTable.getValueAt(ordersTable.getSelectedRow(),0).toString()), "Pending");
+                        f.dispose();
+                        new StaffPage();    //This needs to reload the Order table, instead of closing and reopening the page.
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(f, "This order's status is already: Pending");
+                }
+            }
+        } else if(e.getSource() == setOrderStatusFulfilledButton) {
+            if(ordersTable.getSelectedRow() != -1) {
+                if(!ordersTable.getValueAt(ordersTable.getSelectedRow(),8).equals("Fulfilled")) {
+                    if(DBDriver.confirm("Are you sure you'd like to change this order's status to: Fulfilled ?") == 0) {
+                        DBDriver.UpdateOrderStatus(Integer.parseInt(ordersTable.getValueAt(ordersTable.getSelectedRow(),0).toString()), "Fulfilled");
+                        f.dispose();
+                        new StaffPage();    //This needs to reload the Order table, instead of closing and reopening the page.
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(f, "This order's status is already: Fulfilled");
+                }
+            }
+        } else if(e.getSource() == setOrderStatusConfirmedButton) {
+            if(ordersTable.getSelectedRow() != -1) {
+                if(!ordersTable.getValueAt(ordersTable.getSelectedRow(),8).equals("Confirmed")) {
+                    if(DBDriver.confirm("Are you sure you'd like to change this order's status to: Confirmed ?") == 0) {
+                        DBDriver.UpdateOrderStatus(Integer.parseInt(ordersTable.getValueAt(ordersTable.getSelectedRow(),0).toString()), "Confirmed");
+                        f.dispose();
+                        new StaffPage();    //This needs to reload the Order table, instead of closing and reopening the page.
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(f, "This order's status is already: Confirmed");
+                }
+            }
         }
 //        else if (e.getSource() == customerButton) {
 //            f.dispose();

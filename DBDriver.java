@@ -1,9 +1,7 @@
-import com.mysql.cj.jdbc.result.ResultSetImpl;
-
 import javax.swing.*;
-import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,7 +36,7 @@ public class DBDriver {
 
     public static void customerSelectAll() throws SQLException {
         Connection con = DBDriver.getConnection();
-        Statement stmt = con.createStatement();
+        Statement stmt = Objects.requireNonNull(con).createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Customer");
         while (rs.next()) {
             System.out.print("Customer ID: " + rs.getInt("customerId"));
@@ -52,7 +50,7 @@ public class DBDriver {
 
     public static void staffSelectAll() throws SQLException {
         Connection con = DBDriver.getConnection();
-        Statement stmt = con.createStatement();
+        Statement stmt = Objects.requireNonNull(con).createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Staff");
         while (rs.next()) {
             System.out.print("Staff Username: " + rs.getString("staffUsername"));
@@ -63,7 +61,7 @@ public class DBDriver {
 
     public static void addressSelectAll() throws SQLException {
         Connection con = DBDriver.getConnection();
-        Statement stmt = con.createStatement();
+        Statement stmt = Objects.requireNonNull(con).createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Address");
         while (rs.next()) {
             System.out.print("HouseNo: " + rs.getString("houseNo"));
@@ -77,58 +75,44 @@ public class DBDriver {
     //---------------------------------------------------
     //REGISTER PAGE FUNCTIONS
     //---------------------------------------------------
-    public static boolean addressExists(String houseNo, String postcode)
-    {
-        try{
+    public static boolean addressExists(String houseNo, String postcode) {
+        try {
             Connection con = DBDriver.getConnection();
-            Statement stmt = con.createStatement();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Address WHERE houseNo = '" + houseNo + "' AND postcode = '"+ postcode +"'");
             boolean exists = rs.next();
             con.close();
             return exists;
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             return false;
         }
-
-
     }
 
-    public static boolean customerExists(int customerId)
-    {
-        try{
+    public static boolean customerExists(int customerId) {
+        try {
             Connection con = DBDriver.getConnection();
-            Statement stmt = con.createStatement();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Customer WHERE customerId = " + customerId);
             boolean exists = rs.next();
             con.close();
             return exists;
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             return false;
         }
     }
 
-    public static void insertCustomerRecord(String forename, String surname, String houseNo, String streetName, String cityName, String postcode) throws SQLException
-    {
+    public static void insertCustomerRecord(String forename, String surname, String houseNo, String streetName, String cityName, String postcode) throws SQLException {
         Connection con = getConnection();
-        Statement stmt = con.createStatement();
-        //Check if the Address exists
-        if(!addressExists(houseNo, postcode))
-        {
-            //Add Address
-            addressInsertRecord(houseNo, streetName, cityName, postcode);
+        Statement stmt = Objects.requireNonNull(con).createStatement();
+        if(!addressExists(houseNo, postcode)) {    //Check if the Address exists
+            addressInsertRecord(houseNo, streetName, cityName, postcode);   //Add Address
         }
-        //Add Customer
-        String sql = "INSERT INTO Customer (forename,surname,houseNo,postcode) VALUES ('" + forename + "','" + surname + "'," + houseNo + ",'" + postcode + "')";
+        String sql = "INSERT INTO Customer (forename,surname,houseNo,postcode) VALUES ('" + forename + "','" + surname + "'," + houseNo + ",'" + postcode + "')";   //Add Customer
         System.out.println("Inserting record into the Customer table...");
-        try
-        {
+        try {
             stmt.executeUpdate(sql);
             System.out.println("Customer insertion successful");
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             System.out.println("Customer insertion unsuccessful");
             ex.printStackTrace();
         }
@@ -137,7 +121,7 @@ public class DBDriver {
 
     public static void addressInsertRecord(String houseNo, String streetName, String cityName, String postcode) throws SQLException {
         Connection con = DBDriver.getConnection();
-        Statement stmt = con.createStatement();
+        Statement stmt = Objects.requireNonNull(con).createStatement();
         System.out.println("Inserting record into the Address table...");
         String intoTable = "INSERT INTO Address (houseNo, streetName, cityName, postcode) VALUES (";
         String sql = intoTable + houseNo + ",\"" + streetName + "\",\"" + cityName + "\",\"" + postcode + "\")";
@@ -159,7 +143,7 @@ public class DBDriver {
         String passDB = "";
         String passEncrypt = "";
         Connection con = DBDriver.getConnection();
-        Statement stmt = con.createStatement();
+        Statement stmt = Objects.requireNonNull(con).createStatement();
         ResultSet rs = stmt.executeQuery("SELECT * FROM Staff WHERE staffUsername = '" + userIn + "'");
         while (rs.next()) {
             passDB = rs.getString("sPassword");
@@ -173,37 +157,47 @@ public class DBDriver {
     }
 
     public static ArrayList<String> allOrders(){
-        try{
+        try {
             Connection con = DBDriver.getConnection();
-            Statement stmt = con.createStatement();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
             ArrayList<String> orderList = new ArrayList<>();
             ResultSet rs = stmt.executeQuery("SELECT orderNo, staffUsername, customerId, " +
-                    "CONCAT(fPro.brandName,' - ', fPro.productName) AS frameName, " +
-                    "CONCAT(hPro.brandName,' - ', hPro.productName) AS handlebarName, " +
-                    "CONCAT(wPro.brandName,' - ', wPro.productName) AS wheelName, " +
-                    "orderDate, orderCost, orderStatus FROM Orders " +
-                    "INNER JOIN AssembledBike ON AssembledBike.assembledBikeId = Orders.assembledBikeId " +
-                    "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
-                    "INNER JOIN Handlebar ON AssembledBike.handlebarId = Handlebar.handlebarId " +
-                    "INNER JOIN Wheel ON AssembledBike.wheelId = Wheel.wheelId " +
-                    "INNER JOIN Product AS fPro ON FrameSet.frameId = fPro.productId " +
-                    "INNER JOIN Product AS hPro ON Handlebar.handlebarId = hPro.productId " +
-                    "INNER JOIN Product AS wPro ON Wheel.wheelId = wPro.productId;");
+                "CONCAT(fPro.brandName,' - ', fPro.productName) AS frameName, " +
+                "CONCAT(hPro.brandName,' - ', hPro.productName) AS handlebarName, " +
+                "CONCAT(wPro.brandName,' - ', wPro.productName) AS wheelName, " +
+                "orderDate, orderCost, orderStatus FROM Orders " +
+                "INNER JOIN AssembledBike ON AssembledBike.assembledBikeId = Orders.assembledBikeId " +
+                "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
+                "INNER JOIN Handlebar ON AssembledBike.handlebarId = Handlebar.handlebarId " +
+                "INNER JOIN Wheel ON AssembledBike.wheelId = Wheel.wheelId " +
+                "INNER JOIN Product AS fPro ON FrameSet.frameId = fPro.productId " +
+                "INNER JOIN Product AS hPro ON Handlebar.handlebarId = hPro.productId " +
+                "INNER JOIN Product AS wPro ON Wheel.wheelId = wPro.productId;");
             while (rs.next()) {
                 orderList.add(
-                        rs.getInt("orderNo")+ ","+rs.getString("staffUsername")+","+
-                                rs.getInt("customerId")+","+rs.getString("frameName")+","+
-                                rs.getString("handlebarName")+","+rs.getString("wheelName")+","+
-                                rs.getDate("orderDate")+",£"+rs.getDouble("orderCost")+","+
-                                rs.getString("orderStatus"));
+                    rs.getInt("orderNo")+ ","+rs.getString("staffUsername")+","+
+                        rs.getInt("customerId")+","+rs.getString("frameName")+","+
+                        rs.getString("handlebarName")+","+rs.getString("wheelName")+","+
+                        rs.getDate("orderDate")+",£"+rs.getDouble("orderCost")+","+
+                        rs.getString("orderStatus"));
             }
             closeConnection(con);
             return orderList;
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             System.out.println("Connection to Database unsuccessful");
             ex.printStackTrace();
             return new ArrayList<>(); //returns empty list
+        }
+    }
+
+    public static void UpdateOrderStatus(int orderNo, String status) {
+        try {
+            Connection con = getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            stmt.executeUpdate("UPDATE Orders SET orderStatus = '" + status + "' WHERE orderNo = "+ orderNo);
+            closeConnection(con);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -212,10 +206,10 @@ public class DBDriver {
     //---------------------------------------------------------------------
 
     public static ArrayList<String> allFramesInStock(){
-        try{
+        try {
             Connection con = DBDriver.getConnection();
-            Statement stmt = con.createStatement();
-            ArrayList<String> frameList = new ArrayList<String>();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ArrayList<String> frameList = new ArrayList<>();
             ResultSet rs = stmt.executeQuery("SELECT frameId, brandName, productName, gears, shocks, size, unitCost FROM FrameSet INNER JOIN Product ON frameId = productId WHERE stock > 0;");
             while (rs.next()) {
                 frameList.add(rs.getInt("frameId")+". "+rs.getString("brandName")+" '"+rs.getString("productName")+
@@ -224,23 +218,18 @@ public class DBDriver {
             }
             closeConnection(con);
             return frameList;
-        }
-        catch(SQLException ex)
-        {
+        } catch(SQLException ex) {
             System.out.println("Connection to Database unsuccessful");
             ex.printStackTrace();
-            ArrayList<String> emptyList = new ArrayList<String>();
-            return emptyList;
+            return new ArrayList<>();
         }
-
-
     }
 
     public static ArrayList<String> allWheelsInStock(){
-        try{
+        try {
             Connection con = DBDriver.getConnection();
-            Statement stmt = con.createStatement();
-            ArrayList<String> wheelList = new ArrayList<String>();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ArrayList<String> wheelList = new ArrayList<>();
             ResultSet rs = stmt.executeQuery("SELECT wheelId, brandName, productName, style, brakes, diameter, unitCost FROM Wheel INNER JOIN Product ON wheelId = productId WHERE stock > 1;");
             while (rs.next()) {
                 wheelList.add(rs.getInt("wheelId")+". "+rs.getString("brandName")+" '"+rs.getString("productName")+
@@ -249,22 +238,18 @@ public class DBDriver {
             }
             closeConnection(con);
             return wheelList;
-        }
-        catch(SQLException ex){
+        } catch(SQLException ex) {
             System.out.println("Connection to Database unsuccessful");
             ex.printStackTrace();
-            ArrayList<String> emptyList = new ArrayList<String>();
-            return emptyList;
+            return new ArrayList<>();
         }
-
-
     }
 
     public static ArrayList<String> allHandlebarsInStock(){
-        try{
+        try {
             Connection con = DBDriver.getConnection();
-            Statement stmt = con.createStatement();
-            ArrayList<String> handlebarList = new ArrayList<String>();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ArrayList<String> handlebarList = new ArrayList<>();
             ResultSet rs = stmt.executeQuery("SELECT handlebarId, brandName, productName, handlebarStyle, unitCost FROM Handlebar INNER JOIN Product ON handlebarId = productId WHERE stock > 0;");
             while (rs.next()) {
                 handlebarList.add(rs.getInt("handlebarId")+". "+rs.getString("brandName")+" '"+rs.getString("productName")+
@@ -272,22 +257,18 @@ public class DBDriver {
             }
             closeConnection(con);
             return handlebarList;
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             System.out.println("Connection to Database unsuccessful");
             ex.printStackTrace();
-            ArrayList<String> emptyList = new ArrayList<String>();
-            return emptyList;
+            return new ArrayList<>();
         }
-
-
     }
 
-    public static ArrayList<String> allAssembledBikesInStock(){
-        try{
+    public static ArrayList<String> allAssembledBikesInStock() {
+        try {
             Connection con = DBDriver.getConnection();
-            Statement stmt = con.createStatement();
-            ArrayList<String> bikeList = new ArrayList<String>();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ArrayList<String> bikeList = new ArrayList<>();
             ResultSet rs = stmt.executeQuery("SELECT assembledBikeId, aPro.brandName, aPro.productName, " +
                     "gears AS frameGears, shocks AS frameShocks, size AS frameSize, handlebarStyle, " +
                     "diameter AS wheelDiameter, brakes AS wheelBrakes, style AS wheelStyle, " +
@@ -308,22 +289,18 @@ public class DBDriver {
             }
             closeConnection(con);
             return bikeList;
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             System.out.println("Connection to Database unsuccessful");
             ex.printStackTrace();
-            ArrayList<String> emptyList = new ArrayList<String>();
-            return emptyList;
+            return new ArrayList<>();
         }
-
-
     }
 
     public static ArrayList<String> allOrdersFromCustomer(int customerId){
-        try{
+        try {
             Connection con = DBDriver.getConnection();
-            Statement stmt = con.createStatement();
-            ArrayList<String> orderList = new ArrayList<String>();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ArrayList<String> orderList = new ArrayList<>();
             ResultSet rs = stmt.executeQuery("SELECT orderNo, CONCAT(fPro.brandName,' - ', fPro.productName) AS frameName, CONCAT(hPro.brandName,' - ', hPro.productName) AS handlebarName,CONCAT(wPro.brandName,' - ', wPro.productName) AS wheelName, orderDate, orderCost, orderStatus FROM Orders " +
                     "INNER JOIN AssembledBike ON AssembledBike.assembledBikeId = Orders.assembledBikeId " +
                     "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
@@ -338,68 +315,47 @@ public class DBDriver {
             }
             closeConnection(con);
             return orderList;
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             System.out.println("Connection to Database unsuccessful");
             ex.printStackTrace();
-            ArrayList<String> emptyList = new ArrayList<String>();
-            return emptyList;
+            return new ArrayList<>();
         }
-
-
     }
 
-    public static void DeleteOrder(int orderNo)
-    {
-        try{
+    public static void DeleteOrder(int orderNo) {
+        try {
             Connection con = DBDriver.getConnection();
-            Statement stmt = con.createStatement();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
             int count = stmt.executeUpdate("DELETE FROM Orders WHERE orderNo = "+orderNo);
             con.close();
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             System.out.println("Connection to Database unsuccessful");
             ex.printStackTrace();
         }
-
-
     }
 
-    public static void UpdateCustomer(int customerId,String forename, String surname, String houseNo, String streetName, String cityName, String postcode)
-    {
-
-        try
-        {
+    public static void UpdateCustomer(int customerId,String forename, String surname, String houseNo, String streetName, String cityName, String postcode) {
+        try {
             Connection con = getConnection();
-            Statement stmt = con.createStatement();
-            //Check if the Address exists
-            if(!addressExists(houseNo, postcode))
-            {
-                //Add Address
-                addressInsertRecord(houseNo, streetName, cityName, postcode);
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            if(!addressExists(houseNo, postcode)){   //Check if the Address exists
+                addressInsertRecord(houseNo, streetName, cityName, postcode);   //Add Address
             }
-            //Add Customer
-            System.out.println("Updating customer record...");
+            System.out.println("Updating customer record...");  //Add Customer
             int count = stmt.executeUpdate("UPDATE Customer SET forename = '"+forename+"', surname = '"+surname+"', houseNo = '"+houseNo+"', postcode = '"+postcode+"' WHERE customerId = "+customerId);
             System.out.println("Customer update successful");
             closeConnection(con);
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             System.out.println("Customer update unsuccessful");
             ex.printStackTrace();
         }
-
     }
 
 
-    public static String boolIntToString(int tinyInt)
-    {
+    public static String boolIntToString(int tinyInt) {
         if(tinyInt == 1){
             return "Yes";
-        }
-        else{
+        } else {
             return "No";
         }
     }
@@ -408,49 +364,40 @@ public class DBDriver {
     //END OF BROWSE PAGE FUNCTIONS
     //---------------------------------------------------------------------
 
-    public static boolean orderExists(int orderNo)
-    {
-        try{
+    public static boolean orderExists(int orderNo) {
+        try {
             Connection con = DBDriver.getConnection();
-            Statement stmt = con.createStatement();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Orders WHERE orderNo = " + orderNo);
             boolean exists = rs.next();
             con.close();
             return exists;
-        }
-        catch(SQLException ex)
-        {
+        } catch(SQLException ex) {
             System.out.println("Error with Database connection");
             ex.printStackTrace();
             return false;
         }
-
-
     }
 
-    public static int customerFromOrder(int orderNo)
-    {
-        try{
+    public static int customerFromOrder(int orderNo) {
+        try {
             Connection con = DBDriver.getConnection();
-            Statement stmt = con.createStatement();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
             ResultSet rs = stmt.executeQuery("SELECT customerId FROM Orders WHERE orderNo = " + orderNo);
             rs.next();
             int customerId = rs.getInt("customerId");
             con.close();
             return customerId;
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             return 0;
         }
-
     }
 
-    public static ArrayList<String> customerDetails(int customerId)
-    {
+    public static ArrayList<String> customerDetails(int customerId) {
         ArrayList<String> selectedCustomer = new ArrayList<>();
-        try{
+        try {
             Connection con = DBDriver.getConnection();
-            Statement stmt = con.createStatement();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Customer INNER JOIN Address ON Customer.houseNo = Address.houseNo AND Customer.postcode = Address.postcode WHERE customerId = "+customerId);
             rs.next();
             selectedCustomer.add(rs.getString("forename"));
@@ -459,11 +406,9 @@ public class DBDriver {
             selectedCustomer.add(rs.getString("streetName"));
             selectedCustomer.add(rs.getString("cityName"));
             selectedCustomer.add(rs.getString("postcode"));
-
             con.close();
             return selectedCustomer;
-        }
-        catch (SQLException ex){
+        } catch (SQLException ex) {
             return selectedCustomer;
         }
     }
@@ -473,86 +418,56 @@ public class DBDriver {
     //---------------------------------------------------------------------
     public static boolean isAlpha(String name) {
         char[] chars = name.toCharArray();
-
         for (char c : chars) {
             if(!Character.isLetter(c)) {
                 return false;
             }
         }
-
         return true;
     }
 
     public static boolean isAlphaOrSpace(String name) {
         char[] chars = name.toCharArray();
-
         for (char c : chars) {
             if(!Character.isLetter(c) && c != ' ') {
                 return false;
             }
         }
-
         return true;
     }
 
-    public static boolean isNo(String no)
-    {
+    public static boolean isNo(String no) {
         try {
             Integer.parseInt(no);
             return true;
-        }
-        catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             return false;
         }
     }
 
-    public static boolean isNoOrAlpha(String no)
-    {
+    public static boolean isNoOrAlpha(String no) {
         char[] chars = no.toCharArray();
-        for (char c : chars)
-        {
-            try{
+        for (char c : chars) {
+            try {
                 Integer.parseInt(""+c);
-            }
-            catch (NumberFormatException ex){
+            } catch (NumberFormatException ex) {
                 if(!Character.isLetter(c)) {
                     return false;
                 }
             }
-
         }
-
         return true;
     }
 
-    public static boolean isPostcode(String postcode)
-    {
+    public static boolean isPostcode(String postcode) {
         String regex = "^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$";
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(postcode);
-
         return matcher.matches();
     }
 
     public static int confirm(String message) {
-        int result = JOptionPane.showConfirmDialog((Component) null, message,
-                "alert", JOptionPane.OK_CANCEL_OPTION);
-        return result;
+        return JOptionPane.showConfirmDialog(null, message, "alert", JOptionPane.OK_CANCEL_OPTION);
     }
 
-    public static void main(String[] args) throws SQLException{
-
-        //customerSelectAll();
-
-        //staffSelectAll();
-
-        //customerInsertRecord("Waigen", "Waigen", 18, "S10 5DF");
-
-        //addressInsertRecord(14, "Manchester Road", "Sheffield", "S10 5DF");
-
-        //addressSelectAll();
-
-        //staffLogin("Staff1","password");
-
-    }
 }
