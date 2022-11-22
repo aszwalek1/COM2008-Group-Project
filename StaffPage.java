@@ -1,7 +1,9 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class StaffPage implements ActionListener {
 
@@ -28,8 +30,20 @@ public class StaffPage implements ActionListener {
 
     JButton getBrowseButton = new JButton("Browse");
 
+    // Column Names
+    String[] columnNames = {
+            "Order ID", "Staff Username", "Customer ID", "Frame-set", "Handlebar", "Wheels", "Order Date", "Total Price", "Status"};
 
-
+    //Table
+    JTable ordersTable = new JTable(new DefaultTableModel(columnNames,0))
+    {
+        //MAKE TABLE UNEDITABLE BY USER
+        private static final long serialVersionUID = 1L;
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+    DefaultTableModel orderModel = (DefaultTableModel) ordersTable.getModel();
 
     public StaffPage() {
 
@@ -117,28 +131,19 @@ public class StaffPage implements ActionListener {
 /// MAKE A DROP DOWN BOX FOR THE OPTION
         //Scroll Panel
 
-        // Column Names
-        String[] columnNames = {
-                "Order ID", "Status" };
-
-
-        // Data to be displayed in the JTable
-        String[][] data = {
-                {"12345", "Pending"},
-                {"78978", "In processs"},
-                {"1455", "Pending"},
-                {"7855", "In processs"}
-        };
-
-
-
 
         //Table
-        JTable ordersTable = new JTable(data, columnNames);
         ordersTable.setBounds(30, 40, 200, 300);
         ordersTable.setFont(new Font("Verdana", Font.PLAIN, 20));
         ordersTable.setRowHeight(24);
         ordersTable.getTableHeader().setFont(new Font("Verdana", Font.PLAIN, 22));
+        ordersTable.getTableHeader().setReorderingAllowed(false);
+
+        ArrayList<String> orderList = DBDriver.allOrders();
+        for (String s : orderList) {
+            orderModel.addRow(s.split(","));
+            System.out.println(s);
+        }
 
 
         JScrollPane scrollPanel = new JScrollPane(ordersTable);

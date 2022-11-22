@@ -172,6 +172,41 @@ public class DBDriver {
         return passEncrypt.equals(passDB);
     }
 
+    public static ArrayList<String> allOrders(){
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = con.createStatement();
+            ArrayList<String> orderList = new ArrayList<>();
+            ResultSet rs = stmt.executeQuery("SELECT orderNo, staffUsername, customerId, " +
+                    "CONCAT(fPro.brandName,' - ', fPro.productName) AS frameName, " +
+                    "CONCAT(hPro.brandName,' - ', hPro.productName) AS handlebarName, " +
+                    "CONCAT(wPro.brandName,' - ', wPro.productName) AS wheelName, " +
+                    "orderDate, orderCost, orderStatus FROM Orders " +
+                    "INNER JOIN AssembledBike ON AssembledBike.assembledBikeId = Orders.assembledBikeId " +
+                    "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
+                    "INNER JOIN Handlebar ON AssembledBike.handlebarId = Handlebar.handlebarId " +
+                    "INNER JOIN Wheel ON AssembledBike.wheelId = Wheel.wheelId " +
+                    "INNER JOIN Product AS fPro ON FrameSet.frameId = fPro.productId " +
+                    "INNER JOIN Product AS hPro ON Handlebar.handlebarId = hPro.productId " +
+                    "INNER JOIN Product AS wPro ON Wheel.wheelId = wPro.productId;");
+            while (rs.next()) {
+                orderList.add(
+                        rs.getInt("orderNo")+ ","+rs.getString("staffUsername")+","+
+                                rs.getInt("customerId")+","+rs.getString("frameName")+","+
+                                rs.getString("handlebarName")+","+rs.getString("wheelName")+","+
+                                rs.getDate("orderDate")+",£"+rs.getDouble("orderCost")+","+
+                                rs.getString("orderStatus"));
+            }
+            closeConnection(con);
+            return orderList;
+        }
+        catch (SQLException ex){
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+            return new ArrayList<>(); //returns empty list
+        }
+    }
+
     //---------------------------------------------------------------------
     //BROWSE PAGE FUNCTIONS
     //---------------------------------------------------------------------
