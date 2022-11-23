@@ -413,6 +413,23 @@ public class DBDriver {
         }
     }
 
+    public static int getNewCustomerId(){
+        try{
+            Connection con = DBDriver.getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Customer");
+            int lastId = 0;
+            while (rs.next())
+            {
+                lastId = rs.getInt("customerId");
+            }
+            return lastId;
+        }
+        catch(SQLException ex){
+            return 0;
+        }
+    }
+
     //---------------------------------------------------------------------
     //VALIDATION FUNCTIONS
     //---------------------------------------------------------------------
