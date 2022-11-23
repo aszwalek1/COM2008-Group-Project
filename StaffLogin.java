@@ -1,6 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 
@@ -69,14 +68,11 @@ public class StaffLogin {
 
 
         login.addActionListener(ae -> {
-
-
-            f.dispose();
-            new StaffPage();
-
             try {
                 if (DBDriver.staffLogin(user.getText(), String.valueOf(pass.getPassword()))){
                     JOptionPane.showMessageDialog(f, "Login Success");
+                    f.dispose();
+                    new StaffPage();
                 } else {
                     JOptionPane.showMessageDialog(f, "Login Failed");
                 }

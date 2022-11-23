@@ -154,21 +154,17 @@ public class CustomerLogin {
 
         back.addActionListener(ae -> {
             f.dispose();
-            if(nextPage == "BrowsePage")
-            {
+            if(nextPage.equals("BrowsePage")) {
                 new RegisterPage();
-            }
-            else
-            {
+            } else {
                 new HomePage();
             }
-
         });
 
         login.addActionListener(ae -> {
 
             //Check whether user is logging in with Address or Order Id
-            if(order_id.isVisible() == true)
+            if(order_id.isVisible())
             {
                 //get customer id from order id if there exists an order with the provided order id
                 if(text.getText().length() == 0)
@@ -180,7 +176,7 @@ public class CustomerLogin {
                     int customerId = DBDriver.customerFromOrder(Integer.parseInt(text.getText()));
                     JOptionPane.showMessageDialog(f, "Success!");
                     f.dispose();
-                    if(nextPage == "BrowsePage")
+                    if(nextPage.equals("BrowsePage"))
                     {
                         new BrowsePage();
                     }
@@ -226,7 +222,7 @@ public class CustomerLogin {
                     int customerId = Integer.parseInt(customer_text.getText());
                     JOptionPane.showMessageDialog(f, "Success!");
                     f.dispose();
-                    if(nextPage == "BrowsePage")
+                    if(nextPage.equals("BrowsePage"))
                     {
                         new BrowsePage();
                     }
