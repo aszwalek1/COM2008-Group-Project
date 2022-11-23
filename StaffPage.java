@@ -32,6 +32,8 @@ public class StaffPage implements ActionListener {
     JButton setOrderStatusFulfilledButton = new JButton("Fulfilled");
     JButton setOrderStatusConfirmedButton = new JButton("Confirmed");
 
+    JButton inventoryButton = new JButton(("View Inventory"));
+
     // Column Names
     String[] columnNames = {
             "Order ID", "Staff Username", "Customer ID", "Frame-set", "Handlebar", "Wheels", "Order Date", "Total Price", "Status"};
@@ -69,27 +71,27 @@ public class StaffPage implements ActionListener {
 
         //Labels and text fields for  for inventory
 
-        JLabel title = new JLabel("INVENTORY");
-        title.setFont(new Font("Arial", Font.BOLD, 20));
+//        JLabel title = new JLabel("INVENTORY");
+//        title.setFont(new Font("Arial", Font.BOLD, 20));
+//
+//
+//
+//        JLabel wheels = new JLabel("WHEELS");
+//
+//
+//        JLabel frames = new JLabel("FRAME-SETS");
+//
+//
+//        JLabel handle = new JLabel("HANDLE");
 
 
 
-        JLabel wheels = new JLabel("WHEELS");
-
-
-        JLabel frames = new JLabel("FRAME-SETS");
-
-
-        JLabel handle = new JLabel("HANDLE");
-
-
-
-        //All text field
-        JTextField wheels_in = new JTextField("                 ");
-
-        JTextField frames_in = new JTextField("                 ");
-
-        JTextField handle_in = new JTextField("        ");
+//        //All text field
+//        JTextField wheels_in = new JTextField("                 ");
+//
+//        JTextField frames_in = new JTextField("                 ");
+//
+//        JTextField handle_in = new JTextField("        ");
 
 
 
@@ -108,6 +110,13 @@ public class StaffPage implements ActionListener {
         customerButton.setBackground(new Color(59, 89, 182));
         customerButton.setForeground(Color.WHITE);
         customerButton.setFont(new Font("Arial", Font.BOLD, 20));
+
+
+        rightPanel.add( inventoryButton );
+        inventoryButton.setMargin(new Insets(5,5,5,5));
+        inventoryButton.setBackground(new Color(59, 89, 182));
+        inventoryButton.setForeground(Color.WHITE);
+        inventoryButton.setFont(new Font("Arial", Font.BOLD, 20));
 
         leftPanel.add(getBrowseButton);
         getBrowseButton.setMargin(new Insets(5,5,5,5));
@@ -139,15 +148,15 @@ public class StaffPage implements ActionListener {
         topPanel.add(Box.createRigidArea(new Dimension(50, 100)));
 
 
-        topmostPanel.add(title);
-        detailsPanel.add(wheels);
-        detailsPanel.add(wheels_in);
-
-        detailsPanel.add(frames);
-        detailsPanel.add(frames_in);
-
-        detailsPanel.add(handle);
-        detailsPanel.add(handle_in);
+//        topmostPanel.add(title);
+//        detailsPanel.add(wheels);
+//        detailsPanel.add(wheels_in);
+//
+//        detailsPanel.add(frames);
+//        detailsPanel.add(frames_in);
+//
+//        detailsPanel.add(handle);
+//        detailsPanel.add(handle_in);
 
 
 
@@ -241,7 +250,23 @@ public class StaffPage implements ActionListener {
 //            f.dispose();
 //            new CustomerPage();
 //        }
+
+
+        if(e.getSource() == customerButton) {
+            f.dispose();
+            new ViewCustomer();
+        }
+
+
+        if(e.getSource() == inventoryButton) {
+            f.dispose();
+            new ViewInventory();
+        }
     }
 
+    public static void main(String[] args) {
+
+        new StaffPage();
+    }
 
 }
