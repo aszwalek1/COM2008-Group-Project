@@ -17,9 +17,7 @@ public class DBDriver {
 
     public static Connection getConnection() {
         try {
-            Connection con = DriverManager.getConnection(URL + DBNAME, USER, PASSWORD);
-            System.out.println("Connection to Database successful");
-            return con;
+            return DriverManager.getConnection(URL + DBNAME, USER, PASSWORD);
         } catch (SQLException ex) {
             System.out.println("Connection to Database unsuccessful");
             ex.printStackTrace();
@@ -30,7 +28,6 @@ public class DBDriver {
     public static void closeConnection(Connection con) {
         try {
             con.close();
-            System.out.println("Connection to Database closed successfully");
         } catch (SQLException ex) {
             System.out.println("Connection to Database could not be closed successfully");
             ex.printStackTrace();
@@ -189,7 +186,7 @@ public class DBDriver {
         } catch (SQLException ex) {
             System.out.println("Connection to Database unsuccessful");
             ex.printStackTrace();
-            return new ArrayList<>(); //returns empty list
+            return new ArrayList<>(); //returns empty list if cant connect
         }
     }
 
@@ -198,6 +195,17 @@ public class DBDriver {
             Connection con = getConnection();
             Statement stmt = Objects.requireNonNull(con).createStatement();
             stmt.executeUpdate("UPDATE Orders SET orderStatus = '" + status + "' WHERE orderNo = "+ orderNo);
+            closeConnection(con);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public static void UpdateOrderStatus(int orderNo, String status, String username) {
+        try {
+            Connection con = getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            stmt.executeUpdate("UPDATE Orders SET orderStatus = '" + status + "', staffUsername = '" + username + "' WHERE orderNo = "+ orderNo);
             closeConnection(con);
         } catch (SQLException ex) {
             ex.printStackTrace();
