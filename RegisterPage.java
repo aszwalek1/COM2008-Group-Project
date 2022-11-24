@@ -19,7 +19,9 @@ public class RegisterPage extends JFrame {
     JButton backButton = new JButton("Back");
     JButton registerButton = new JButton("Register");
 
-    public RegisterPage() {
+    JButton loginButton = new JButton("Login (Already a Customer)");
+
+    public RegisterPage(int frameId, int handlebarId, int wheelId, String bikeName) {
 
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
@@ -41,10 +43,11 @@ public class RegisterPage extends JFrame {
         backButton.setFont(new Font("Arial", Font.BOLD, 20));
         leftPanel.add(Box.createRigidArea(new Dimension(100, 120)));
 
+
         //Back button action
         backButton.addActionListener(al -> {
             f.dispose();
-            new BrowsePage();
+            new BrowsePage(0);
         });
 
         // Right panel with all the text fields
@@ -52,64 +55,90 @@ public class RegisterPage extends JFrame {
         // FORENAME - label and text field
         rightPanel.add(Box.createRigidArea(new Dimension(200, 50)));
         JLabel forenameLabel = new JLabel("Please type your forename below");
+        forenameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         forenameLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         rightPanel.add(forenameLabel);
 
         JTextField forenameField = new JTextField("");
+        forenameField.setAlignmentX(Component.CENTER_ALIGNMENT);
         rightPanel.add(forenameField);
         rightPanel.add(Box.createRigidArea(new Dimension(200, 30)));
 
         // SURNAME
         JLabel surnameLabel = new JLabel("Please type your surname below");
+        surnameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         surnameLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         rightPanel.add(surnameLabel);
 
         JTextField surnameField = new JTextField("");
+        surnameField.setAlignmentX(Component.CENTER_ALIGNMENT);
         rightPanel.add(surnameField);
         rightPanel.add(Box.createRigidArea(new Dimension(200, 30)));
 
         // HOUSE NUMBER
         JLabel houseNoLabel = new JLabel("Please type your house number below");
+        houseNoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         houseNoLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         rightPanel.add(houseNoLabel);
 
         JTextField houseNoField = new JTextField("");
+        houseNoField.setAlignmentX(Component.CENTER_ALIGNMENT);
         rightPanel.add(houseNoField);
         rightPanel.add(Box.createRigidArea(new Dimension(200, 30)));
 
         // ROAD NAME
         JLabel roadLabel = new JLabel("Please type your road name below");
+        roadLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         roadLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         rightPanel.add(roadLabel);
 
         JTextField roadField = new JTextField("");
+        roadField.setAlignmentX(Component.CENTER_ALIGNMENT);
         rightPanel.add(roadField);
         rightPanel.add(Box.createRigidArea(new Dimension(200, 30)));
 
         // CITY NAME
         JLabel cityLabel = new JLabel("Please type your city name below");
+        cityLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         cityLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         rightPanel.add(cityLabel);
 
         JTextField cityField = new JTextField("");
+        cityField.setAlignmentX(Component.CENTER_ALIGNMENT);
         rightPanel.add(cityField);
         rightPanel.add(Box.createRigidArea(new Dimension(200, 30)));
 
         // POSTCODE
         JLabel postcodeLabel = new JLabel("Please type your postcode below");
+        postcodeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         postcodeLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         rightPanel.add(postcodeLabel);
 
         JTextField postcodeField = new JTextField("");
+        postcodeField.setAlignmentX(Component.CENTER_ALIGNMENT);
         rightPanel.add(postcodeField);
         rightPanel.add(Box.createRigidArea(new Dimension(200, 30)));
 
         rightPanel.add(registerButton);
+        registerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         rightPanel.add(Box.createRigidArea(new Dimension(200, 30)));
         registerButton.setMargin(new Insets(5,5,5,5));
         registerButton.setBackground(new Color(59, 89, 182));
         registerButton.setForeground(Color.WHITE);
         registerButton.setFont(new Font("Arial", Font.BOLD, 20));
+
+        rightPanel.add(loginButton);
+        rightPanel.add(Box.createRigidArea(new Dimension(200, 30)));
+        loginButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        loginButton.setMargin(new Insets(5,5,5,5));
+        loginButton.setBackground(new Color(59, 89, 182));
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFont(new Font("Arial", Font.BOLD, 20));
+
+        loginButton.addActionListener(al -> {
+            f.dispose();
+            new CustomerLogin("BrowsePage",frameId,handlebarId,wheelId,bikeName);
+        });
 
         //Register button action
         registerButton.addActionListener(al -> {
@@ -149,9 +178,10 @@ public class RegisterPage extends JFrame {
                     DBDriver.insertCustomerRecord(forenameField.getText().toLowerCase(),surnameField.getText().toLowerCase(),
                            houseNoField.getText().toUpperCase(),roadField.getText().toLowerCase(),cityField.getText().toLowerCase(),
                             postcodeField.getText().toUpperCase());
-                    JOptionPane.showMessageDialog(f, "Success!");
+                    int newCustomerId = DBDriver.getNewCustomerId();
+                    JOptionPane.showMessageDialog(f, "Success! IMPORTANT NOTICE : Your Customer Id Is "+newCustomerId);
                     f.dispose();
-                    //new BrowsePage();
+                    new OrderSumPage(newCustomerId, frameId, handlebarId, wheelId, bikeName);
                 } catch (SQLException e) {
                     JOptionPane.showMessageDialog(f, "Error when adding a customer! Please consult a member of staff. (Likely a database connection error)");
                 }
@@ -167,6 +197,11 @@ public class RegisterPage extends JFrame {
         f.pack();
         f.setVisible(true);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    }
+
+    public static void main(String[] args)
+    {
+        new RegisterPage(0,0,0,"");
     }
 
 

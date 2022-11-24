@@ -1,9 +1,12 @@
 import javax.swing.*;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Date;
 
 
 public class DBDriver {
@@ -264,7 +267,7 @@ public class DBDriver {
         }
     }
 
-    public static ArrayList<String> allAssembledBikesInStock() {
+    public static ArrayList<String> allAssembledBikes() {
         try {
             Connection con = DBDriver.getConnection();
             Statement stmt = Objects.requireNonNull(con).createStatement();
@@ -279,7 +282,7 @@ public class DBDriver {
                     "INNER JOIN Wheel ON AssembledBike.wheelId = Wheel.wheelId " +
                     "INNER JOIN Product AS fPro ON FrameSet.frameId = fPro.productId " +
                     "INNER JOIN Product AS hPro ON Handlebar.handlebarId = hPro.productId " +
-                    "INNER JOIN Product AS wPro ON Wheel.wheelId = wPro.productId WHERE aPro.stock > 0;");
+                    "INNER JOIN Product AS wPro ON Wheel.wheelId = wPro.productId");
             while (rs.next()) {
                 bikeList.add(rs.getInt("assembledBikeId")+". "+rs.getString("brandName")+" '"+rs.getString("productName")+
                         "' - Frame Gears: "+rs.getInt("frameGears")+", Frame Shocks: "+boolIntToString(rs.getInt("frameShocks"))+
@@ -293,6 +296,209 @@ public class DBDriver {
             System.out.println("Connection to Database unsuccessful");
             ex.printStackTrace();
             return new ArrayList<>();
+        }
+    }
+
+    public static String[] getBike(int bikeId) {
+        try {
+            Connection con = DBDriver.getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            String[] bike = new String[5];
+            ResultSet rs = stmt.executeQuery("SELECT concat(aPro.brandName,' ', aPro.productName) AS name," +
+                    "concat(fPro.brandName,' - ', fPro.productName,', Gears: ', gears,', Shocks: ', shocks,', Size: ', size,', Cost: £', fPro.unitCost) as f," +
+                    "concat(hPro.brandName,' - ', hPro.productName,', Style: ',handlebarStyle,', Cost: £',hPro.unitCost) as h," +
+                    "concat(wPro.brandName,' - ', hPro.productName,', ',diameter,', ',brakes,', ', style,', Cost: £',wPro.unitCost) as w," +
+                    "concat('£',ROUND(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost+wPro.unitCost,2)) AS total FROM AssembledBike " +
+                    "INNER JOIN Product AS aPro ON assembledBikeId = aPro.productId " +
+                    "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
+                    "INNER JOIN Handlebar ON AssembledBike.handlebarId = Handlebar.handlebarId " +
+                    "INNER JOIN Wheel ON AssembledBike.wheelId = Wheel.wheelId " +
+                    "INNER JOIN Product AS fPro ON FrameSet.frameId = fPro.productId " +
+                    "INNER JOIN Product AS hPro ON Handlebar.handlebarId = hPro.productId " +
+                    "INNER JOIN Product AS wPro ON Wheel.wheelId = wPro.productId WHERE assembledBikeId = "+bikeId);
+            rs.next();
+            bike[0] = rs.getString("name");
+            bike[1] = rs.getString("f");
+            bike[2] = rs.getString("h");
+            bike[3] = rs.getString("w");
+            bike[4] = rs.getString("total");
+            closeConnection(con);
+            return bike;
+        } catch (SQLException ex) {
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+            String[] bike = new String[5];
+            return bike;
+        }
+    }
+
+    public static void createOrder(int customerId, int bikeId, double cost)
+    {
+
+        try {
+            Connection con = getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            Date date = new Date();
+            LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            String sqlDate = ""+localDate.getYear()+"-"+localDate.getMonthValue()+"-"+localDate.getDayOfMonth();
+            String intoTable = "INSERT INTO Orders(assembledBikeId, customerId, staffUsername, orderDate, orderStatus, orderCost) VALUES(";
+            String sql = intoTable + bikeId + "," + customerId + "," + "'TEMP'" + ",'" + sqlDate + "'," + "'Pending'"+","+cost+")";
+            System.out.println("Inserting record into the Customer table...");
+            stmt.executeUpdate(sql);
+            System.out.println("Order insertion successful");
+            closeConnection(con);
+        } catch (SQLException ex) {
+            System.out.println("Order insertion unsuccessful");
+            ex.printStackTrace();
+        }
+    }
+
+    public static void createBike(int frameId, int handlebarId, int wheelId, String name)
+    {
+        try {
+            //CREATE BIKE IN PRODUCT TABLE
+            String bikeBrand = getFrameBrand(frameId)+"-"+getWheelType(wheelId);
+            createProduct(bikeBrand,name,10,0);
+            int bikeProductId = getLatestProductId();
+            Connection con = getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            //CREATE BIKE IN
+            String intoTable = "INSERT INTO AssembledBike(assembledBikeId, wheelId, handlebarId, frameId) VALUES(";
+            String sql = intoTable + bikeProductId + "," + wheelId + "," + handlebarId + "," + frameId+")";
+            System.out.println("Inserting record into the AssembledBike table...");
+            stmt.executeUpdate(sql);
+            System.out.println("bike insertion successful");
+            closeConnection(con);
+        } catch (SQLException ex) {
+            System.out.println("bike insertion unsuccessful");
+            ex.printStackTrace();
+        }
+    }
+
+    public static String getFrameBrand(int frameId)
+    {
+        try
+        {
+            Connection con = getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT brandName FROM FrameSet INNER JOIN Product ON FrameSet.frameId = Product.productId WHERE frameId = "+frameId);
+            rs.next();
+            String brand = rs.getString("brandName");
+            closeConnection(con);
+            return brand;
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            return "";
+        }
+    }
+
+    public static String getWheelType(int wheelId)
+    {
+        try
+        {
+            Connection con = getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT style FROM Wheel WHERE wheelId = "+wheelId);
+            rs.next();
+            String style = rs.getString("style");
+            closeConnection(con);
+            return style;
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            return "";
+        }
+    }
+
+    public static int getLatestProductId()
+    {
+        try
+        {
+            Connection con = getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Product");
+            //ResultSet rs = stmt.executeQuery("SELECT productId FROM Product"); DOESNT WORK????? I DONT UNDERSTAND
+            int i = 0;
+            while(rs.next())
+            {
+                i = rs.getInt("productId");
+            }
+            closeConnection(con);
+            return i;
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            return 0;
+        }
+    }
+
+    public static void createProduct(String brandName, String productName, double cost, int stock)
+    {
+        try
+        {
+            Connection con = getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            int validSerialNo = getNewSerialFromBrand(brandName);
+            String intoTable = "INSERT INTO Product(serialNo, brandName, productName, unitCost, stock) VALUES(";
+            String sql = intoTable + validSerialNo + ",'" + brandName + "','" + productName + "'," + cost + "," + stock+")";
+            stmt.executeUpdate(sql);
+            System.out.println("Product Insertion Successful");
+            closeConnection(con);
+        }
+        catch (SQLException ex)
+        {
+            System.out.println("Product insertion unsuccessful");
+            ex.printStackTrace();
+        }
+    }
+
+    public static int getNewSerialFromBrand(String brandName)
+    {
+        try
+        {
+            Connection con = getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT serialNo FROM Product WHERE brandName = '"+brandName+"'");
+            int max = 0;
+            while (rs.next())
+            {
+                int i = rs.getInt("serialNo");
+                if(i>max)
+                {
+                    max = i;
+                }
+            }
+            closeConnection(con);
+            return max + 1;
+        }
+        catch (SQLException ex)
+        {
+            ex.printStackTrace();
+            return 0;
+        }
+    }
+
+    public static int getLatestOrderId(){
+        try{
+            Connection con = getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            int orderId = 0;
+            ResultSet rs = stmt.executeQuery("SELECT orderNo FROM Orders");
+            while(rs.next())
+            {
+                orderId = rs.getInt("orderNo");
+            }
+            closeConnection(con);
+            return orderId;
+        }
+        catch (SQLException ex){
+            System.out.println("Order fetch unsuccessful");
+            ex.printStackTrace();
+            return 0;
         }
     }
 
@@ -327,7 +533,7 @@ public class DBDriver {
             Connection con = DBDriver.getConnection();
             Statement stmt = Objects.requireNonNull(con).createStatement();
             int count = stmt.executeUpdate("DELETE FROM Orders WHERE orderNo = "+orderNo);
-            con.close();
+            closeConnection(con);
         } catch (SQLException ex) {
             System.out.println("Connection to Database unsuccessful");
             ex.printStackTrace();
@@ -484,7 +690,12 @@ public class DBDriver {
     }
 
     public static int confirm(String message) {
-        return JOptionPane.showConfirmDialog(null, message, "alert", JOptionPane.OK_CANCEL_OPTION);
+        return JOptionPane.showConfirmDialog(null, message, "alert", JOptionPane.YES_NO_OPTION);
+    }
+
+    public static void main(String[] args)
+    {
+        System.out.println(getLatestProductId());
     }
 
 }

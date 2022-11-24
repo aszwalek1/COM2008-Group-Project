@@ -34,7 +34,7 @@ public class PaymentPage implements ActionListener {
         //Back button action
         backButton.addActionListener(al -> {
             f.dispose();
-            new BrowsePage();
+            //new BrowsePage();
         });
 
         //Layout
