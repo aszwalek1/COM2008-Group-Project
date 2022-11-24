@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="58e3d2b5-e2a8-43e0-a306-a29c7e98da69" name="Changes" comment="Adding inventory and customer details page">
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/.idea/COM2008-Group-Project.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/.idea/libraries/mysql_connector_java_8_0_27.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/BrowsePage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/CustomerLogin.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/CustomerPage$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/CustomerPage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/DBDriver.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/HomePage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/PaymentPage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/RegisterPage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/StaffLogin.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/StaffPage$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/StaffPage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/Team Report.docx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/ViewCustomer.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/COM2008-Group-Project/ViewInventory.class" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/HomePage.java" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/StaffLogin.java" root0="SKIP_HIGHLIGHTING" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2H5OBAA2ji2jS2R8FfF6gW5s3xV" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;15&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/pradh/OneDrive/Desktop/COM2008 Systems Design and Security/mysql-connector-java-8.0.27.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;
+  }
+}</component>
+  <component name="RunManager" selected="Application.Unnamed">
+    <configuration name="HomePage" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="HomePage" />
+      <module name="COM2008-Group-Project" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyLogin" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="MyLogin" />
+      <module name="COM2008-Group-Project" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Test" />
+      <module name="COM2008-Group-Project" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="IndexPage" />
+      <module name="COM2008-Group-Project" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="compute" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="compute" />
+      <module name="COM2008-Group-Project" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="JetRunConfigurationType">
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.HomePage" />
+        <item itemvalue="Application.Test" />
+        <item itemvalue="Application.compute" />
+        <item itemvalue="Application.MyLogin" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="58e3d2b5-e2a8-43e0-a306-a29c7e98da69" name="Changes" comment="" />
+      <created>1667571339890</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1667571339890</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Changes in file structure">
+      <created>1667908357799</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1667908357799</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Changes in file structure">
+      <created>1667908697259</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1667908697259</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Modified the Home page ,Customer Page and Staff Page">
+      <created>1668201882082</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1668201882082</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Chnages">
+      <created>1668202958621</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1668202958621</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Merge conflict">
+      <created>1668267710037</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1668267710037</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Changing file names">
+      <created>1668268775379</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1668268775379</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Changing button colours">
+      <created>1668270721287</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1668270721287</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Merge conflict">
+      <created>1668532789635</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1668532789635</updated>
+    </task>
+    <task id="LOCAL-00009" summary="changing the button">
+      <created>1668605208979</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1668605208979</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Added the customer page">
+      <created>1668606084682</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1668606084682</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Added the customer page">
+      <created>1668606168788</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1668606168788</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Added Staff Page">
+      <created>1668612134444</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1668612134444</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Customer can now add address to login">
+      <created>1668620017984</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1668620017984</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Changes to customer login">
+      <created>1668623452110</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1668623452110</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Adding panels to StaffPage">
+      <created>1668802220300</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1668802220300</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Adding panels to StaffPage">
+      <created>1668873718067</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1668873718067</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Changes to the staff page">
+      <created>1668885746493</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1668885746493</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Adding table, inventory to the staff page">
+      <created>1668888970776</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1668888970776</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Adding table, inventory to the staff page">
+      <created>1668979524049</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1668979524049</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Commit">
+      <created>1668983417808</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1668983417808</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Adding &quot;Inventory section&quot; tp Staff Page">
+      <created>1669046533085</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1669046533085</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Adding &quot;Inventory section&quot; tp Staff Page">
+      <created>1669204676238</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1669204676238</updated>
+    </task>
+    <task id="LOCAL-00023" summary="To pull stuff">
+      <created>1669204787052</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1669204787052</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Adding inventory and customer details page">
+      <created>1669211533703</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1669211533703</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Adding inventory and customer details page">
+      <created>1669211559881</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1669211559881</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Changes in file structure" />
+    <MESSAGE value="Modified the Home page ,Customer Page and Staff Page" />
+    <MESSAGE value="Chnages" />
+    <MESSAGE value="Changing file names" />
+    <MESSAGE value="Changing button colours" />
+    <MESSAGE value="Merge conflict" />
+    <MESSAGE value="changing the button" />
+    <MESSAGE value="Added the customer page" />
+    <MESSAGE value="Added Staff Page" />
+    <MESSAGE value="Customer can now add address to login" />
+    <MESSAGE value="Changes to customer login" />
+    <MESSAGE value="Adding panels to StaffPage" />
+    <MESSAGE value="Changes to the staff page" />
+    <MESSAGE value="Adding table, inventory to the staff page" />
+    <MESSAGE value="Commit" />
+    <MESSAGE value="Adding &quot;Inventory section&quot; tp Staff Page" />
+    <MESSAGE value="To pull stuff" />
+    <MESSAGE value="Adding inventory and customer details page" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding inventory and customer details page" />
+  </component>
+</project>
