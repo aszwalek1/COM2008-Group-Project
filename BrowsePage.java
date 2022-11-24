@@ -15,13 +15,13 @@ public class BrowsePage {
 
     //Buttons
     JButton backButton = new JButton("Back");
-    JButton centralOrderButton = new JButton("Order");
-    JButton eastOrderButton = new JButton("Order");
-    JButton temporaryRegistration = new JButton("Register here to buy a bike");
+    JButton centralOrderButton = new JButton("Order Pre-assembled");
+    JButton eastOrderButton = new JButton("Order Your Custom Made");
+    //JButton temporaryRegistration = new JButton("Register here to buy a bike");
 
 
 
-    public BrowsePage() {
+    public BrowsePage(int customerId) {
 
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -59,21 +59,11 @@ public class BrowsePage {
         centralPanel.add(Box.createRigidArea(new Dimension(50, 162)));
 
         // Combo Box with ready bikes from the database
-        ArrayList<String> assembledBikesList = new ArrayList<>(DBDriver.allAssembledBikesInStock());
+        ArrayList<String> assembledBikesList = new ArrayList<>(DBDriver.allAssembledBikes());
         String[] bikeStrings = assembledBikesList.toArray(new String[assembledBikesList.size()]);
         JComboBox<String> bikeList = new JComboBox<>(bikeStrings);
         centralPanel.add(bikeList);
         centralPanel.add(Box.createRigidArea(new Dimension(50, 100)));
-
-        //Label for the bike name
-        JLabel bikeNameLabel = new JLabel("Your Bike's Name:");
-        bikeNameLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
-        centralPanel.add(bikeNameLabel);
-
-        //Text field for the bike name
-        JTextField bikeNameField = new JTextField("");
-        centralPanel.add(bikeNameField);
-        centralPanel.add(Box.createRigidArea(new Dimension(200, 20)));
 
         //Order button in the central panel
         centralPanel.add(centralOrderButton);
@@ -84,30 +74,6 @@ public class BrowsePage {
 
 
         centralPanel.add(Box.createRigidArea(new Dimension(50, 300)));
-
-        //Action Listener for the Order button
-        centralOrderButton.addActionListener(e -> {
-            if (bikeNameField.getText().length() == 0) {
-                JOptionPane.showMessageDialog(f, "Please type the bike name to proceed");
-            } else {
-                String bikeName = bikeNameField.getText();
-                f.dispose();
-                //new CustomerPage();
-            }
-
-        });
-
-
-        temporaryRegistration.setMargin(new Insets(5, 5, 5, 5));
-        temporaryRegistration.setBackground(new Color(59, 89, 182));
-        temporaryRegistration.setForeground(Color.WHITE);
-        temporaryRegistration.setFont(new Font("Arial", Font.BOLD, 20));
-        centralPanel.add(temporaryRegistration);
-
-        temporaryRegistration.addActionListener(e -> {
-            f.dispose();
-            new RegisterPage();
-        });
 
 
         // EAST PANEL
@@ -193,18 +159,43 @@ public class BrowsePage {
 
         eastPanel.add(Box.createRigidArea(new Dimension(200, 80)));
 
-
         //Action Listeners
 
         eastOrderButton.addActionListener(e -> {
-            if (nameField.getText().length() == 0) {
-                JOptionPane.showMessageDialog(f, "Please type the bike name to proceed");
+            if (nameField.getText().length() == 0 && !DBDriver.isAlpha(nameField.getText())) {
+                JOptionPane.showMessageDialog(f, "Please type a name for your bike that is only letters to proceed");
             } else {
                 String bikeName = nameField.getText();
-                System.out.println(bikeName);
+                int frameId = Integer.parseInt(frameSetList.getSelectedItem().toString().split("\\.")[0]);
+                int handlebarId = Integer.parseInt(handlebarList.getSelectedItem().toString().split("\\.")[0]);
+                int wheelId = Integer.parseInt(wheelStyleList.getSelectedItem().toString().split("\\.")[0]);
+
+                if(customerId!=0)
+                {
+
+                    new OrderSumPage(customerId,frameId,handlebarId,wheelId,bikeName);
+                }
+                else
+                {
+                    new RegisterPage(frameId,handlebarId,wheelId,bikeName);
+                }
                 f.dispose();
-                //new CustomerPage();
+
             }
+        });
+
+        centralOrderButton.addActionListener(e -> {
+            int assembledBikeId = Integer.parseInt(bikeList.getSelectedItem().toString().split("\\.")[0]);
+            if(customerId!=0)
+            {
+                new OrderSumPage(customerId,assembledBikeId,0,0,"");
+            }
+            else
+            {
+                new RegisterPage(assembledBikeId,0,0,"");
+            }
+            f.dispose();
+
         });
 
         wheelStyleList.addActionListener (e -> {

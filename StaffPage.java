@@ -199,7 +199,7 @@ public class StaffPage implements ActionListener {
             new HomePage();
         } else if(e.getSource() == getBrowseButton) {
             f.dispose();
-            new BrowsePage();
+            new BrowsePage(0);
         } else if(e.getSource() == setOrderStatusPendingButton) {
             if(ordersTable.getSelectedRow() != -1) {
                 if(!ordersTable.getValueAt(ordersTable.getSelectedRow(),8).equals("Pending")) {

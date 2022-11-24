@@ -49,7 +49,7 @@ public class HomePage {
 
         clogin.addActionListener(ae -> {
           f.dispose();
-           new CustomerLogin("CustomerPage");
+           new CustomerLogin("HomePage",0,0,0,"");
         });
 
        slogin.addActionListener(e -> {
@@ -59,13 +59,14 @@ public class HomePage {
 
         browse.addActionListener(ae -> {
             f.dispose();
-            new BrowsePage();
+            new BrowsePage(0);
         });
 
 
         f.setVisible(true);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
+
 
     public static void main(String[] args) {
 

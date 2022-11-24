@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class CustomerPage implements ActionListener {
+public class CustomerPage {
 
     //Frame
     JFrame f = new JFrame("Customer Page - Build-a-Bike Ltd.");
@@ -180,12 +180,6 @@ public class CustomerPage implements ActionListener {
         middlePanel.add(scrollPanel);
 
 
-        //Buttons actions
-        exitButton.addActionListener(this);
-        browseButton.addActionListener(this);
-        deleteButton.addActionListener(this);
-        saveDetailsButton.addActionListener(this);
-
         f.add(leftPanel, BorderLayout.WEST);
         f.add(rightPanel, BorderLayout.EAST);
         f.add(middlePanel, BorderLayout.CENTER);
@@ -194,18 +188,15 @@ public class CustomerPage implements ActionListener {
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-    }
-    public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == exitButton) {
+        browseButton.addActionListener(ae -> {
+            f.dispose();
+            new BrowsePage(customerId);
+        });
+        exitButton.addActionListener(ae -> {
             f.dispose();
             new HomePage();
-        }
-        else if(e.getSource() == browseButton) {
-            f.dispose();
-            new BrowsePage();
-        }
-        else if(e.getSource() == saveDetailsButton)
-        {
+        });
+        saveDetailsButton.addActionListener(ae -> {
             //Validate Details
             //Prompt if they want to update their details
             //Update details
@@ -241,21 +232,20 @@ public class CustomerPage implements ActionListener {
             }
             else {
                 //Add Customer To DB
-                if(DBDriver.confirm("Are you sure you'd like to update your details?") == 0)
+                if(DBDriver.confirm("Are you sure you'd like to update your details?") == JOptionPane.YES_OPTION)
                 {
                     DBDriver.UpdateCustomer(Integer.parseInt(customerIdLabel.getText()), firstname.getText().toLowerCase(),surname.getText().toLowerCase(),
                             houseNo.getText().toUpperCase(),roadName.getText().toLowerCase(),cityName.getText().toLowerCase(),postcode.getText().toUpperCase());
                     JOptionPane.showMessageDialog(f, "Success!");
                 }
             }
-        }
-        else if(e.getSource() == deleteButton)
-        {
+        });
+        deleteButton.addActionListener(ae -> {
             if(ordersTable.getSelectedRow() != -1)
             {
                 if(ordersTable.getValueAt(ordersTable.getSelectedRow(),6).equals("Pending"))
                 {
-                    if(DBDriver.confirm("Are you sure you'd like to delete this order?") == 0)
+                    if(DBDriver.confirm("Are you sure you'd like to delete this order?") == JOptionPane.YES_OPTION)
                     {
                         DBDriver.DeleteOrder(Integer.parseInt(ordersTable.getValueAt(ordersTable.getSelectedRow(),0).toString()));
                         orderModel.removeRow(ordersTable.getSelectedRow());
@@ -268,7 +258,8 @@ public class CustomerPage implements ActionListener {
                 }
 
             }
-        }
+        });
+
     }
 
 }
