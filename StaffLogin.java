@@ -72,7 +72,7 @@ public class StaffLogin {
                 if (DBDriver.staffLogin(user.getText(), String.valueOf(pass.getPassword()))){
                     JOptionPane.showMessageDialog(f, "Login Success");
                     f.dispose();
-                    new StaffPage();
+                    new StaffPage(user.getText());
                 } else {
                     JOptionPane.showMessageDialog(f, "Login Failed");
                 }
