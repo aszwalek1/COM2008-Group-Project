@@ -34,103 +34,10 @@ public class DBDriver {
         }
     }
 
-    public static ArrayList<String> custAddrSelectAll(){    //returns an array list of customer AND ALL address info
-        try {
-            Connection con = DBDriver.getConnection();
-            Statement stmt = Objects.requireNonNull(con).createStatement();
-            ArrayList<String> orderList = new ArrayList<>();
-            ResultSet rs = stmt.executeQuery("SELECT customerId, forename, surname, Customer.houseNo, " +
-                    "Address.streetName, Address.cityName, Customer.postcode FROM Customer " +
-                    "INNER JOIN Address ON Customer.houseNo=Address.houseNo AND Customer.postcode=Address.postcode;");
-            while (rs.next()) {
-                orderList.add(
-                        rs.getInt("customerId")+ ","+rs.getString("forename")+","+
-                                rs.getString("surname")+","+rs.getString("houseNo")+","+
-                                rs.getString("streetName")+","+rs.getString("cityName")+","+
-                                rs.getString("postcode"));
-            }
-            closeConnection(con);
-            return orderList;
-        } catch (SQLException ex) {
-            System.out.println("Connection to Database unsuccessful");
-            ex.printStackTrace();
-            return new ArrayList<>(); //returns empty list if cant connect
-        }
-    }
-
-    public static ArrayList<String> custAddrSelectAll(int columnIndex, String input){    //returns a sorted array list of customer AND ALL address info
-        try {
-            Connection con = DBDriver.getConnection();
-            Statement stmt = Objects.requireNonNull(con).createStatement();
-            ArrayList<String> orderList = new ArrayList<>();
-            String tableColumn = "Customer.customerId";
-            if (columnIndex == 0) {
-                tableColumn = "Customer.customerId";
-            } else if (columnIndex == 1) {
-                tableColumn = "Customer.forename";
-            } else if (columnIndex == 2) {
-                tableColumn = "Customer.surname";
-            } else if (columnIndex == 3) {
-                tableColumn = "Customer.houseNo";
-            } else if (columnIndex == 4) {
-                tableColumn = "Address.streetName";
-            } else if (columnIndex == 5) {
-                tableColumn = "Address.cityName";
-            } else if (columnIndex == 6) {
-                tableColumn = "Customer.postcode";
-            }
-            ResultSet rs = stmt.executeQuery("SELECT customerId, forename, surname, Customer.houseNo, " +
-                    "Address.streetName, Address.cityName, Customer.postcode FROM Customer " +
-                    "INNER JOIN Address ON Customer.houseNo=Address.houseNo AND Customer.postcode=Address.postcode " +
-                    "WHERE " + tableColumn + " LIKE '%" + input + "%';");
-            if (rs != null){
-                while (rs.next()) {
-                    orderList.add(
-                            rs.getInt("customerId")+ ","+rs.getString("forename")+","+
-                                    rs.getString("surname")+","+rs.getString("houseNo")+","+
-                                    rs.getString("streetName")+","+rs.getString("cityName")+","+
-                                    rs.getString("postcode"));
-                }
-                closeConnection(con);
-                return orderList;
-            } else {
-                closeConnection(con);
-                return new ArrayList<>();
-            }
-        } catch (SQLException ex) {
-            System.out.println("Connection to Database unsuccessful");
-            ex.printStackTrace();
-            return new ArrayList<>(); //returns empty list if cant connect
-        }
-    }
-
-    public static void staffSelectAll() throws SQLException {
-        Connection con = DBDriver.getConnection();
-        Statement stmt = Objects.requireNonNull(con).createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM Staff");
-        while (rs.next()) {
-            System.out.print("Staff Username: " + rs.getString("staffUsername"));
-            System.out.println(", Staff Password: " + rs.getString("sPassword"));
-        }
-        closeConnection(con);
-    }
-
-    public static void addressSelectAll() throws SQLException {
-        Connection con = DBDriver.getConnection();
-        Statement stmt = Objects.requireNonNull(con).createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM Address");
-        while (rs.next()) {
-            System.out.print("HouseNo: " + rs.getString("houseNo"));
-            System.out.print(", Street Name: " + rs.getString("streetName"));
-            System.out.print(", City Name: " + rs.getString("cityName"));
-            System.out.println(", Postcode: " + rs.getString("postcode"));
-        }
-        closeConnection(con);
-    }
-
     //---------------------------------------------------
     //REGISTER PAGE FUNCTIONS
     //---------------------------------------------------
+
     public static boolean addressExists(String houseNo, String postcode) {
         try {
             Connection con = DBDriver.getConnection();
@@ -190,11 +97,17 @@ public class DBDriver {
         }
         closeConnection(con);
     }
+
     //-----------------------------------------------------
     //END OF REGISTER PAGE FUNCTIONS
     //-----------------------------------------------------
 
-    //////////////// staff stuff
+
+
+    //-----------------------------------------------------
+    //STAFF PAGE FUNCTIONS
+    //-----------------------------------------------------
+
     public static boolean staffLogin(String userIn, String passIn) throws SQLException {
         String passDB = "";
         String passEncrypt = "";
@@ -267,6 +180,122 @@ public class DBDriver {
             ex.printStackTrace();
         }
     }
+
+    //---------------------------------------------------------------------
+    //END OF STAFF PAGE FUNCTIONS
+    //---------------------------------------------------------------------
+
+
+
+    //---------------------------------------------------------------------
+    //VIEW CUSTOMER PAGE FUNCTIONS
+    //---------------------------------------------------------------------
+
+    public static ArrayList<String> custAddrSelectAll(){    //returns an array list of customer AND ALL address info
+        try {
+            Connection con = DBDriver.getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ArrayList<String> orderList = new ArrayList<>();
+            ResultSet rs = stmt.executeQuery("SELECT customerId, forename, surname, Customer.houseNo, " +
+                    "Address.streetName, Address.cityName, Customer.postcode FROM Customer " +
+                    "INNER JOIN Address ON Customer.houseNo=Address.houseNo AND Customer.postcode=Address.postcode;");
+            while (rs.next()) {
+                orderList.add(
+                        rs.getInt("customerId")+ ","+rs.getString("forename")+","+
+                                rs.getString("surname")+","+rs.getString("houseNo")+","+
+                                rs.getString("streetName")+","+rs.getString("cityName")+","+
+                                rs.getString("postcode"));
+            }
+            closeConnection(con);
+            return orderList;
+        } catch (SQLException ex) {
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+            return new ArrayList<>(); //returns empty list if cant connect
+        }
+    }
+
+    public static ArrayList<String> custAddrSelectAll(int columnIndex, String input){    //returns a sorted array list of customer AND ALL address info
+        try {
+            Connection con = DBDriver.getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ArrayList<String> orderList = new ArrayList<>();
+            String tableColumn = "Customer.customerId";
+            if (columnIndex == 0) {
+                tableColumn = "Customer.customerId";
+            } else if (columnIndex == 1) {
+                tableColumn = "Customer.forename";
+            } else if (columnIndex == 2) {
+                tableColumn = "Customer.surname";
+            } else if (columnIndex == 3) {
+                tableColumn = "Customer.houseNo";
+            } else if (columnIndex == 4) {
+                tableColumn = "Address.streetName";
+            } else if (columnIndex == 5) {
+                tableColumn = "Address.cityName";
+            } else if (columnIndex == 6) {
+                tableColumn = "Customer.postcode";
+            }
+            ResultSet rs = stmt.executeQuery("SELECT customerId, forename, surname, Customer.houseNo, " +
+                    "Address.streetName, Address.cityName, Customer.postcode FROM Customer " +
+                    "INNER JOIN Address ON Customer.houseNo=Address.houseNo AND Customer.postcode=Address.postcode " +
+                    "WHERE " + tableColumn + " LIKE '%" + input + "%';");
+            if (rs != null){
+                while (rs.next()) {
+                    orderList.add(
+                            rs.getInt("customerId")+ ","+rs.getString("forename")+","+
+                                    rs.getString("surname")+","+rs.getString("houseNo")+","+
+                                    rs.getString("streetName")+","+rs.getString("cityName")+","+
+                                    rs.getString("postcode"));
+                }
+                closeConnection(con);
+                return orderList;
+            } else {
+                closeConnection(con);
+                return new ArrayList<>();
+            }
+        } catch (SQLException ex) {
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+            return new ArrayList<>(); //returns empty list if cant connect
+        }
+    }
+
+    //---------------------------------------------------------------------
+    //END OF VIEW CUSTOMER PAGE FUNCTIONS
+    //---------------------------------------------------------------------
+
+
+
+    //---------------------------------------------------------------------
+    //VIEW INVENTORY PAGE FUNCTIONS
+    //---------------------------------------------------------------------
+
+    public static ArrayList<String> handleBarSelectAll() {
+        ArrayList<String> handleBars = new ArrayList<>();
+        try {
+            Connection con = DBDriver.getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Customer INNER JOIN Address ON Customer.houseNo = Address.houseNo AND Customer.postcode = Address.postcode WHERE customerId = ");
+            rs.next();
+            handleBars.add(rs.getString("forename"));
+            handleBars.add(rs.getString("surname"));
+            handleBars.add(rs.getString("houseNo"));
+            handleBars.add(rs.getString("streetName"));
+            handleBars.add(rs.getString("cityName"));
+            handleBars.add(rs.getString("postcode"));
+            con.close();
+            return handleBars;
+        } catch (SQLException ex) {
+            return handleBars;
+        }
+    }
+
+    //---------------------------------------------------------------------
+    //END OF VIEW INVENTORY PAGE FUNCTIONS
+    //---------------------------------------------------------------------
+
+
 
     //---------------------------------------------------------------------
     //BROWSE PAGE FUNCTIONS
@@ -634,6 +663,12 @@ public class DBDriver {
     //END OF BROWSE PAGE FUNCTIONS
     //---------------------------------------------------------------------
 
+
+
+    //---------------------------------------------------------------------
+    //CUSTOMER LOGIN AND CUSTOMER PAGE FUNCTIONS
+    //---------------------------------------------------------------------
+
     public static boolean orderExists(int orderNo) {
         try {
             Connection con = DBDriver.getConnection();
@@ -701,8 +736,15 @@ public class DBDriver {
     }
 
     //---------------------------------------------------------------------
+    //END OF CUSTOMER LOGIN AND CUSTOMER PAGE FUNCTIONS
+    //---------------------------------------------------------------------
+
+
+
+    //---------------------------------------------------------------------
     //VALIDATION FUNCTIONS
     //---------------------------------------------------------------------
+
     public static boolean isAlpha(String name) {
         char[] chars = name.toCharArray();
         for (char c : chars) {
@@ -756,6 +798,11 @@ public class DBDriver {
     public static int confirm(String message) {
         return JOptionPane.showConfirmDialog(null, message, "alert", JOptionPane.YES_NO_OPTION);
     }
+
+    //---------------------------------------------------------------------
+    //END OF VALIDATION FUNCTIONS
+    //---------------------------------------------------------------------
+
 
     public static void main(String[] args)
     {

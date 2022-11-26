@@ -162,6 +162,16 @@ public class StaffPage implements ActionListener {
             }
         });
 
+        customerButton.addActionListener(ae -> {
+            f.dispose();
+            new ViewCustomer(username);
+        });
+
+        inventoryButton.addActionListener(ae -> {
+            f.dispose();
+            new ViewInventory(username);
+        });
+
     }
 
 
@@ -181,12 +191,6 @@ public class StaffPage implements ActionListener {
         } else if(e.getSource() == getBrowseButton) {
             f.dispose();
             new BrowsePage(0);
-        } else if(e.getSource() == customerButton) {
-            f.dispose();
-            new ViewCustomer();
-        } else if(e.getSource() == inventoryButton) {
-            f.dispose();
-            new ViewInventory();
         }
     }
 

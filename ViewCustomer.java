@@ -32,7 +32,7 @@ public class ViewCustomer {
 
 
 
-    public ViewCustomer() {
+    public ViewCustomer(String username) {
 
         JFrame f = new JFrame("Customer details - Build-a-Bike Ltd.");
         f.setVisible(true);
@@ -92,6 +92,11 @@ public class ViewCustomer {
             } else {
                 populateTable();
             }
+        });
+
+        backButton.addActionListener(ae -> {
+            f.dispose();
+            new StaffPage(username);
         });
     }
 
