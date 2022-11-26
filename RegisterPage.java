@@ -44,6 +44,7 @@ public class RegisterPage extends JFrame {
         leftPanel.add(Box.createRigidArea(new Dimension(100, 120)));
 
 
+
         //Back button action
         backButton.addActionListener(al -> {
             f.dispose();
