@@ -34,18 +34,74 @@ public class DBDriver {
         }
     }
 
-    public static void customerSelectAll() throws SQLException {
-        Connection con = DBDriver.getConnection();
-        Statement stmt = Objects.requireNonNull(con).createStatement();
-        ResultSet rs = stmt.executeQuery("SELECT * FROM Customer");
-        while (rs.next()) {
-            System.out.print("Customer ID: " + rs.getInt("customerId"));
-            System.out.print(", Forename: " + rs.getString("forename"));
-            System.out.print(", Surname: " + rs.getString("surname"));
-            System.out.print(", HouseNo: " + rs.getInt("houseNo"));
-            System.out.println(", Postcode: " + rs.getString("postcode"));
+    public static ArrayList<String> custAddrSelectAll(){    //returns an array list of customer AND ALL address info
+        try {
+            Connection con = DBDriver.getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ArrayList<String> orderList = new ArrayList<>();
+            ResultSet rs = stmt.executeQuery("SELECT customerId, forename, surname, Customer.houseNo, " +
+                    "Address.streetName, Address.cityName, Customer.postcode FROM Customer " +
+                    "INNER JOIN Address ON Customer.houseNo=Address.houseNo AND Customer.postcode=Address.postcode;");
+            while (rs.next()) {
+                orderList.add(
+                        rs.getInt("customerId")+ ","+rs.getString("forename")+","+
+                                rs.getString("surname")+","+rs.getString("houseNo")+","+
+                                rs.getString("streetName")+","+rs.getString("cityName")+","+
+                                rs.getString("postcode"));
+            }
+            closeConnection(con);
+            return orderList;
+        } catch (SQLException ex) {
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+            return new ArrayList<>(); //returns empty list if cant connect
         }
-        closeConnection(con);
+    }
+
+    public static ArrayList<String> custAddrSelectAll(int columnIndex, String input){    //returns a sorted array list of customer AND ALL address info
+        try {
+            Connection con = DBDriver.getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ArrayList<String> orderList = new ArrayList<>();
+            String tableColumn = "Customer.customerId";
+            if (columnIndex == 0) {
+                tableColumn = "Customer.customerId";
+            } else if (columnIndex == 1) {
+                tableColumn = "Customer.forename";
+            } else if (columnIndex == 2) {
+                tableColumn = "Customer.surname";
+            } else if (columnIndex == 3) {
+                tableColumn = "Customer.houseNo";
+            } else if (columnIndex == 4) {
+                tableColumn = "Address.streetName";
+            } else if (columnIndex == 5) {
+                tableColumn = "Address.cityName";
+            } else if (columnIndex == 6) {
+                tableColumn = "Customer.postcode";
+            }
+            ResultSet rs = stmt.executeQuery("SELECT customerId, forename, surname, Customer.houseNo, " +
+                    "Address.streetName, Address.cityName, Customer.postcode FROM Customer " +
+                    "INNER JOIN Address ON Customer.houseNo=Address.houseNo AND Customer.postcode=Address.postcode " +
+                    "WHERE " + tableColumn + " LIKE '%" + input + "%';");
+            if (rs != null){
+                while (rs.next()) {
+                    orderList.add(
+                            rs.getInt("customerId")+ ","+rs.getString("forename")+","+
+                                    rs.getString("surname")+","+rs.getString("houseNo")+","+
+                                    rs.getString("streetName")+","+rs.getString("cityName")+","+
+                                    rs.getString("postcode"));
+                }
+                closeConnection(con);
+                return orderList;
+            } else {
+                closeConnection(con);
+                return new ArrayList<>();
+            }
+        } catch (SQLException ex) {
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+            return new ArrayList<>(); //returns empty list if cant connect
+        }
     }
 
     public static void staffSelectAll() throws SQLException {
