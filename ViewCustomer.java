@@ -90,6 +90,7 @@ public class ViewCustomer {
                     populateTable(searchFrom.getSelectedIndex(), searchFor.getText());
                     }
             } else {
+                JOptionPane.showMessageDialog(f, "Please input a valid search parameter");
                 populateTable();
             }
         });

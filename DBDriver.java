@@ -276,7 +276,7 @@ public class DBDriver {
             Connection con = DBDriver.getConnection();
             Statement stmt = Objects.requireNonNull(con).createStatement();
             ArrayList<String> handlebarList = new ArrayList<>();
-            ResultSet rs = stmt.executeQuery("SELECT productId, serialNo, brandName, productName, Handlebar.handlebarStyle, unitCost, stock FROM Product" +
+            ResultSet rs = stmt.executeQuery("SELECT productId, serialNo, brandName, productName, Handlebar.handlebarStyle, unitCost, stock FROM Product " +
                     "INNER JOIN Handlebar ON Product.productId = Handlebar.handlebarId;");
             while (rs.next()) {
                 handlebarList.add(
@@ -300,7 +300,7 @@ public class DBDriver {
             Statement stmt = Objects.requireNonNull(con).createStatement();
             ArrayList<String> frameSetList = new ArrayList<>();
             ResultSet rs = stmt.executeQuery("SELECT productId, serialNo, brandName, productName, FrameSet.gears, " +
-                    "FrameSet.shocks, FrameSet.size, unitCost, stock FROM Product" +
+                    "FrameSet.shocks, FrameSet.size, unitCost, stock FROM Product " +
                     "INNER JOIN FrameSet ON Product.productId = FrameSet.frameId;");
             while (rs.next()) {
                 frameSetList.add(
@@ -325,7 +325,7 @@ public class DBDriver {
             Statement stmt = Objects.requireNonNull(con).createStatement();
             ArrayList<String> wheelList = new ArrayList<>();
             ResultSet rs = stmt.executeQuery("SELECT productId, serialNo, brandName, productName, Wheel.style, " +
-                    "Wheel.diameter, Wheel.brakes, unitCost, stock FROM Product" +
+                    "Wheel.diameter, Wheel.brakes, unitCost, stock FROM Product " +
                     "INNER JOIN Wheel ON Product.productId = Wheel.wheelId;");
             while (rs.next()) {
                 wheelList.add(
@@ -350,7 +350,7 @@ public class DBDriver {
             Statement stmt = Objects.requireNonNull(con).createStatement();
             ArrayList<String> bikeList = new ArrayList<>();
             ResultSet rs = stmt.executeQuery("SELECT assembledBikeId, aPro.brandName, aPro.productName, " +
-                    "gears, shocks, size, handlebarStyle, diameter, brakes, style, " +
+                    "gears, shocks, size, handlebarStyle, style, diameter, brakes, " +
                     "(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost+wPro.unitCost) AS total FROM AssembledBike " +
                     "INNER JOIN Product AS aPro ON assembledBikeId = aPro.productId " +
                     "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
@@ -363,8 +363,8 @@ public class DBDriver {
                 bikeList.add(rs.getInt("assembledBikeId")+","+rs.getString("brandName")+","+
                         rs.getString("productName")+","+rs.getInt("gears")+","+
                         rs.getBoolean("shocks")+","+rs.getDouble("size")+","+
-                        rs.getString("handlebarStyle")+","+rs.getDouble("diameter")+","+
-                        rs.getString("brakes")+","+rs.getString("style")+","+rs.getDouble("total"));
+                        rs.getString("handlebarStyle")+","+rs.getString("style")+","+
+                        rs.getDouble("diameter")+","+rs.getString("brakes")+","+rs.getDouble("total"));
             }
             closeConnection(con);
             return bikeList;
@@ -505,7 +505,7 @@ public class DBDriver {
                     rs = stmt.executeQuery("SELECT productId, serialNo, brandName, productName, FrameSet.gears, " +
                         "FrameSet.shocks, FrameSet.size, unitCost, stock FROM Product " +
                         "INNER JOIN FrameSet ON Product.productId = FrameSet.frameId " +
-                        "WHERE " + column + " = '%" + input +"%'");
+                        "WHERE " + column + " LIKE '%" + input +"%'");
                     while (rs.next()) {
                         productList.add(
                                 rs.getInt("productId") + "," + rs.getInt("serialNo") + "," +
@@ -518,7 +518,7 @@ public class DBDriver {
                 case "Handlebars" -> {
                     rs = stmt.executeQuery("SELECT productId, serialNo, brandName, productName, Handlebar.handlebarStyle, unitCost, stock FROM Product " +
                         "INNER JOIN Handlebar ON Product.productId = Handlebar.handlebarId " +
-                        "WHERE " + column + " = '%" + input +"%'");
+                        "WHERE " + column + " LIKE '%" + input +"%'");
                     while (rs.next()) {
                         productList.add(
                                 rs.getInt("productId") + "," + rs.getInt("serialNo") + "," +
@@ -528,8 +528,18 @@ public class DBDriver {
                     }
                 }
                 case "Assembled Bikes" -> {
+                    String columnName;
+                    if (column.equals("brandName") || column.equals("productName")) {
+                        columnName = "aPro." + column;
+                    } else if (column.equals("productId")){
+                        columnName = "assembledBikeId";
+                    } else if (column.equals("total")){
+                        columnName = "(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost+wPro.unitCost)";
+                    } else {
+                        columnName = column;
+                    }
                     rs = stmt.executeQuery("SELECT assembledBikeId, aPro.brandName, aPro.productName, " +
-                        "gears, shocks, size, handlebarStyle, diameter, brakes, style, " +
+                        "gears, shocks, size, handlebarStyle, style, diameter, brakes, " +
                         "(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost+wPro.unitCost) AS total FROM AssembledBike " +
                         "INNER JOIN Product AS aPro ON assembledBikeId = aPro.productId " +
                         "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
@@ -537,22 +547,21 @@ public class DBDriver {
                         "INNER JOIN Wheel ON AssembledBike.wheelId = Wheel.wheelId " +
                         "INNER JOIN Product AS fPro ON FrameSet.frameId = fPro.productId " +
                         "INNER JOIN Product AS hPro ON Handlebar.handlebarId = hPro.productId " +
-                        "INNER JOIN Product AS wPro ON Wheel.wheelId = wPro.productId" +
-                        "WHERE " + column + " = '%" + input + "%';");
+                        "INNER JOIN Product AS wPro ON Wheel.wheelId = wPro.productId " +
+                        "WHERE " + columnName + " LIKE '%" + input + "%';");
                     while (rs.next()) {
                         productList.add(rs.getInt("assembledBikeId")+","+rs.getString("brandName")+","+
                             rs.getString("productName")+","+rs.getInt("gears")+","+
                             rs.getBoolean("shocks")+","+rs.getDouble("size")+","+
-                            rs.getString("handlebarStyle")+","+rs.getDouble("diameter")+","+
-                            rs.getString("brakes")+","+rs.getString("style")+","+rs.getDouble("total"));
+                            rs.getString("handlebarStyle")+","+rs.getString("style")+","+
+                            rs.getDouble("diameter")+","+rs.getString("brakes")+","+rs.getDouble("total"));
                     }
-                    return new ArrayList<>();
                 }
                 default -> { //default is wheels table
                     rs = stmt.executeQuery("SELECT productId, serialNo, brandName, productName, Wheel.style, " +
                         "Wheel.diameter, Wheel.brakes, unitCost, stock FROM Product " +
                         "INNER JOIN Wheel ON Product.productId = Wheel.wheelId " +
-                        "WHERE " + column + " = '%" + input +"%';");
+                        "WHERE " + column + " LIKE '%" + input +"%';");
                     while (rs.next()) {
                         productList.add(
                             rs.getInt("productId") + "," + rs.getInt("serialNo") + "," +
