@@ -52,7 +52,10 @@ Postcode :
 
 
 ### To browse as a Shopper :
-Click on "Browse" to view the browse page and 
+Click on "Browse" to view the browse page and order a bike.
+
+- As a shopper you can browse pre-assembled bikes or customise a new bike
+- As a shopper you can order a bike o
 
 
 

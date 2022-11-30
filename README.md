@@ -2,11 +2,22 @@
 Authors: Alicja Szwalek, Siya Pradhan, Alexander Brown, Waigen Yau
 Com2008 Systems Design and Security Group Project Nov, Dec 2022
 
-To run system: 
+### To run the system:
+### 1. Establish the VPN connection
 
-1. VPN connection
-2. Instructions to run the system from the terminal (vey important)
-3. Login instructions for the system 
+      
+To set up the VPN connection : https://students.sheffield.ac.uk/it-services/get-connected/vpn
+
+### 2. Running the system:
+On the terminal
+
+### ` > cd COM2008`
+
+### ` > javac HomePage.java`
+
+
+### ` > java HomePage`
+
 
 
 
@@ -52,7 +63,10 @@ Postcode :
 
 
 ### To browse as a Shopper :
-Click on "Browse" to view the browse page and 
+Click on "Browse" to view the browse page and order a bike.
+
+- As a shopper you can browse pre-assembled bikes or customise a new bike
+- As a shopper you can order a new bike registering as a customer
 
 
 
