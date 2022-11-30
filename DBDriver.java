@@ -240,7 +240,7 @@ public class DBDriver {
                     "Address.streetName, Address.cityName, Customer.postcode FROM Customer " +
                     "INNER JOIN Address ON Customer.houseNo=Address.houseNo AND Customer.postcode=Address.postcode " +
                     "WHERE " + tableColumn + " LIKE '%" + input + "%';");
-            if (rs != null){
+            if (rs != null) {
                 while (rs.next()) {
                     orderList.add(
                             rs.getInt("customerId")+ ","+rs.getString("forename")+","+
@@ -392,8 +392,7 @@ public class DBDriver {
             sql = intoTable + productId + ",'" + style + "')";
             stmt.executeUpdate(sql);
             closeConnection(con);
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Product insertion unsuccessful");
             ex.printStackTrace();
         }
@@ -416,8 +415,7 @@ public class DBDriver {
             sql = intoTable + productId + ",'" + gears + "','" + shocks + "','" + size + "')";
             stmt.executeUpdate(sql);
             closeConnection(con);
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Product insertion unsuccessful");
             ex.printStackTrace();
         }
@@ -440,57 +438,35 @@ public class DBDriver {
             sql = intoTable + productId + ",'" + style + "','" + diameter + "','" + brakes + "')";
             stmt.executeUpdate(sql);
             closeConnection(con);
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Product insertion unsuccessful");
             ex.printStackTrace();
         }
     }
 
-    public static void setProductStock(int productId, int stock) {
+    public static void setProductStock(String productId, String stock) {
         try {
             Connection con = getConnection();
             Statement stmt = Objects.requireNonNull(con).createStatement();
-            stmt.executeUpdate("UPDATE Product SET stock = '" + stock + "' WHERE productId = "+ productId);
+            stmt.executeUpdate("UPDATE Product SET stock = " + stock + " WHERE productId = "+ productId);
             closeConnection(con);
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    public static void incrementProductStock(int productId) {
+    public static void updateProductStock(String productId, String which) {
         try {
             Connection con = getConnection();
-            int stock = 0;
             Statement stmt = Objects.requireNonNull(con).createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT stock FROM Product WHERE productId = '" + productId +"';");
-            while (rs.next()) {
-                stock = rs.getInt("stock") + 1;
+            if (which.equals("increase")) {
+                stmt.executeUpdate("UPDATE Product SET stock = stock + 1 WHERE productId = "+ productId);
+            } else if (which.equals("decrease")) {
+                stmt.executeUpdate("UPDATE Product SET stock = stock - 1 WHERE productId = "+ productId);
             }
-            stmt.executeUpdate("UPDATE Product SET stock = '" + stock + "' WHERE productId = "+ productId);
             closeConnection(con);
         } catch (SQLException ex) {
             ex.printStackTrace();
-        }
-    }
-
-    public static boolean decrementProductStock(int productId) {
-        try {
-            Connection con = getConnection();
-            int stock = 0;
-            boolean result = false;
-            Statement stmt = Objects.requireNonNull(con).createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT stock FROM Product WHERE productId = '" + productId +"';");
-            while (rs.next()) {
-                stock = rs.getInt("stock") - 1;
-            }
-            if (stock < 0) { stock = 0; } else { result = true; }
-            stmt.executeUpdate("UPDATE Product SET stock = '" + stock + "' WHERE productId = "+ productId);
-            closeConnection(con);
-            return result;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
         }
     }
 
@@ -528,16 +504,12 @@ public class DBDriver {
                     }
                 }
                 case "Assembled Bikes" -> {
-                    String columnName;
-                    if (column.equals("brandName") || column.equals("productName")) {
-                        columnName = "aPro." + column;
-                    } else if (column.equals("productId")){
-                        columnName = "assembledBikeId";
-                    } else if (column.equals("total")){
-                        columnName = "(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost+wPro.unitCost)";
-                    } else {
-                        columnName = column;
-                    }
+                    String columnName = switch (column) {
+                        case "brandName", "productName" -> "aPro." + column;
+                        case "productId" -> "assembledBikeId";
+                        case "total" -> "(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost+wPro.unitCost)";
+                        default -> column;
+                    };
                     rs = stmt.executeQuery("SELECT assembledBikeId, aPro.brandName, aPro.productName, " +
                         "gears, shocks, size, handlebarStyle, style, diameter, brakes, " +
                         "(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost+wPro.unitCost) AS total FROM AssembledBike " +
@@ -713,9 +685,7 @@ public class DBDriver {
         }
     }
 
-    public static void createOrder(int customerId, int bikeId, double cost)
-    {
-
+    public static void createOrder(int customerId, int bikeId, double cost) {
         try {
             Connection con = getConnection();
             Statement stmt = Objects.requireNonNull(con).createStatement();
@@ -734,8 +704,7 @@ public class DBDriver {
         }
     }
 
-    public static void createBike(int frameId, int handlebarId, int wheelId, String name)
-    {
+    public static void createBike(int frameId, int handlebarId, int wheelId, String name) {
         try {
             //CREATE BIKE IN PRODUCT TABLE
             String bikeBrand = getFrameBrand(frameId)+"-"+getWheelType(wheelId);
@@ -756,10 +725,8 @@ public class DBDriver {
         }
     }
 
-    public static String getFrameBrand(int frameId)
-    {
-        try
-        {
+    public static String getFrameBrand(int frameId) {
+        try {
             Connection con = getConnection();
             Statement stmt = Objects.requireNonNull(con).createStatement();
             ResultSet rs = stmt.executeQuery("SELECT brandName FROM FrameSet INNER JOIN Product ON FrameSet.frameId = Product.productId WHERE frameId = "+frameId);
@@ -767,18 +734,14 @@ public class DBDriver {
             String brand = rs.getString("brandName");
             closeConnection(con);
             return brand;
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             return "";
         }
     }
 
-    public static String getWheelType(int wheelId)
-    {
-        try
-        {
+    public static String getWheelType(int wheelId) {
+        try {
             Connection con = getConnection();
             Statement stmt = Objects.requireNonNull(con).createStatement();
             ResultSet rs = stmt.executeQuery("SELECT style FROM Wheel WHERE wheelId = "+wheelId);
@@ -786,32 +749,25 @@ public class DBDriver {
             String style = rs.getString("style");
             closeConnection(con);
             return style;
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             return "";
         }
     }
 
-    public static int getLatestProductId()
-    {
-        try
-        {
+    public static int getLatestProductId() {
+        try {
             Connection con = getConnection();
             Statement stmt = Objects.requireNonNull(con).createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Product");
             //ResultSet rs = stmt.executeQuery("SELECT productId FROM Product"); DOESNT WORK????? I DONT UNDERSTAND
             int i = 0;
-            while(rs.next())
-            {
+            while(rs.next()) {
                 i = rs.getInt("productId");
             }
             closeConnection(con);
             return i;
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             return 0;
         }
@@ -827,8 +783,7 @@ public class DBDriver {
             stmt.executeUpdate(sql);
             System.out.println("Product Insertion Successful");
             closeConnection(con);
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Product insertion unsuccessful");
             ex.printStackTrace();
         }
@@ -848,8 +803,7 @@ public class DBDriver {
             }
             closeConnection(con);
             return max + 1;
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             ex.printStackTrace();
             return 0;
         }
@@ -866,8 +820,7 @@ public class DBDriver {
             }
             closeConnection(con);
             return orderId;
-        }
-        catch (SQLException ex) {
+        } catch (SQLException ex) {
             System.out.println("Order fetch unsuccessful");
             ex.printStackTrace();
             return 0;
@@ -1003,13 +956,11 @@ public class DBDriver {
             Statement stmt = Objects.requireNonNull(con).createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Customer");
             int lastId = 0;
-            while (rs.next())
-            {
+            while (rs.next()) {
                 lastId = rs.getInt("customerId");
             }
             return lastId;
-        }
-        catch(SQLException ex){
+        } catch(SQLException ex){
             return 0;
         }
     }
