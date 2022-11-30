@@ -103,7 +103,7 @@ public class ViewCustomer {
                 if(DBDriver.confirm("Search the table for any occurrence of: '" + searchFor.getText() +
                         "', in column: '" + searchFrom.getSelectedItem().toString() + "'?") == 0) {
                     populateTable(searchFrom.getSelectedIndex(), searchFor.getText());
-                    }
+                }
             } else {
                 JOptionPane.showMessageDialog(f, "Please input a valid search parameter");
                 populateTable();
