@@ -8,7 +8,10 @@ public class ViewCustomer {
     JPanel mainPanel = new JPanel(new GridLayout(1, 2));
     JPanel leftPanel = new JPanel(new GridLayout(2, 1));
     JPanel rightPanel = new JPanel();
-    JPanel topPanel = new JPanel();
+    JPanel topPanel = new JPanel(new GridLayout(1,3));
+    JPanel topLeftPanel = new JPanel();
+    JPanel topRightPanel = new JPanel();
+    JPanel topMiddlePanel = new JPanel();
     JPanel bottomPanel = new JPanel();
     JButton backButton = new JButton("Back");
 
@@ -39,9 +42,10 @@ public class ViewCustomer {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
+
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
+        topMiddlePanel.setLayout(new BoxLayout(topMiddlePanel, BoxLayout.Y_AXIS));
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
 
         //adding panel borders
@@ -54,6 +58,10 @@ public class ViewCustomer {
         f.add(mainPanel);
         mainPanel.add(leftPanel);
         mainPanel.add(rightPanel);
+        topPanel.add(topLeftPanel);
+        topPanel.add(topMiddlePanel);
+        topPanel.add(topRightPanel);
+
         leftPanel.add(topPanel, BorderLayout.NORTH);
         leftPanel.add(bottomPanel, BorderLayout.SOUTH);
 
@@ -63,9 +71,16 @@ public class ViewCustomer {
         backButton.setForeground(Color.WHITE);
         backButton.setFont(new Font("Arial", Font.BOLD, 20));
 
-        topPanel.add(searchFrom);
-        topPanel.add(searchFor);
-        topPanel.add(search);
+        topLeftPanel.add(Box.createRigidArea(new Dimension(80, 200)));
+        topMiddlePanel.add(Box.createRigidArea(new Dimension(80, 200)));
+        topMiddlePanel.add(searchFrom);
+        topMiddlePanel.add(Box.createRigidArea(new Dimension(40, 90)));
+        topMiddlePanel.add(searchFor);
+        topMiddlePanel.add(Box.createRigidArea(new Dimension(40, 90)));
+        topMiddlePanel.add(search);
+        topMiddlePanel.add(Box.createRigidArea(new Dimension(40, 200)));
+        topRightPanel.add(Box.createRigidArea(new Dimension(80, 200)));
+
         search.setMargin(new Insets(5,5,5,5));
         search.setBackground(new Color(59, 89, 182));
         search.setForeground(Color.WHITE);
