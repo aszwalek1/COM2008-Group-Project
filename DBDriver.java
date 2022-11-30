@@ -159,6 +159,48 @@ public class DBDriver {
         }
     }
 
+    public static ArrayList<String> allOrders(String column, String input){
+        try {
+            String columnName;
+            switch(column){
+                case "frameName" -> columnName = "CONCAT(fPro.brandName,' - ', fPro.productName)";
+                case "handlebarName" -> columnName = "CONCAT(hPro.brandName,' - ', hPro.productName)";
+                case "wheelName" -> columnName = "CONCAT(wPro.brandName,' - ', wPro.productName)";
+                default -> columnName = column;
+            }
+            Connection con = DBDriver.getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            ArrayList<String> orderList = new ArrayList<>();
+            ResultSet rs = stmt.executeQuery("SELECT orderNo, staffUsername, customerId, " +
+                    "CONCAT(fPro.brandName,' - ', fPro.productName) AS frameName, " +
+                    "CONCAT(hPro.brandName,' - ', hPro.productName) AS handlebarName, " +
+                    "CONCAT(wPro.brandName,' - ', wPro.productName) AS wheelName, " +
+                    "orderDate, orderCost, orderStatus FROM Orders " +
+                    "INNER JOIN AssembledBike ON AssembledBike.assembledBikeId = Orders.assembledBikeId " +
+                    "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
+                    "INNER JOIN Handlebar ON AssembledBike.handlebarId = Handlebar.handlebarId " +
+                    "INNER JOIN Wheel ON AssembledBike.wheelId = Wheel.wheelId " +
+                    "INNER JOIN Product AS fPro ON FrameSet.frameId = fPro.productId " +
+                    "INNER JOIN Product AS hPro ON Handlebar.handlebarId = hPro.productId " +
+                    "INNER JOIN Product AS wPro ON Wheel.wheelId = wPro.productId " +
+                    "WHERE " + columnName + " LIKE '%" + input + "%';");
+            while (rs.next()) {
+                orderList.add(
+                        rs.getInt("orderNo")+ ","+rs.getString("staffUsername")+","+
+                                rs.getInt("customerId")+","+rs.getString("frameName")+","+
+                                rs.getString("handlebarName")+","+rs.getString("wheelName")+","+
+                                rs.getDate("orderDate")+",£"+rs.getDouble("orderCost")+","+
+                                rs.getString("orderStatus"));
+            }
+            closeConnection(con);
+            return orderList;
+        } catch (SQLException ex) {
+            System.out.println("Connection to Database unsuccessful");
+            ex.printStackTrace();
+            return new ArrayList<>(); //returns empty list if cant connect
+        }
+    }
+
     public static void UpdateOrderStatus(int orderNo, String status) {
         try {
             Connection con = getConnection();

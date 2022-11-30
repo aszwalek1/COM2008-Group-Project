@@ -56,15 +56,18 @@ public class ViewInventory {
     JLabel unitCostLabel = new JLabel("Unit Cost (£):");
     JLabel stockLabel = new JLabel("Current Stock:");
     JButton newFrameSetButton = new JButton("New Frame Set");
-    JPanel newFrameSetPanel = new JPanel(new GridLayout(4, 1));
+    JPanel newFrameSetPanel = new JPanel(new GridLayout(2, 1));
+    JPanel newFrameSetTopPanel = new JPanel(new GridLayout(6, 1));
     JTextField gears = new JTextField(11);
     JComboBox<String> shocks = new JComboBox<>(new String[]{"false", "true"});
     JTextField size = new JTextField(11);
     JButton newHandlebarButton = new JButton("New Handlebar");
     JPanel newHandlebarPanel = new JPanel(new GridLayout(2, 1));
+    JPanel newHandlebarTopPanel = new JPanel(new GridLayout(2, 1));
     JComboBox<String> handlebarStyle = new JComboBox<>(new String[]{"Straight", "High", "Dropped"});
     JButton newWheelButton = new JButton("New Wheel");
-    JPanel newWheelPanel = new JPanel(new GridLayout(4, 1));
+    JPanel newWheelPanel = new JPanel(new GridLayout(2, 1));
+    JPanel newWheelTopPanel = new JPanel(new GridLayout(6, 1));
     JComboBox<String> style = new JComboBox<>(new String[]{"Road", "Mountain", "Hybrid"});
     JTextField diameter = new JTextField(11);
     JComboBox<String> brakes = new JComboBox<>(new String[]{"Rim", "Disk"});
@@ -89,6 +92,10 @@ public class ViewInventory {
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
         topMiddlePanel.setLayout(new BoxLayout(topMiddlePanel, BoxLayout.X_AXIS));
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
+
+        newFrameSetPanel.setLayout(new BoxLayout(newFrameSetPanel, BoxLayout.Y_AXIS));
+        newHandlebarPanel.setLayout(new BoxLayout(newHandlebarPanel, BoxLayout.Y_AXIS));
+        newWheelPanel.setLayout(new BoxLayout(newWheelPanel, BoxLayout.Y_AXIS));
 
         //adding panel borders JUST FOR EASIER VISUALISING THE PANEL LOCATIONS
         leftPanel.setBorder(BorderFactory.createLineBorder(Color.black));
@@ -182,22 +189,25 @@ public class ViewInventory {
         newProductPanel.add(stockLabel);
         newProductPanel.add(stockTxtFld);
 
-        newFrameSetPanel.add(gearsLabel);
-        newFrameSetPanel.add(gears);
-        newFrameSetPanel.add(shocksLabel);
-        newFrameSetPanel.add(shocks);
-        newFrameSetPanel.add(sizeLabel);
-        newFrameSetPanel.add(size);
+        newFrameSetPanel.add(newFrameSetTopPanel);
+        newFrameSetTopPanel.add(gearsLabel);
+        newFrameSetTopPanel.add(gears);
+        newFrameSetTopPanel.add(shocksLabel);
+        newFrameSetTopPanel.add(shocks);
+        newFrameSetTopPanel.add(sizeLabel);
+        newFrameSetTopPanel.add(size);
 
-        newHandlebarPanel.add(handlebarStyleLabel);
-        newHandlebarPanel.add(handlebarStyle);
+        newHandlebarPanel.add(newHandlebarTopPanel);
+        newHandlebarTopPanel.add(handlebarStyleLabel);
+        newHandlebarTopPanel.add(handlebarStyle);
 
-        newWheelPanel.add(styleLabel);
-        newWheelPanel.add(style);
-        newWheelPanel.add(diameterLabel);
-        newWheelPanel.add(diameter);
-        newWheelPanel.add(brakesLabel);
-        newWheelPanel.add(brakes);
+        newWheelPanel.add(newWheelTopPanel);
+        newWheelTopPanel.add(styleLabel);
+        newWheelTopPanel.add(style);
+        newWheelTopPanel.add(diameterLabel);
+        newWheelTopPanel.add(diameter);
+        newWheelTopPanel.add(brakesLabel);
+        newWheelTopPanel.add(brakes);
 
 
         searchButton.addActionListener(ae -> {
@@ -265,7 +275,6 @@ public class ViewInventory {
                 populateTable("Frame Sets");
                 updateSelectColumn();
             }
-
         });
 
         newHandlebarButton.addActionListener(ae -> {
@@ -279,7 +288,6 @@ public class ViewInventory {
                 populateTable("Handlebars");
                 updateSelectColumn();
             }
-
         });
 
         newWheelButton.addActionListener(ae -> {
@@ -293,7 +301,6 @@ public class ViewInventory {
                 populateTable("Wheels");
                 updateSelectColumn();
             }
-
         });
 
         backButton.addActionListener(ae -> {
@@ -365,13 +372,13 @@ public class ViewInventory {
     public void addInputsToProductPanel(int productType){
         switch(productType){
             case 0 -> {
-                newFrameSetPanel.add(newProductPanel, BorderLayout.PAGE_START);
+                newFrameSetPanel.add(newProductPanel, BorderLayout.PAGE_END);
             }
             case 1 -> {
-                newHandlebarPanel.add(newProductPanel, BorderLayout.PAGE_START);
+                newHandlebarPanel.add(newProductPanel, BorderLayout.PAGE_END);
             }
             default -> { //wheels is default
-                newWheelPanel.add(newProductPanel, BorderLayout.PAGE_START);
+                newWheelPanel.add(newProductPanel, BorderLayout.PAGE_END);
             }
         }
     }
