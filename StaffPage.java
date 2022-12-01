@@ -152,8 +152,12 @@ public class StaffPage {
             if (ordersTable.getSelectedRow() != -1) {
                 if (!ordersTable.getValueAt(ordersTable.getSelectedRow(), 8).equals("Fulfilled")) {
                     if (DBDriver.confirm("Are you sure you'd like to change this order's status to: Fulfilled ?") == 0) {
-                        DBDriver.UpdateOrderStatus(Integer.parseInt(ordersTable.getValueAt(ordersTable.getSelectedRow(), 0).toString()), "Fulfilled");
-                        populateTable();
+                        if (DBDriver.decreaseOrderStock(Integer.parseInt(ordersTable.getValueAt(ordersTable.getSelectedRow(), 0).toString()))) {
+                            DBDriver.UpdateOrderStatus(Integer.parseInt(ordersTable.getValueAt(ordersTable.getSelectedRow(), 0).toString()), "Fulfilled");
+                            populateTable();
+                        } else {
+                            JOptionPane.showMessageDialog(f, "There is not enough stock for this order to be fulfilled.");
+                        }
                     }
                 } else {
                     JOptionPane.showMessageDialog(f, "This order's status is already: Fulfilled");

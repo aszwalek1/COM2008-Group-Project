@@ -40,7 +40,7 @@ public class OrderSumPage {
     JLabel nameLabel = new JLabel("Bike Name: ");
     JLabel frameLabel = new JLabel("Frame-Set: 1x - ");
     JLabel handlebarLabel = new JLabel("Handlebars: 1x - ");
-    JLabel wheelLabel = new JLabel("Wheels: 2x - ");
+    JLabel wheelLabel = new JLabel("Wheel Pair: 1x - ");
     JLabel costLabel = new JLabel("Total Cost: ");
     JLabel dateLabel = new JLabel("Date: ");
 

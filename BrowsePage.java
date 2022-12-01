@@ -118,7 +118,7 @@ public class BrowsePage {
 
         eastPanel.add(Box.createRigidArea(new Dimension(200, 80)));
 
-        JLabel wheelsLabel = new JLabel("Choose the wheels for your bike");
+        JLabel wheelsLabel = new JLabel("Choose the pair of wheels for your bike");
         wheelsLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(wheelsLabel);
 
