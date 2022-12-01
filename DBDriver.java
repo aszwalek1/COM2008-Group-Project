@@ -704,7 +704,7 @@ public class DBDriver {
             ResultSet rs = stmt.executeQuery("SELECT assembledBikeId, aPro.brandName, aPro.productName, " +
                     "gears AS frameGears, shocks AS frameShocks, size AS frameSize, handlebarStyle, " +
                     "diameter AS wheelDiameter, brakes AS wheelBrakes, style AS wheelStyle, " +
-                    "(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost+wPro.unitCost) AS total FROM AssembledBike " +
+                    "ROUND(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost,2) AS total FROM AssembledBike " +
                     "INNER JOIN Product AS aPro ON assembledBikeId = aPro.productId " +
                     "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
                     "INNER JOIN Handlebar ON AssembledBike.handlebarId = Handlebar.handlebarId " +
