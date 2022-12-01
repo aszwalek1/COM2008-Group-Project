@@ -24,7 +24,7 @@ On the terminal
 ### To login as staff: 
 Enter the following login details and click on "login"
 1. username  : Staff1 
-
+ 
    password : password
 
 

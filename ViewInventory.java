@@ -5,23 +5,31 @@ import java.util.ArrayList;
 
 public class ViewInventory {
 
-    JPanel mainPanel = new JPanel(new GridLayout(1, 2));
-    JPanel leftPanel = new JPanel(new GridLayout(4, 1));
+    // Panels
+    JPanel mainPanel = new JPanel(new GridLayout(1, 3));
+    JPanel leftPanel = new JPanel();
+    JPanel middlePanel = new JPanel(new GridLayout(4,1));
     JPanel rightPanel = new JPanel();
-    JPanel topPanel = new JPanel();
+
+    // Panels in the middle panel
+    JPanel topTopPanel = new JPanel();
     JPanel topMiddlePanel = new JPanel();
     JPanel botMiddlePanel = new JPanel();
     JPanel bottomPanel = new JPanel();
-    JButton backButton = new JButton("Back");
 
+    // Back button
+    JButton backButton = new JButton("Back");
 
     //Table stuff
     String[] tableList = {"Frame Sets", "Handlebars", "Wheels", "Assembled Bikes"};
     JComboBox<String> selectTable = new JComboBox<>(tableList);
-    String[] frameColumns = {"Product ID", "Serial No", "Brand", "Name", "Gears", "Shocks", "Size (cm)", "Cost (£)", "Stock"};
+    String[] frameColumns = {"Product ID", "Serial No", "Brand", "Name", "Gears", "Shocks",
+            "Size (cm)", "Cost (£)", "Stock"};
     String[] handleColumns = {"Product ID", "Serial No", "Brand", "Name", "Style", "Cost (£)", "Stock"};
-    String[] bikeColumns = {"Product ID", "Brand", "Bike Name", "Gears", "Shocks", "Frame Size (cm)", "Handlebar Style", "Wheel Style", "Wheel Diameter (cm)", "Brakes", "Total Cost (£)"};
-    String[] wheelColumns = {"Product ID", "Serial No", "Brand", "Name", "Style", "Diameter (cm)", "Brakes", "Cost (£)", "Stock"};
+    String[] bikeColumns = {"Product ID", "Brand", "Bike Name", "Gears", "Shocks", "Frame Size (cm)", "Handlebar Style",
+            "Wheel Style", "Wheel Diameter (cm)", "Brakes", "Total Cost (£)"};
+    String[] wheelColumns = {"Product ID", "Serial No", "Brand", "Name", "Style", "Diameter (cm)", "Brakes",
+            "Cost (£)", "Stock"};
     JTable productTable = new JTable(new DefaultTableModel(frameColumns,0)) {
         //MAKE TABLE UNEDITABLE BY USER
         private static final long serialVersionUID = 1L;
@@ -32,16 +40,18 @@ public class ViewInventory {
     DefaultTableModel productModel = (DefaultTableModel) productTable.getModel();
 
 
-    //Search stuff
+    //Searching
+    JLabel searchLabel = new JLabel("Search the inventory by product type or product information");
     JComboBox<String> selectColumn = new JComboBox<>(frameColumns);
-    JTextField searchColumnFor = new JTextField(50);
+    JTextField searchColumnFor = new JTextField(20);
     JButton searchButton = new JButton("Search");
 
 
-    //Stock stuff
+    //Stock
     JButton incStockButton = new JButton("Increase Stock");
     JButton decStockButton = new JButton("Decrease Stock");
-    JTextField setStockTo = new JTextField(11);
+    JLabel stockLabel2 = new JLabel("Write the number of stock below to set it faster");
+    JTextField setStockTo = new JTextField(20);
     JButton setStockButton = new JButton("Set Stock");
 
 
@@ -82,45 +92,81 @@ public class ViewInventory {
 
     public ViewInventory(String username) {
 
+        // Frame
         JFrame f = new JFrame("Inventory - Build-a-Bike Ltd.");
         f.setVisible(true);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-        leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+        mainPanel.add(leftPanel);
+        mainPanel.add(middlePanel);
+        mainPanel.add(rightPanel);
+
+        // Setting panels layout
         rightPanel.setLayout(new BoxLayout(rightPanel, BoxLayout.Y_AXIS));
-        topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-        topMiddlePanel.setLayout(new BoxLayout(topMiddlePanel, BoxLayout.X_AXIS));
-        bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
+        botMiddlePanel.setLayout(new BoxLayout(botMiddlePanel, BoxLayout.X_AXIS));
+        bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
 
         newFrameSetPanel.setLayout(new BoxLayout(newFrameSetPanel, BoxLayout.Y_AXIS));
         newHandlebarPanel.setLayout(new BoxLayout(newHandlebarPanel, BoxLayout.Y_AXIS));
         newWheelPanel.setLayout(new BoxLayout(newWheelPanel, BoxLayout.Y_AXIS));
 
-        //adding panel borders JUST FOR EASIER VISUALISING THE PANEL LOCATIONS
-        leftPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        rightPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        topPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        topMiddlePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-        bottomPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-
         //Adding panels to frame
-        f.add(mainPanel);
-        mainPanel.add(leftPanel);
-        mainPanel.add(rightPanel);
-        leftPanel.add(topPanel, BorderLayout.PAGE_START);
-        leftPanel.add(topMiddlePanel, BorderLayout.CENTER);
-        leftPanel.add(botMiddlePanel, BorderLayout.CENTER);
-        leftPanel.add(bottomPanel, BorderLayout.PAGE_END);
+        f.add(leftPanel, BorderLayout.WEST);
+        f.add(middlePanel, BorderLayout.CENTER);
+        f.add(rightPanel, BorderLayout.EAST);
 
-        topPanel.add(selectTable);
-        topPanel.add(selectColumn);
-        topPanel.add(searchColumnFor);
-        topPanel.add(searchButton);
-        searchButton.setMargin(new Insets(5,5,5,5));
-        searchButton.setBackground(new Color(59, 89, 182));
-        searchButton.setForeground(Color.WHITE);
-        searchButton.setFont(new Font("Arial", Font.BOLD, 20));
+        // Left Panel
+        leftPanel.add(backButton);
+        backButton.setMargin(new Insets(5,5,5,5));
+        backButton.setBackground(new Color(59, 89, 182));
+        backButton.setForeground(Color.WHITE);
+        backButton.setFont(new Font("Arial", Font.BOLD, 20));
+
+        // Add panels to the middle panels
+        middlePanel.add(topTopPanel, BorderLayout.PAGE_START);
+        middlePanel.add(topMiddlePanel, BorderLayout.CENTER);
+        middlePanel.add(botMiddlePanel, BorderLayout.CENTER);
+        middlePanel.add(bottomPanel, BorderLayout.PAGE_END);
+
+        // MIDDLE PANEL
+
+        // Top-top panel
+        topTopPanel.add(newFrameSetButton);
+        newFrameSetButton.setMargin(new Insets(5,5,5,5));
+        newFrameSetButton.setBackground(new Color(59, 89, 182));
+        newFrameSetButton.setForeground(Color.WHITE);
+        newFrameSetButton.setFont(new Font("Arial", Font.BOLD, 20));
+        newFrameSetButton.setToolTipText("Click to add a new Frame Set product.");
+
+        topTopPanel.add(newHandlebarButton);
+        newHandlebarButton.setMargin(new Insets(5,5,5,5));
+        newHandlebarButton.setBackground(new Color(59, 89, 182));
+        newHandlebarButton.setForeground(Color.WHITE);
+        newHandlebarButton.setFont(new Font("Arial", Font.BOLD, 20));
+        newHandlebarButton.setToolTipText("Click to add a new Handlebar product.");
+
+        topTopPanel.add(newWheelButton);
+        newWheelButton.setMargin(new Insets(5,5,5,5));
+        newWheelButton.setBackground(new Color(59, 89, 182));
+        newWheelButton.setForeground(Color.WHITE);
+        newWheelButton.setFont(new Font("Arial", Font.BOLD, 20));
+        newWheelButton.setToolTipText("Click to add a new Wheel product.");
+
+        // Top-middle panel
+        topMiddlePanel.add(incStockButton);
+        incStockButton.setMargin(new Insets(5,5,5,5));
+        incStockButton.setBackground(new Color(59, 89, 182));
+        incStockButton.setForeground(Color.WHITE);
+        incStockButton.setFont(new Font("Arial", Font.BOLD, 20));
+        incStockButton.setToolTipText("Click to increase the selected product's stock by 1.");
+
+        topMiddlePanel.add(decStockButton);
+        decStockButton.setMargin(new Insets(5,5,5,5));
+        decStockButton.setBackground(new Color(59, 89, 182));
+        decStockButton.setForeground(Color.WHITE);
+        decStockButton.setFont(new Font("Arial", Font.BOLD, 20));
+        decStockButton.setToolTipText("Click to decrease the selected product's stock by 1.");
 
         topMiddlePanel.add(incStockButton);
         incStockButton.setMargin(new Insets(5,5,5,5));
@@ -128,51 +174,50 @@ public class ViewInventory {
         incStockButton.setForeground(Color.WHITE);
         incStockButton.setFont(new Font("Arial", Font.BOLD, 20));
         incStockButton.setToolTipText("Click to increase the selected product's stock by 1.");
+
         topMiddlePanel.add(decStockButton);
         decStockButton.setMargin(new Insets(5,5,5,5));
         decStockButton.setBackground(new Color(59, 89, 182));
         decStockButton.setForeground(Color.WHITE);
         decStockButton.setFont(new Font("Arial", Font.BOLD, 20));
         decStockButton.setToolTipText("Click to decrease the selected product's stock by 1.");
-        topMiddlePanel.add(setStockTo);
-        topMiddlePanel.add(setStockButton);
+
+        // Bot-middle Panel
+        botMiddlePanel.add(stockLabel2);
+        botMiddlePanel.add(Box.createRigidArea(new Dimension(40, 80)));
+        botMiddlePanel.add(setStockTo);
+        botMiddlePanel.add(Box.createRigidArea(new Dimension(40, 100)));
+
+        botMiddlePanel.add(setStockButton);
         setStockButton.setMargin(new Insets(5,5,5,5));
         setStockButton.setBackground(new Color(59, 89, 182));
         setStockButton.setForeground(Color.WHITE);
         setStockButton.setFont(new Font("Arial", Font.BOLD, 20));
         setStockButton.setToolTipText("Click to set the selected products stock to the specified new amount.");
 
-        botMiddlePanel.add(newFrameSetButton);
-        newFrameSetButton.setMargin(new Insets(5,5,5,5));
-        newFrameSetButton.setBackground(new Color(59, 89, 182));
-        newFrameSetButton.setForeground(Color.WHITE);
-        newFrameSetButton.setFont(new Font("Arial", Font.BOLD, 20));
-        newFrameSetButton.setToolTipText("Click to add a new Frame Set product.");
-        botMiddlePanel.add(newHandlebarButton);
-        newHandlebarButton.setMargin(new Insets(5,5,5,5));
-        newHandlebarButton.setBackground(new Color(59, 89, 182));
-        newHandlebarButton.setForeground(Color.WHITE);
-        newHandlebarButton.setFont(new Font("Arial", Font.BOLD, 20));
-        newHandlebarButton.setToolTipText("Click to add a new Handlebar product.");
-        botMiddlePanel.add(newWheelButton);
-        newWheelButton.setMargin(new Insets(5,5,5,5));
-        newWheelButton.setBackground(new Color(59, 89, 182));
-        newWheelButton.setForeground(Color.WHITE);
-        newWheelButton.setFont(new Font("Arial", Font.BOLD, 20));
-        newWheelButton.setToolTipText("Click to add a new Wheel product.");
+        // Bottom panel
+        bottomPanel.add(searchLabel);
+        bottomPanel.add(selectTable);
+        bottomPanel.add(selectColumn);
+        bottomPanel.add(Box.createRigidArea(new Dimension(40, 40)));
+        bottomPanel.add(searchColumnFor);
 
-        bottomPanel.add(backButton);
-        backButton.setMargin(new Insets(5,5,5,5));
-        backButton.setBackground(new Color(59, 89, 182));
-        backButton.setForeground(Color.WHITE);
-        backButton.setFont(new Font("Arial", Font.BOLD, 20));
+        bottomPanel.add(searchButton);
+        searchButton.setMargin(new Insets(5,5,5,5));
+        searchButton.setBackground(new Color(59, 89, 182));
+        searchButton.setForeground(Color.WHITE);
+        searchButton.setFont(new Font("Arial", Font.BOLD, 20));
 
+        bottomPanel.add(Box.createRigidArea(new Dimension(40, 20)));
+
+        // Right panel
         productTable.setFont(new Font("Verdana", Font.PLAIN, 20));
         productTable.setRowHeight(24);
         productTable.getTableHeader().setFont(new Font("Verdana", Font.PLAIN, 22));
         productTable.getTableHeader().setReorderingAllowed(false);
 
         JScrollPane scrollPanel = new JScrollPane(productTable);
+        scrollPanel.setPreferredSize(new Dimension(900,500));
         rightPanel.add(scrollPanel);
 
         populateTable(selectTable.getSelectedItem().toString());
