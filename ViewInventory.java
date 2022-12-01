@@ -227,40 +227,52 @@ public class ViewInventory {
         });
 
         incStockButton.addActionListener(ae -> {
-           if (productTable.getSelectedRow() != -1) {
-               DBDriver.updateProductStock(productTable.getValueAt(productTable.getSelectedRow(), 0).toString(), "increase");
-               populateTable(selectTable.getSelectedItem().toString());
-               updateSelectColumn();
-           } else {
-               JOptionPane.showMessageDialog(f, "Please select a valid product from the product table");
-           }
-        });
-
-        decStockButton.addActionListener(ae -> {
-            if (productTable.getSelectedRow() != -1) {
-                if (Integer.parseInt(productTable.getValueAt(productTable.getSelectedRow(), productTable.getColumnCount()-1).toString()) > 0) {
-                    DBDriver.updateProductStock(productTable.getValueAt(productTable.getSelectedRow(), 0).toString(), "decrease");
+            if (!selectTable.getSelectedItem().toString().equals("Assembled Bikes")) {
+                if (productTable.getSelectedRow() != -1) {
+                    DBDriver.updateProductStock(productTable.getValueAt(productTable.getSelectedRow(), 0).toString(), "increase");
                     populateTable(selectTable.getSelectedItem().toString());
                     updateSelectColumn();
                 } else {
-                    JOptionPane.showMessageDialog(f, "Product stock cannot be negative");
+                    JOptionPane.showMessageDialog(f, "Please select a valid product from the product table");
                 }
             } else {
-                JOptionPane.showMessageDialog(f, "Please select a valid product from the product table");
+                JOptionPane.showMessageDialog(f, "Stock for Assembled Bikes cannot be changed.");
+            }
+        });
+
+        decStockButton.addActionListener(ae -> {
+            if (!selectTable.getSelectedItem().toString().equals("Assembled Bikes")) {
+                if (productTable.getSelectedRow() != -1) {
+                    if (Integer.parseInt(productTable.getValueAt(productTable.getSelectedRow(), productTable.getColumnCount()-1).toString()) > 0) {
+                        DBDriver.updateProductStock(productTable.getValueAt(productTable.getSelectedRow(), 0).toString(), "decrease");
+                        populateTable(selectTable.getSelectedItem().toString());
+                        updateSelectColumn();
+                    } else {
+                        JOptionPane.showMessageDialog(f, "Product stock cannot be negative");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(f, "Please select a valid product from the product table");
+                }
+            } else {
+                JOptionPane.showMessageDialog(f, "Stock for Assembled Bikes cannot be changed.");
             }
         });
 
         setStockButton.addActionListener(ae -> {
-            if (productTable.getSelectedRow() != -1) {
-                if (Integer.parseInt(setStockTo.getText()) >= 0 && setStockTo.getText().length() <= 11) {
-                    DBDriver.setProductStock(productTable.getValueAt(productTable.getSelectedRow(), 0).toString(), setStockTo.getText());
-                    populateTable(selectTable.getSelectedItem().toString());
-                    updateSelectColumn();
+            if (!selectTable.getSelectedItem().toString().equals("Assembled Bikes")) {
+                if (productTable.getSelectedRow() != -1) {
+                    if (Integer.parseInt(setStockTo.getText()) >= 0 && setStockTo.getText().length() <= 11) {
+                        DBDriver.setProductStock(productTable.getValueAt(productTable.getSelectedRow(), 0).toString(), setStockTo.getText());
+                        populateTable(selectTable.getSelectedItem().toString());
+                        updateSelectColumn();
+                    } else {
+                        JOptionPane.showMessageDialog(f, "Product stock cannot be negative");
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(f, "Product stock cannot be negative");
+                    JOptionPane.showMessageDialog(f, "Please select a valid product from the product table");
                 }
             } else {
-                JOptionPane.showMessageDialog(f, "Please select a valid product from the product table");
+                JOptionPane.showMessageDialog(f, "Stock for Assembled Bikes cannot be changed.");
             }
         });
 
