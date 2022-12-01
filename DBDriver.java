@@ -223,6 +223,39 @@ public class DBDriver {
         }
     }
 
+    public static boolean decreaseOrderStock(int orderNo){
+        try {
+            Connection con = getConnection();
+            Statement stmt = Objects.requireNonNull(con).createStatement();
+            int wheelStock = 0; int frameStock = 0; int handlebarStock = 0;
+            ResultSet rs = stmt.executeQuery("SELECT stock FROM Product WHERE productId = (SELECT wheelId FROM AssembledBike WHERE assembledBikeId = (SELECT assembledBikeId FROM Orders WHERE orderNo = " + orderNo + "));");
+            while (rs.next()) {
+                wheelStock = rs.getInt(1);
+            }
+            rs = stmt.executeQuery("SELECT stock FROM Product WHERE productId = (SELECT frameId FROM AssembledBike WHERE assembledBikeId = (SELECT assembledBikeId FROM Orders WHERE orderNo = " + orderNo + "));");
+            while (rs.next()) {
+                frameStock = rs.getInt(1);
+            }
+            rs = stmt.executeQuery("SELECT stock FROM Product WHERE productId = (SELECT handlebarId FROM AssembledBike WHERE assembledBikeId = (SELECT assembledBikeId FROM Orders WHERE orderNo = " + orderNo + "));");
+            while (rs.next()) {
+                handlebarStock = rs.getInt(1);
+            }
+            if (wheelStock == 0 || frameStock == 0 || handlebarStock == 0) {
+                closeConnection(con);
+                return false;
+            } else {
+                stmt.executeUpdate("UPDATE Product SET stock = stock - 1 WHERE productId = (SELECT wheelId FROM AssembledBike WHERE assembledBikeId = (SELECT assembledBikeId FROM Orders WHERE orderNo = " + orderNo + "));");
+                stmt.executeUpdate("UPDATE Product SET stock = stock - 1 WHERE productId = (SELECT handlebarId FROM AssembledBike WHERE assembledBikeId = (SELECT assembledBikeId FROM Orders WHERE orderNo = " + orderNo + "));");
+                stmt.executeUpdate("UPDATE Product SET stock = stock - 1 WHERE productId = (SELECT frameId FROM AssembledBike WHERE assembledBikeId = (SELECT assembledBikeId FROM Orders WHERE orderNo = " + orderNo + "));");
+                closeConnection(con);
+                return true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
+
     //---------------------------------------------------------------------
     //END OF STAFF PAGE FUNCTIONS
     //---------------------------------------------------------------------
@@ -671,7 +704,7 @@ public class DBDriver {
             ResultSet rs = stmt.executeQuery("SELECT assembledBikeId, aPro.brandName, aPro.productName, " +
                     "gears AS frameGears, shocks AS frameShocks, size AS frameSize, handlebarStyle, " +
                     "diameter AS wheelDiameter, brakes AS wheelBrakes, style AS wheelStyle, " +
-                    "(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost+wPro.unitCost) AS total FROM AssembledBike " +
+                    "ROUND(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost,2) AS total FROM AssembledBike " +
                     "INNER JOIN Product AS aPro ON assembledBikeId = aPro.productId " +
                     "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
                     "INNER JOIN Handlebar ON AssembledBike.handlebarId = Handlebar.handlebarId " +
@@ -704,7 +737,7 @@ public class DBDriver {
                     "concat(fPro.brandName,' - ', fPro.productName,', Gears: ', gears,', Shocks: ', shocks,', Size: ', size,', Cost: £', fPro.unitCost) as f," +
                     "concat(hPro.brandName,' - ', hPro.productName,', Style: ',handlebarStyle,', Cost: £',hPro.unitCost) as h," +
                     "concat(wPro.brandName,' - ', hPro.productName,', ',diameter,', ',brakes,', ', style,', Cost: £',wPro.unitCost) as w," +
-                    "concat('£',ROUND(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost+wPro.unitCost,2)) AS total FROM AssembledBike " +
+                    "concat('£',ROUND(aPro.unitCost+fPro.unitCost+hPro.unitCost+wPro.unitCost,2)) AS total FROM AssembledBike " +
                     "INNER JOIN Product AS aPro ON assembledBikeId = aPro.productId " +
                     "INNER JOIN FrameSet ON AssembledBike.frameId = FrameSet.frameId " +
                     "INNER JOIN Handlebar ON AssembledBike.handlebarId = Handlebar.handlebarId " +

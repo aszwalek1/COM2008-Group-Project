@@ -1,6 +1,12 @@
 import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.plaf.basic.ComboPopup;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Vector;
 
 public class BrowsePage {
 
@@ -61,7 +67,7 @@ public class BrowsePage {
         // Combo Box with ready bikes from the database
         ArrayList<String> assembledBikesList = new ArrayList<>(DBDriver.allAssembledBikes());
         String[] bikeStrings = assembledBikesList.toArray(new String[assembledBikesList.size()]);
-        JComboBox<String> bikeList = new JComboBox<>(bikeStrings);
+        JComboBox<String> bikeList = new WideComboBox(bikeStrings);
         centralPanel.add(bikeList);
         centralPanel.add(Box.createRigidArea(new Dimension(50, 100)));
 
@@ -118,7 +124,7 @@ public class BrowsePage {
 
         eastPanel.add(Box.createRigidArea(new Dimension(200, 80)));
 
-        JLabel wheelsLabel = new JLabel("Choose the wheels for your bike");
+        JLabel wheelsLabel = new JLabel("Choose the pair of wheels for your bike");
         wheelsLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(wheelsLabel);
 
@@ -130,10 +136,16 @@ public class BrowsePage {
 
         eastPanel.add(Box.createRigidArea(new Dimension(200, 50)));
 
-        double cost = 10+Double.parseDouble(String.valueOf(handlebarList.getSelectedItem()).split("£")[1])+
-                Double.parseDouble(String.valueOf(frameSetList.getSelectedItem()).split("£")[1])+
-                Double.parseDouble(String.valueOf(wheelStyleList.getSelectedItem()).split("£")[1]);
-        cost = Math.round(cost * 100.0) / 100.0;
+        double cost;
+        try{
+            cost = 10+Double.parseDouble(String.valueOf(handlebarList.getSelectedItem()).split("£")[1])+
+                    Double.parseDouble(String.valueOf(frameSetList.getSelectedItem()).split("£")[1])+
+                    Double.parseDouble(String.valueOf(wheelStyleList.getSelectedItem()).split("£")[1]);
+            cost = Math.round(cost * 100.0) / 100.0;
+        }
+        catch(ArrayIndexOutOfBoundsException ex){
+            cost = 0;
+        }
         JLabel costLabel = new JLabel("Total Cost(Including Assembly Charge): £"+cost);
         costLabel.setFont(new Font("Verdana", Font.PLAIN, 16));
         eastPanel.add(costLabel);
@@ -243,3 +255,28 @@ public class BrowsePage {
     }
 
 }
+
+class MyPopupMenuListener implements PopupMenuListener {
+
+    public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+        JComboBox box = (JComboBox) e.getSource();
+        Object comp = box.getUI().getAccessibleChild(box, 0);
+        if (!(comp instanceof JPopupMenu)) return;
+        JComponent scrollPane = (JComponent) ((JPopupMenu) comp).getComponent(0);
+        Dimension size = new Dimension();
+        size.width = box.getPreferredSize().width;
+        size.height = scrollPane.getPreferredSize().height;
+        scrollPane.setPreferredSize(size);
+        //  following line for Tiger
+        // scrollPane.setMaximumSize(size);
+    }
+
+    public void popupMenuCanceled(PopupMenuEvent popupMenuEvent) {
+        System.out.println("Canceled");
+    }
+
+    public void popupMenuWillBecomeInvisible(PopupMenuEvent popupMenuEvent) {
+        System.out.println("Becoming Invisible");
+    }
+}
+
