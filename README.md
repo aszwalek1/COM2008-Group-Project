@@ -15,7 +15,6 @@ On the terminal
 
 ### ` > javac HomePage.java`
 
-
 ### ` > java HomePage`
 
 
@@ -23,6 +22,7 @@ On the terminal
 
 ### To login as staff: 
 Enter the following login details and click on "login"
+
 1. username  : Staff1 
  
    password : password
@@ -38,22 +38,33 @@ Enter the following login details and click on "login"
 - As staff you can view all customers by clicking on "View Customers" . You can also perform functions like filtering the customers.
 
 
+
 ### To login as an existing Customer:
 Enter the following login details and click on "login" to access the Customer Page.You can login using a customer id or enter your order id and address by clicking on "Enter address".
 
-Customer ID: xxx
+1. Customer ID : 7
 
-Order ID 
+   Order ID : 10
 
-House no.:
+   House No. : 19
 
-Road name:
+   Road Name : fourthfloor
 
-City :
+   City : sheffield
 
-Postcode : 
+   Postcode : S10 1LF
 
+2. Customer ID : 6
 
+   Order ID : 8
+   
+   House No. : 1
+   
+   Road Name : main road
+   
+   City : london
+   
+   Postcode : L23
 
 
 - Once you login, you can view/edit your personal details and orders as a customer.
