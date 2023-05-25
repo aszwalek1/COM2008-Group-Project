@@ -2,6 +2,8 @@
 Authors: Alicja Szwalek, Siya Pradhan, Alexander Brown, Waigen Yau
 Com2008 Systems Design and Security Group Project Nov, Dec 2022
 
+The project is a Java Software for a fictional company that sells bikes
+
 ### To run the system:
 ### 1. Establish the VPN connection
 
